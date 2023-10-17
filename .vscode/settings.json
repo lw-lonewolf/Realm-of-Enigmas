@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "iostream": "cpp",
+        "locale": "cpp"
+    },
+    "C_Cpp.default.compilerPath": "/usr/bin/clang"
+}

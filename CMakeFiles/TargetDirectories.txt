@@ -1,9 +1,0 @@
-/Users/thomascatt/Library/CloudStorage/GoogleDrive-armaghanahmed@gmail.com/My Drive/_/🏫 Uni/Semester 1/PF/Course Project/Realm-of-Enigmas/CMakeFiles/window.dir
-/Users/thomascatt/Library/CloudStorage/GoogleDrive-armaghanahmed@gmail.com/My Drive/_/🏫 Uni/Semester 1/PF/Course Project/Realm-of-Enigmas/CMakeFiles/package.dir
-/Users/thomascatt/Library/CloudStorage/GoogleDrive-armaghanahmed@gmail.com/My Drive/_/🏫 Uni/Semester 1/PF/Course Project/Realm-of-Enigmas/CMakeFiles/package_source.dir
-/Users/thomascatt/Library/CloudStorage/GoogleDrive-armaghanahmed@gmail.com/My Drive/_/🏫 Uni/Semester 1/PF/Course Project/Realm-of-Enigmas/CMakeFiles/edit_cache.dir
-/Users/thomascatt/Library/CloudStorage/GoogleDrive-armaghanahmed@gmail.com/My Drive/_/🏫 Uni/Semester 1/PF/Course Project/Realm-of-Enigmas/CMakeFiles/rebuild_cache.dir
-/Users/thomascatt/Library/CloudStorage/GoogleDrive-armaghanahmed@gmail.com/My Drive/_/🏫 Uni/Semester 1/PF/Course Project/Realm-of-Enigmas/CMakeFiles/list_install_components.dir
-/Users/thomascatt/Library/CloudStorage/GoogleDrive-armaghanahmed@gmail.com/My Drive/_/🏫 Uni/Semester 1/PF/Course Project/Realm-of-Enigmas/CMakeFiles/install.dir
-/Users/thomascatt/Library/CloudStorage/GoogleDrive-armaghanahmed@gmail.com/My Drive/_/🏫 Uni/Semester 1/PF/Course Project/Realm-of-Enigmas/CMakeFiles/install/local.dir
-/Users/thomascatt/Library/CloudStorage/GoogleDrive-armaghanahmed@gmail.com/My Drive/_/🏫 Uni/Semester 1/PF/Course Project/Realm-of-Enigmas/CMakeFiles/install/strip.dir

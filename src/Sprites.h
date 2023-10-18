@@ -1,0 +1,14 @@
+#define PLAYER_SPRITE_PATH "assets/player-sprite.png"
+#define PLAYER_SPRITE_SIZE 64
+#define PLAYER_ANIM_FRAMES 8
+
+#define PLAYER_ANIM_SPEED 100
+
+enum PLAYER_SPRITE_DIR {
+    PLAYER_SPRITE_UP,
+    PLAYER_SPRITE_LEFT,
+    PLAYER_SPRITE_DOWN,
+    PLAYER_SPRITE_RIGHT
+};
+
+#define BACKGROUND_DEMO_PATH "assets/demo-bg-sprite.jpg"

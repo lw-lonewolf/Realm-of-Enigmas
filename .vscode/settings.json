@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "__locale": "cpp"
+    },
+    "C_Cpp.default.compilerPath": "/usr/bin/clang++",
+    "cmake.configureOnOpen": true
+}

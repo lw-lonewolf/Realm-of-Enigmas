@@ -1,28 +1,46 @@
-#define PI 3.141
+
+/* Window & Graphics Options */
 
 #define SCREEN_W 800
 #define SCREEN_H 600
 #define WINDOW_TITLE "Window Title"
 #define REFRESH_RATE 60
 
-#define PLAYER_SPRITE_PATH "res/player-sprite.png"
-#define PLAYER_SPRITE_SIZE 64
+/* Game values */
 
-struct BoxCollider {
+#define PI 3.141
+#define PLAYER_MOVE_MULTIPLIER 1
+
+/* Game controls */
+
+const sf::Keyboard::Key KEY_UP = sf::Keyboard::W;
+const sf::Keyboard::Key KEY_LEFT = sf::Keyboard::A;
+const sf::Keyboard::Key KEY_DOWN = sf::Keyboard::S;
+const sf::Keyboard::Key KEY_RIGHT = sf::Keyboard::D;
+
+/* Structures */
+
+// struct BoxCollider {
+//     const int objectId = rand();
+//     sf::Sprite sprite;
+// };
+
+struct Scene {
+    std::string backgroundSpritePath;
+    sf::Texture background;
+    sf::Sprite backgroundSprite;
+    
+    int defaultPlayerDir;
+    sf::Vector2f defaultPlayerPos;
+    
+    sf::IntRect colliderHitboxes[32];
+};
+
+struct {
     sf::Sprite sprite;
-};
-
-
-enum PLAYER_SPRITE_DIR {
-    PLAYER_SPRITE_UP,
-    PLAYER_SPRITE_LEFT,
-    PLAYER_SPRITE_DOWN,
-    PLAYER_SPRITE_RIGHT
-};
-
-enum KEYBOARD_CONTROLS {
-    KEY_UP = sf::Keyboard::W,
-    KEY_LEFT = sf::Keyboard::A,
-    KEY_DOWN = sf::Keyboard::S,
-    KEY_RIGHT = sf::Keyboard::D
-};
+    sf::Vector2f movementVector;
+    sf::Texture texture;
+    bool moving;
+    int direction;
+    int currentAnimFrame;
+} player;

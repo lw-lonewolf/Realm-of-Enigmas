@@ -12,6 +12,7 @@ void playerLoop() {
     }
 
     if (player.moving) {
+        player.prevPosition = player.sprite.getPosition();
         player.sprite.move(player.movementVector);
         if (player.movementVector.x == 0 && player.movementVector.y == 0)
             player.moving = false;
@@ -23,7 +24,7 @@ void playerLoop() {
     }
         
 
-    std::cout << player.currentAnimFrame * PLAYER_SPRITE_SIZE << " " << player.direction * PLAYER_SPRITE_SIZE << std::endl;
+    // std::cout << player.currentAnimFrame * PLAYER_SPRITE_SIZE << " " << player.direction * PLAYER_SPRITE_SIZE << std::endl;
     
     // sf::IntRect positionRect = sf::IntRect(0, 0, 64, 64);
     sf::IntRect positionRect = sf::IntRect(player.currentAnimFrame * PLAYER_SPRITE_SIZE, player.direction * PLAYER_SPRITE_SIZE, PLAYER_SPRITE_SIZE, PLAYER_SPRITE_SIZE);
@@ -42,7 +43,7 @@ void loadScene(Scene scene) {
         std::cout << "Failed to load from file: " << PLAYER_SPRITE_PATH << std::endl;
     
     player.sprite.setTexture(player.texture);
-    player.sprite.setPosition(currentScene.defaultPlayerPos);
+    player.sprite.setPosition(currentScene.defaultPlayerPos.x - PLAYER_SPRITE_SIZE/2, currentScene.defaultPlayerPos.y - PLAYER_SPRITE_SIZE/2);
 
     player.moving = false;
     player.currentAnimFrame = 0;
@@ -56,7 +57,18 @@ void Render(sf::RenderWindow& window) {
     playerLoop();
 
     window.draw(currentScene.backgroundSprite);
+    // for (int i = 0; i < currentScene.totalColliders; i++) {
+    //     sf::IntRect hitbox = currentScene.colliderHitboxes[i];
+    //     sf::RectangleShape hitboxRect(sf::Vector2f(hitbox.width, hitbox.height));
+
+    //     hitboxRect.setPosition(hitbox.left, hitbox.top);
+    //     hitboxRect.setFillColor(sf::Color::Red);
+    //     window.draw(hitboxRect);
+    // }
+
+
     window.draw(player.sprite);
+    
     framecount++;
     if (framecount > REFRESH_RATE) framecount = 0;
 }

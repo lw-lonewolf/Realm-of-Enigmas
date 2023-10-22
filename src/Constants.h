@@ -33,6 +33,7 @@ struct Scene {
     int defaultPlayerDir;
     sf::Vector2f defaultPlayerPos;
     
+    int totalColliders;
     sf::IntRect colliderHitboxes[32];
 };
 
@@ -40,6 +41,7 @@ struct {
     sf::Sprite sprite;
     sf::Vector2f movementVector;
     sf::Texture texture;
+    sf::Vector2f prevPosition;
     bool moving;
     int direction;
     int currentAnimFrame;

@@ -1,7 +1,5 @@
 int framecount = 0;
 
-Scene currentScene;
-
 void setView() {
     sf::Vector2f playerPos = player.sprite.getPosition();
     sf::Vector2f viewCenter;
@@ -60,16 +58,22 @@ void playerLoop() {
     if (player.moving) {
         player.prevPosition = player.sprite.getPosition();
 
-        // if (abs(player.movementVector.x) && abs(player.movementVector.y))
-        
-        player.sprite.move(player.movementVector);
-        if (player.movementVector.x == 0 && player.movementVector.y == 0)
-            player.moving = false;
 
         if (player.movementVector.x/PLAYER_MOVE_MULTIPLIER == -1) player.direction = PLAYER_SPRITE_LEFT;
         if (player.movementVector.x/PLAYER_MOVE_MULTIPLIER == 1) player.direction = PLAYER_SPRITE_RIGHT;
         if (player.movementVector.y/PLAYER_MOVE_MULTIPLIER == -1) player.direction = PLAYER_SPRITE_UP;
         if (player.movementVector.y/PLAYER_MOVE_MULTIPLIER == 1) player.direction = PLAYER_SPRITE_DOWN;
+
+        // Validating diagonal movement vector
+        if (!PhysicsValidatePosition(sf::Vector2f(player.sprite.getPosition().x + player.movementVector.x, player.sprite.getPosition().y)))
+            player.movementVector.x = 0;
+
+        if (!PhysicsValidatePosition(sf::Vector2f(player.sprite.getPosition().x, player.sprite.getPosition().y + player.movementVector.y)))
+            player.movementVector.y = 0;
+
+        player.sprite.move(player.movementVector);
+        if (player.movementVector.x == 0 && player.movementVector.y == 0)
+            player.moving = false;
     }
         
 
@@ -108,7 +112,7 @@ void Render(sf::RenderWindow& window) {
 
     window.setView(currentScene.view);
     window.draw(currentScene.backgroundSprite);
-//    window.draw(player.sprite);
+    window.draw(player.sprite);
 
     framecount++;
     if (framecount > REFRESH_RATE) framecount = 0;

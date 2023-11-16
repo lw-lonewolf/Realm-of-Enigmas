@@ -1,9 +1,0 @@
-/mnt/c/Users/Thomas Catt/iCloudDrive/Documents/CLion/Realm-of-Enigmas/CMakeFiles/window.dir
-/mnt/c/Users/Thomas Catt/iCloudDrive/Documents/CLion/Realm-of-Enigmas/CMakeFiles/package.dir
-/mnt/c/Users/Thomas Catt/iCloudDrive/Documents/CLion/Realm-of-Enigmas/CMakeFiles/package_source.dir
-/mnt/c/Users/Thomas Catt/iCloudDrive/Documents/CLion/Realm-of-Enigmas/CMakeFiles/edit_cache.dir
-/mnt/c/Users/Thomas Catt/iCloudDrive/Documents/CLion/Realm-of-Enigmas/CMakeFiles/rebuild_cache.dir
-/mnt/c/Users/Thomas Catt/iCloudDrive/Documents/CLion/Realm-of-Enigmas/CMakeFiles/list_install_components.dir
-/mnt/c/Users/Thomas Catt/iCloudDrive/Documents/CLion/Realm-of-Enigmas/CMakeFiles/install.dir
-/mnt/c/Users/Thomas Catt/iCloudDrive/Documents/CLion/Realm-of-Enigmas/CMakeFiles/install/local.dir
-/mnt/c/Users/Thomas Catt/iCloudDrive/Documents/CLion/Realm-of-Enigmas/CMakeFiles/install/strip.dir

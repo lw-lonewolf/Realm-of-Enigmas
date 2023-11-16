@@ -9,9 +9,9 @@
 #include "src/Constants.h"
 #include "src/Sprites.h"
 
-/* Include files */
-#include "src/Render.cpp"
+/* Source files */
 #include "src/Physics.cpp"
+#include "src/Render.cpp"
 #include "src/EventHandler.cpp"
 
 /* Scene files */

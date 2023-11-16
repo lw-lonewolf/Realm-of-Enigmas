@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/window.dir/main.cpp.o -o bin/window  /usr/lib/libsfml-graphics-d.so.2.6.1 /usr/lib/libsfml-window-d.so.2.6.1 /usr/lib/libsfml-system-d.so.2.6.1 

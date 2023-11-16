@@ -45,7 +45,7 @@ struct Scene {
     sf::Vector2f defaultPlayerPos;
     
     int totalColliders;
-    sf::IntRect colliderHitboxes[];
+    sf::IntRect colliderHitboxes[32];
 };
 
 struct {

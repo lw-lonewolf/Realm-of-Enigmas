@@ -1,10 +1,10 @@
 .vscode
 bin
 CMakeFiles
+SFML
 
 cmake_install.cmake
 CMakeCache.txt
 CPackConfig.cmake
 CPackSourceConfig.cmake
 Makefile
-.vscode/settings.json

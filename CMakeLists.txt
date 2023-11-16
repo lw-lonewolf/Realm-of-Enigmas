@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.11)
 project(window LANGUAGES C CXX)
 
-find_package(SFML 2.5 COMPONENTS graphics system REQUIRED)
+find_package(SFML 2.6 COMPONENTS graphics system REQUIRED)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 

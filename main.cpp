@@ -1,18 +1,23 @@
+/* SFML */
 #include <SFML/Graphics.hpp>
-#include <iostream>
 
+/* Native */
+#include <iostream>
+#include <math.h>
+
+/* Header files */
 #include "src/Constants.h"
 #include "src/Sprites.h"
+
+/* Include files */
 #include "src/Render.cpp"
 #include "src/Physics.cpp"
 #include "src/EventHandler.cpp"
 
+/* Scene files */
 #include "src/scenes/DemoScene.cpp"
 
-
 int main() {
-    srand(time(0));
-
     sf::RenderWindow window(sf::VideoMode(SCREEN_W, SCREEN_H), WINDOW_TITLE);
     window.setFramerateLimit(REFRESH_RATE);
 
@@ -32,5 +37,5 @@ int main() {
         window.display();
     }
 
-    return 0;    
+    return 0;
 }

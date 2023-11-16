@@ -8,11 +8,11 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/Users/thomascatt/Library/CloudStorage/GoogleDrive-armaghanahmed@gmail.com/My Drive/_/🏫 Uni/Semester 1/PF/Course Project/Realm-of-Enigmas/main.cpp" "CMakeFiles/window.dir/main.cpp.o" "gcc" "CMakeFiles/window.dir/main.cpp.o.d"
+  "/mnt/c/Users/Thomas Catt/iCloudDrive/Documents/CLion/Realm-of-Enigmas/main.cpp" "CMakeFiles/window.dir/main.cpp.o" "gcc" "CMakeFiles/window.dir/main.cpp.o.d"
   )
 
-# Targets to which this target links which contain Fortran sources.
-set(CMAKE_Fortran_TARGET_LINKED_INFO_FILES
+# Targets to which this target links.
+set(CMAKE_TARGET_LINKED_INFO_FILES
   )
 
 # Fortran module output directory.

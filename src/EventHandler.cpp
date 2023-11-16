@@ -33,10 +33,10 @@ void EventHandler(sf::Event event) {
             onMovement(sf::Vector2f(0, player.movementVector.y));
             
         break;
-
-    case sf::Event::MouseMoved:
-        std::cout << "mouse: x:" << event.mouseMove.x << " y:" << event.mouseMove.y << std::endl;
-    
+//
+//    case sf::Event::MouseMoved:
+//        std::cout << "mouse: x:" << event.mouseMove.x << " y:" << event.mouseMove.y << std::endl;
+//
     default:
         break;
     }

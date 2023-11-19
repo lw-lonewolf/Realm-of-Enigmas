@@ -18,6 +18,7 @@
 #include "src/Render.cpp"
 #include "src/EventHandler.cpp"
 
+
 /* Override methods: *
  * Functions that override the default Render() and EventHandler() for
  * any custom scene that would need access to these functions.

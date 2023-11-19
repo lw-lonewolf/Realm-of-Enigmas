@@ -65,28 +65,40 @@ void playerLoop() {
             player.currentAnimFrame = 1;
     }
 
+    bool isDiagonalMovement = abs(player.movementVector.x / PLAYER_MOVE_MULTIPLIER) && abs(player.movementVector.y / PLAYER_MOVE_MULTIPLIER);
+    sf::Vector2f effectiveMovementVector = player.movementVector;
+
     if (player.moving) {
         player.prevPosition = player.sprite.getPosition();
-
 
         if (player.movementVector.x/PLAYER_MOVE_MULTIPLIER == -1) player.direction = PLAYER_SPRITE_LEFT;
         if (player.movementVector.x/PLAYER_MOVE_MULTIPLIER == 1) player.direction = PLAYER_SPRITE_RIGHT;
         if (player.movementVector.y/PLAYER_MOVE_MULTIPLIER == -1) player.direction = PLAYER_SPRITE_UP;
         if (player.movementVector.y/PLAYER_MOVE_MULTIPLIER == 1) player.direction = PLAYER_SPRITE_DOWN;
 
+
+        // Normalizing input vector
+
+        if (isDiagonalMovement) {
+            effectiveMovementVector.x = player.movementVector.x * (0.707f);
+            effectiveMovementVector.y = player.movementVector.y * (0.707f);
+        }
+
+
+        // Physics checks:
         // Validate new player position before moving the player sprite
 
-        if (PhysicsValidatePosition(sf::Vector2f(player.sprite.getPosition().x + player.movementVector.x, player.sprite.getPosition().y)))
-            player.sprite.move(sf::Vector2f(player.movementVector.x, 0));
+        if (!PhysicsValidatePosition(sf::Vector2f(player.sprite.getPosition().x + effectiveMovementVector.x, player.sprite.getPosition().y)))
+            effectiveMovementVector.x = 0;
 
-        if (PhysicsValidatePosition(sf::Vector2f(player.sprite.getPosition().x, player.sprite.getPosition().y + player.movementVector.y)))
-            player.sprite.move(sf::Vector2f(0, player.movementVector.y));
+        if (!PhysicsValidatePosition(sf::Vector2f(player.sprite.getPosition().x, player.sprite.getPosition().y + effectiveMovementVector.y)))
+            effectiveMovementVector.y = 0;
+
+        player.sprite.move(effectiveMovementVector);
 
         if (player.movementVector.x == 0 && player.movementVector.y == 0)
             player.moving = false;
     }
-        
-
 
     sf::IntRect positionRect = sf::IntRect(player.currentAnimFrame * PLAYER_SPRITE_WIDTH, player.direction * PLAYER_SPRITE_HEIGHT, PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
     player.sprite.setTextureRect(positionRect);

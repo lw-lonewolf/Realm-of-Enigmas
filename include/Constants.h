@@ -16,6 +16,12 @@
 #define PI 3.141
 #define PLAYER_MOVE_MULTIPLIER 2
 
+enum MenuItem {
+    MENU_PLAY,
+    MENU_SETTINGS,
+    MENU_QUIT
+};
+
 /* Game controls */
 
 const sf::Keyboard::Key KEY_UP = sf::Keyboard::W;
@@ -42,19 +48,19 @@ const int UI_BODY_3_SIZE = 22;
 
 /* Structures (& Struct constructors) */
 
-struct BoxCollider {
-    int left, top, width, height = 0;
-};
-
-BoxCollider newBoxCollider(int left = 0, int top = 0, int width = 0, int height = 0) {
-    BoxCollider hitbox;
-    hitbox.left = left;
-    hitbox.top = top;
-    hitbox.width = width;
-    hitbox.height = height;
-
-    return hitbox;
-}
+//struct BoxCollider {
+//    int left, top, width, height = 0;
+//};
+//
+//BoxCollider newBoxCollider(int left = 0, int top = 0, int width = 0, int height = 0) {
+//    BoxCollider hitbox;
+//    hitbox.left = left;
+//    hitbox.top = top;
+//    hitbox.width = width;
+//    hitbox.height = height;
+//
+//    return hitbox;
+//}
 
 enum SceneType {
     SCENE_MENU,
@@ -67,6 +73,12 @@ enum InputAction {
     INPUT_SELECT,
     INPUT_BACK
 };
+//
+//enum Interaction
+//
+//struct Interactible {
+//
+//};
 
 struct Scene {
     SceneType type;
@@ -81,6 +93,7 @@ struct Scene {
     sf::Vector2f defaultPlayerPos;
 
     sf::IntRect colliderHitboxes[32];
+//    sf::Vector2f interactibles[32];
 };
 
 struct {
@@ -92,3 +105,9 @@ struct {
     int direction;
     int currentAnimFrame;
 } player;
+
+
+// Function prototypes for the methods in other files like Render.cpp, Physics
+// .cpp etc.
+void loadScene(Scene scene);
+bool PhysicsValidatePosition(sf::Vector2f testPosition);

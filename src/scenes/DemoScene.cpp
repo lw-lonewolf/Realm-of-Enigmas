@@ -1,7 +1,14 @@
+/* DemoScene.cpp *
+ * A game scene file. This is just a demo scene with random stuff. This one has
+ * hitboxes and a player moving around in some map
+ *
+ * */
+
 Scene initDemoScene() {
     Scene scene;
 
-    scene.name = "Demo Scene";
+    scene.name = "Test Scene";
+    scene.type = SCENE_GAME;
     scene.backgroundSpritePath = BACKGROUND_DEMO_PATH;
     scene.defaultPlayerDir = PLAYER_SPRITE_DOWN;
     scene.defaultPlayerPos = sf::Vector2f(173.f, 244.f);

@@ -1,3 +1,9 @@
+/* Physics.cpp *
+ * Self explanatory, this file will contain all physics related logic of the
+ * game.
+ *
+ * */
+
 Scene currentScene;
 
 bool PhysicsValidatePosition(sf::Vector2f testPosition) {

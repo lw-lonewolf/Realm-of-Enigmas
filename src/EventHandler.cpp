@@ -1,4 +1,28 @@
-#include <SFML/Graphics.hpp>
+/* EventHandler.cpp
+ * This file controls all the Event handling of the program. Any SFML Event
+ * handling is fundamentally broken down in this file.
+ * */
+
+void onOverrideEvent(sf::Event event);
+
+void menuEventHandler(sf::Event event) {
+    switch (event.type) {
+        case sf::Event::KeyPressed:
+            if (event.key.code == KEY_NAV_UP)
+                onMenuNavigation(INPUT_NAVIGATE, -1);
+
+            else if (event.key.code == KEY_NAV_DOWN)
+                onMenuNavigation(INPUT_NAVIGATE, 1);
+
+            else if (event.key.code == KEY_NAV_SELECT)
+                onMenuNavigation(INPUT_SELECT, -1);
+
+            else if (event.key.code == KEY_NAV_BACK)
+                onMenuNavigation(INPUT_BACK, -1);
+
+            break;
+    }
+}
 
 void onMovement(sf::Vector2f dir) {
     player.movementVector = dir;
@@ -40,4 +64,6 @@ void EventHandler(sf::Event event) {
     default:
         break;
     }
+
+    onOverrideEvent(event);
 }

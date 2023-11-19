@@ -1,6 +1,16 @@
+/* Render.cpp
+ * This is the heart of the game code. This file has a lot of stuff on player
+ * management, scene management and view management that I think can be
+ * structured a lot better.
+ *
+ * */
+
+void onOverrideRender(sf::RenderWindow& window);
 int framecount = 0;
 
 void setView() {
+    if (!currentScene.playerEnabled) return;
+
     sf::Vector2f playerPos = player.sprite.getPosition();
     sf::Vector2f viewCenter;
 
@@ -64,21 +74,20 @@ void playerLoop() {
         if (player.movementVector.y/PLAYER_MOVE_MULTIPLIER == -1) player.direction = PLAYER_SPRITE_UP;
         if (player.movementVector.y/PLAYER_MOVE_MULTIPLIER == 1) player.direction = PLAYER_SPRITE_DOWN;
 
-        // Validating diagonal movement vector
-        if (!PhysicsValidatePosition(sf::Vector2f(player.sprite.getPosition().x + player.movementVector.x, player.sprite.getPosition().y)))
-            player.movementVector.x = 0;
+        // Validate new player position before moving the player sprite
 
-        if (!PhysicsValidatePosition(sf::Vector2f(player.sprite.getPosition().x, player.sprite.getPosition().y + player.movementVector.y)))
-            player.movementVector.y = 0;
+        if (PhysicsValidatePosition(sf::Vector2f(player.sprite.getPosition().x + player.movementVector.x, player.sprite.getPosition().y)))
+            player.sprite.move(sf::Vector2f(player.movementVector.x, 0));
 
-        player.sprite.move(player.movementVector);
+        if (PhysicsValidatePosition(sf::Vector2f(player.sprite.getPosition().x, player.sprite.getPosition().y + player.movementVector.y)))
+            player.sprite.move(sf::Vector2f(0, player.movementVector.y));
+
         if (player.movementVector.x == 0 && player.movementVector.y == 0)
             player.moving = false;
     }
         
 
 
-    // sf::IntRect positionRect = sf::IntRect(0, 0, 64, 64);
     sf::IntRect positionRect = sf::IntRect(player.currentAnimFrame * PLAYER_SPRITE_WIDTH, player.direction * PLAYER_SPRITE_HEIGHT, PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
     player.sprite.setTextureRect(positionRect);
 
@@ -108,12 +117,16 @@ void loadScene(Scene scene) {
 
 void Render(sf::RenderWindow& window) {
     window.clear();
-    playerLoop();
+    if (currentScene.type == SCENE_GAME){
+        if (currentScene.playerEnabled)
+            playerLoop();
 
-    window.setView(currentScene.view);
-    window.draw(currentScene.backgroundSprite);
-    window.draw(player.sprite);
-
+        window.setView(currentScene.view);
+        window.draw(currentScene.backgroundSprite);
+        if (currentScene.playerEnabled)
+            window.draw(player.sprite);
+    }
     framecount++;
     if (framecount > REFRESH_RATE) framecount = 0;
+    onOverrideRender(window);
 }

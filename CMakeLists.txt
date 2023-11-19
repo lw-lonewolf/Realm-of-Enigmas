@@ -16,7 +16,8 @@ endif()
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
-add_executable(window main.cpp)
+add_executable(window main.cpp
+        src/Override.cpp)
 target_link_libraries(window PRIVATE sfml-graphics sfml-system)
 
 install(TARGETS window)

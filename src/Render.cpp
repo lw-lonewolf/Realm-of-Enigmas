@@ -5,9 +5,10 @@
  *
  * */
 
-void onOverrideRender(sf::RenderWindow& window);
-int framecount = 0;
-
+/* The setView function (should be called "setCamera") sets the camera
+ * coordinates according to the position of the character (camera follows player
+ * system)
+ * */
 void setView() {
     if (!currentScene.playerEnabled) return;
 
@@ -56,56 +57,11 @@ void setView() {
         currentScene.view.setCenter(viewCenter.x, bottomCorner);
 }
 
-void playerLoop() {
-    if (!player.moving)
-        player.currentAnimFrame = 0;
-    else if (framecount % (REFRESH_RATE * PLAYER_ANIM_SPEED / 1000) == 0) {
-        player.currentAnimFrame++;
-        if (player.currentAnimFrame > PLAYER_ANIM_FRAMES)
-            player.currentAnimFrame = 1;
-    }
 
-    bool isDiagonalMovement = abs(player.movementVector.x / PLAYER_MOVE_MULTIPLIER) && abs(player.movementVector.y / PLAYER_MOVE_MULTIPLIER);
-    sf::Vector2f effectiveMovementVector = player.movementVector;
-
-    if (player.moving) {
-        player.prevPosition = player.sprite.getPosition();
-
-        if (player.movementVector.x/PLAYER_MOVE_MULTIPLIER == -1) player.direction = PLAYER_SPRITE_LEFT;
-        if (player.movementVector.x/PLAYER_MOVE_MULTIPLIER == 1) player.direction = PLAYER_SPRITE_RIGHT;
-        if (player.movementVector.y/PLAYER_MOVE_MULTIPLIER == -1) player.direction = PLAYER_SPRITE_UP;
-        if (player.movementVector.y/PLAYER_MOVE_MULTIPLIER == 1) player.direction = PLAYER_SPRITE_DOWN;
-
-
-        // Normalizing input vector
-
-        if (isDiagonalMovement) {
-            effectiveMovementVector.x = player.movementVector.x * (0.707f);
-            effectiveMovementVector.y = player.movementVector.y * (0.707f);
-        }
-
-
-        // Physics checks:
-        // Validate new player position before moving the player sprite
-
-        if (!PhysicsValidatePosition(sf::Vector2f(player.sprite.getPosition().x + effectiveMovementVector.x, player.sprite.getPosition().y)))
-            effectiveMovementVector.x = 0;
-
-        if (!PhysicsValidatePosition(sf::Vector2f(player.sprite.getPosition().x, player.sprite.getPosition().y + effectiveMovementVector.y)))
-            effectiveMovementVector.y = 0;
-
-        player.sprite.move(effectiveMovementVector);
-
-        if (player.movementVector.x == 0 && player.movementVector.y == 0)
-            player.moving = false;
-    }
-
-    sf::IntRect positionRect = sf::IntRect(player.currentAnimFrame * PLAYER_SPRITE_WIDTH, player.direction * PLAYER_SPRITE_HEIGHT, PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT);
-    player.sprite.setTextureRect(positionRect);
-
-    setView();
-}
-
+/* The loadScene simply loads up the scene passed as the parameter. The previous
+ * scene objects are automatically stashed.
+ *
+ * */
 void loadScene(Scene scene) {
     currentScene = scene;
 
@@ -127,18 +83,91 @@ void loadScene(Scene scene) {
     playerLoop();
 }
 
+void renderInteraction(sf::RenderWindow& window, InteractionPoint interaction) {
+
+    sf::Text interactionTx;
+    interactionTx.setString("[E]");
+    interactionTx.setFont(UI_FONT_BODY);
+    interactionTx.setCharacterSize(UI_BODY_3_SIZE);
+    interactionTx.setFillColor(sf::Color::White);
+    interactionTx.setPosition(interaction.position.x, interaction.position.y - UI_BODY_3_SIZE);
+    interactionTx.setOrigin(UI_BODY_3_SIZE/2, UI_BODY_3_SIZE/2);
+
+    window.draw(interactionTx);
+}
+
+/* The UILayer function renders the UI of the game. It renders above the game
+ * objects, right after setting the uiView as the view (window.setView).
+ *
+ * */
+void UILayer(sf::RenderWindow& window) {
+
+
+    if (uiStatus.length()) {// this will be true when the uiStatus has text
+        sf::RectangleShape uiStatusBg(sf::Vector2f(SCREEN_W, UI_BODY_2_SIZE + 10));
+        uiStatusBg.setPosition(0, SCREEN_H - 10);
+        uiStatusBg.setOrigin(sf::Vector2f(0, UI_BODY_2_SIZE));
+        uiStatusBg.setFillColor(sf::Color(0, 0, 0, 100));
+        window.draw(uiStatusBg);
+    }
+
+    sf::Text uiStatusTx;
+    uiStatusTx.setString(uiStatus);
+    uiStatusTx.setFont(UI_FONT_BODY);
+    uiStatusTx.setCharacterSize(UI_BODY_2_SIZE);
+    uiStatusTx.setFillColor(sf::Color::White);
+    uiStatusTx.setPosition(0, SCREEN_H);
+    uiStatusTx.setOrigin(-10, UI_BODY_2_SIZE + 10);
+
+    window.draw(uiStatusTx);
+}
+
+/* Debug mode render:
+ * This only runs when the DEBUG_MODE is enabled in Constants.h.
+ *
+ * */
+void renderDebug(sf::RenderWindow& window) {
+    for (int i = 0; currentScene.interactibles[i].name != INTERACTION_NULL; i++) {
+        sf::RectangleShape rect(sf::Vector2f(INTERACTIBLE_THRESHOLD, INTERACTIBLE_THRESHOLD));
+        rect.setPosition(sf::Vector2f(currentScene.interactibles[i].position.x - (INTERACTIBLE_THRESHOLD/2), currentScene.interactibles[i].position.y - (INTERACTIBLE_THRESHOLD/2)));
+        rect.setFillColor(sf::Color::Green);
+        window.draw(rect);
+    }
+
+    for (int i = 0; !(currentScene.colliderHitboxes[i].width - currentScene.colliderHitboxes[i].height == currentScene.colliderHitboxes[i].width); i++) {
+        sf::IntRect hitbox = currentScene.colliderHitboxes[i];
+
+        sf::RectangleShape rect(sf::Vector2f(hitbox.width, hitbox.height));
+        rect.setPosition(sf::Vector2f(hitbox.left, hitbox.top));
+        rect.setFillColor(sf::Color(255, 0, 0, 100));
+        window.draw(rect);
+    }
+}
+
 void Render(sf::RenderWindow& window) {
     window.clear();
+
     if (currentScene.type == SCENE_GAME){
         if (currentScene.playerEnabled)
             playerLoop();
 
         window.setView(currentScene.view);
         window.draw(currentScene.backgroundSprite);
+
+        interactionLoop(window);
+
         if (currentScene.playerEnabled)
             window.draw(player.sprite);
+
     }
+
+    onOverrideRender(window);
+
+    if (DEBUG_MODE) renderDebug(window);
+    window.setView(uiView);
+    UILayer(window);
+
     framecount++;
     if (framecount > REFRESH_RATE) framecount = 0;
-    onOverrideRender(window);
+
 }

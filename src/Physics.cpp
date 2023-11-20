@@ -6,6 +6,12 @@
 
 Scene currentScene;
 
+/* The PhysicsValidatePosition function takes in a test position vector and
+ * returns true if the vector isn't colliding with any of the defined hitboxes.
+ * (Returns false if it does) (Colliding just means if the test position is
+ * inside any hitbox)
+ *
+ * */
 bool PhysicsValidatePosition(sf::Vector2f testPosition) {
     for (int i = 0; !(currentScene.colliderHitboxes[i].width - currentScene.colliderHitboxes[i].height == currentScene.colliderHitboxes[i].width); i++) {
         sf::IntRect hitbox = currentScene.colliderHitboxes[i];
@@ -25,6 +31,12 @@ bool PhysicsValidatePosition(sf::Vector2f testPosition) {
     return true;
 }
 
+
+/* The PhysicsLoop functions runs every frame, and makes sure that the player
+ * isn't colliding with any of the hitboxes (restore the player to its last
+ * position if it is)
+ *
+ * */
 
 void PhysicsLoop() {
     sf::Vector2f playerPos = player.sprite.getPosition();

@@ -50,8 +50,6 @@ void onMenuRender(sf::RenderWindow& window) {
     menuTitle.setFillColor(sf::Color(200, 200, 200));
 
     sf::Text menuItems[3];
-
-
     for (int i = 0; i < 3; i++) {
         menuItems[i].setString(menuItemNames[i]);
         menuItems[i].setFont(UI_FONT_BODY);

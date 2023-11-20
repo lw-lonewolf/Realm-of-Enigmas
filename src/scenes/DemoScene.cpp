@@ -23,6 +23,15 @@ Scene initDemoScene() {
     scene.colliderHitboxes[5] = sf::IntRect(192, 0, 351, 70);
 
 
+    InteractionPoint changeSceneInteraction;
+    changeSceneInteraction.name = INTERACTION_TRAVEL;
+    changeSceneInteraction.label = "Go to Test Scene";
+    changeSceneInteraction.travelTo = TRAVEL_TEST_SCENE;
+    changeSceneInteraction.position = sf::Vector2f(175, 225);
+
+    scene.interactibles[0] = changeSceneInteraction;
+
+
 
     return scene;
 }

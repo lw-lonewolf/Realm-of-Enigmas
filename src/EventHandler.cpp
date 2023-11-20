@@ -3,8 +3,12 @@
  * handling is fundamentally broken down in this file.
  * */
 
-void onOverrideEvent(sf::Event event);
 
+/* The menuEventHandler function is called from the Override.cpp (visit
+ * Override.cpp for explanation) when the MenuScene wants to receive event
+ * handling calls. The onMenuNavigation is situated in MenuScene.cpp.
+ *
+ * */
 void menuEventHandler(sf::Event event) {
     switch (event.type) {
         case sf::Event::KeyPressed:
@@ -24,28 +28,49 @@ void menuEventHandler(sf::Event event) {
     }
 }
 
+/* This small function is responsible for converting the keyboard direction
+ * (from the EventHandler below) into a usable player movementVector.
+ *
+ * */
 void onMovement(sf::Vector2f dir) {
     player.movementVector = dir;
     player.moving = true;
 }
 
+/* Finally, the EventHandler is the heart of all the event handling in the
+ * entire game. All events are passed to this, and this function forks down the
+ * call to the relevant handler (movement handler, interaction handler, menu
+ * handler, etc.)
+ *
+ * */
 void EventHandler(sf::Event event) {
     switch (event.type) {
     case sf::Event::KeyPressed:
         // std::cout << "key: " << event.key.code << std::endl;
 
-        if (event.key.code == KEY_UP)
-            onMovement(sf::Vector2f(player.movementVector.x, -1.f * PLAYER_MOVE_MULTIPLIER));
-            
-        else if (event.key.code == KEY_DOWN)
-            onMovement(sf::Vector2f(player.movementVector.x, 1.f * PLAYER_MOVE_MULTIPLIER));
-            
-        else if (event.key.code == KEY_LEFT)
-            onMovement(sf::Vector2f(-1.f * PLAYER_MOVE_MULTIPLIER, player.movementVector.y));
-            
-        else if (event.key.code == KEY_RIGHT)
-            onMovement(sf::Vector2f(1.f * PLAYER_MOVE_MULTIPLIER, player.movementVector.y));
-        
+        switch (event.key.code) {
+            case KEY_UP:
+                onMovement(sf::Vector2f(player.movementVector.x, -1.f * PLAYER_MOVE_MULTIPLIER));
+                break;
+
+            case KEY_DOWN:
+                onMovement(sf::Vector2f(player.movementVector.x, 1.f * PLAYER_MOVE_MULTIPLIER));
+                break;
+
+            case KEY_LEFT:
+                onMovement(sf::Vector2f(-1.f * PLAYER_MOVE_MULTIPLIER, player.movementVector.y));
+                break;
+
+            case KEY_RIGHT:
+                onMovement(sf::Vector2f(1.f * PLAYER_MOVE_MULTIPLIER, player.movementVector.y));
+                break;
+
+            case KEY_ACTION:
+                handleInteraction(player.interactionInRange);
+                break;
+
+        }
+
         break;
 
     case sf::Event::KeyReleased:
@@ -57,13 +82,16 @@ void EventHandler(sf::Event event) {
             onMovement(sf::Vector2f(0, player.movementVector.y));
             
         break;
-//
+
 //    case sf::Event::MouseMoved:
 //        std::cout << "mouse: x:" << event.mouseMove.x << " y:" << event.mouseMove.y << std::endl;
-//
+
     default:
         break;
     }
 
+    /* This is overriding call which extends the EventHandler to any of the
+     * scenes that may also require it.
+     * */
     onOverrideEvent(event);
 }

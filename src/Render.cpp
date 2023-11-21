@@ -80,6 +80,11 @@ void loadScene(Scene scene) {
     player.currentAnimFrame = 0;
     player.direction = currentScene.defaultPlayerDir;
 
+    // Initialize every animating sprite's current frame to the first.
+    for (int i = 0; currentScene.animatedSprites[i].animFrames > 0; i++) {
+        currentScene.animatedSpritesFrames[i] = 1;
+    }
+
     playerLoop();
 }
 
@@ -93,13 +98,43 @@ void renderInteraction(sf::RenderWindow& window, InteractionPoint interaction) {
     sf::Text interactionTx;
     interactionTx.setString("E");
     interactionTx.setFont(UI_FONT_BODY);
-    interactionTx.setCharacterSize(UI_BODY_3_SIZE);
+    interactionTx.setCharacterSize(UI_SMALL_1_SIZE);
     interactionTx.setFillColor(sf::Color::White);
     interactionTx.setPosition(interactionIcon.getPosition());
-    interactionTx.setOrigin(-UI_BODY_3_SIZE/3, 0);
+    interactionTx.setOrigin(-UI_SMALL_1_SIZE/2, -UI_SMALL_1_SIZE/4);
+
+    if (framecount > (REFRESH_RATE/2)) {
+        // if half a second has passed, change the icon into a pressed button
+        interactionIcon.setTextureRect(UI_SPR_BTN_SQUARE_PRESSED);
+
+        // also move the text a little lower too
+        interactionTx.setPosition(interactionTx.getPosition().x, interactionTx.getPosition().y + 1);
+
+    }
+
 
     window.draw(interactionIcon);
     window.draw(interactionTx);
+}
+
+
+void NPCsRenderLoop(sf::RenderWindow& window) {
+    for (int i = 0; currentScene.animatedSprites[i].animFrames > 0; i++) {
+        IdleAnimatingSprite npcSprite = currentScene.animatedSprites[i];
+
+        if (framecount % (REFRESH_RATE * npcSprite.animSpeed / 1000) == 0) {
+            currentScene.animatedSpritesFrames[i]++;
+            if (currentScene.animatedSpritesFrames[i] > npcSprite.animFrames)
+                currentScene.animatedSpritesFrames[i] = 1;
+        }
+
+        sf::Sprite npc;
+        npc.setTexture(guideCharTexture);
+        npc.setTextureRect(sf::IntRect(npcSprite.width * (currentScene.animatedSpritesFrames[i] - 1), 0, npcSprite.width, npcSprite.height));
+        npc.setPosition(npcSprite.position);
+
+        window.draw(npc);
+    }
 }
 
 /* The UILayer function renders the UI of the game. It renders above the game
@@ -134,8 +169,9 @@ void UILayer(sf::RenderWindow& window) {
  * */
 void renderDebug(sf::RenderWindow& window) {
     for (int i = 0; currentScene.interactibles[i].name != INTERACTION_NULL; i++) {
+        sf::Vector2f targetPos = centerByDimensions(currentScene.interactibles[i].position, sf::Vector2i(INTERACTIBLE_THRESHOLD, INTERACTIBLE_THRESHOLD));
         sf::RectangleShape rect(sf::Vector2f(INTERACTIBLE_THRESHOLD, INTERACTIBLE_THRESHOLD));
-        rect.setPosition(sf::Vector2f(currentScene.interactibles[i].position.x - (INTERACTIBLE_THRESHOLD/2), currentScene.interactibles[i].position.y - (INTERACTIBLE_THRESHOLD/2)));
+        rect.setPosition(sf::Vector2f(targetPos.x - (INTERACTIBLE_THRESHOLD/2), targetPos.y - (INTERACTIBLE_THRESHOLD/2)));
         rect.setFillColor(sf::Color::Green);
         window.draw(rect);
     }
@@ -160,6 +196,7 @@ void Render(sf::RenderWindow& window) {
         window.setView(currentScene.view);
         window.draw(currentScene.backgroundSprite);
 
+        NPCsRenderLoop(window);
         interactionLoop(window);
 
         if (currentScene.playerEnabled)
@@ -170,10 +207,11 @@ void Render(sf::RenderWindow& window) {
     onOverrideRender(window);
 
     if (DEBUG_MODE) renderDebug(window);
+
     window.setView(uiView);
     UILayer(window);
 
     framecount++;
-    if (framecount > REFRESH_RATE) framecount = 0;
+    if (framecount >= REFRESH_RATE) framecount = 0;
 
 }

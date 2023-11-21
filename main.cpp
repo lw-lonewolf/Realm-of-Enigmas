@@ -32,6 +32,7 @@ int main() {
     window.setFramerateLimit(REFRESH_RATE);
 
     uiView = sf::View(sf::Vector2f(SCREEN_W/2, SCREEN_H/2), sf::Vector2f(SCREEN_W, SCREEN_H));
+    
     // Preloading the fonts and UI spritesheet:
 
     UI_FONT_HEAD.loadFromFile(UI_FONT_HEAD_LOCATION);
@@ -40,10 +41,15 @@ int main() {
     if (!uiSpriteTexture.loadFromFile(UI_SPRITE_PATH))
         std::cout << "Failed to load from file: " << UI_SPRITE_PATH << std::endl;
 
+    initGuideCharSprite();
+    if (!guideCharTexture.loadFromFile(guideChar.path))
+        std::cout << "Failed to load from file: " << guideChar.path << std::endl;
+
+
     // Loading the first scene, the MenuScene.cpp: (initMenuScene is defined in
     // MenuScene.cpp)
 
-    loadScene(initMenuScene());
+    loadScene(initTestScene());
 
     while (window.isOpen()) {
         sf::Event event;

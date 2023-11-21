@@ -49,6 +49,9 @@ const int UI_HEAD_3_SIZE = 45;
 const int UI_BODY_1_SIZE = 30;
 const int UI_BODY_2_SIZE = 22;
 const int UI_BODY_3_SIZE = 14;
+const int UI_SMALL_1_SIZE = 11;
+const int UI_SMALL_2_SIZE = 8;
+const int UI_SMALL_3_SIZE = 5;
 
 /* Structures & related enums */
 
@@ -74,6 +77,17 @@ enum InputAction {
     INPUT_BACK
 };
 
+/* SceneLocation will basically contain identifiers for all the locations the
+ * player can travel to. (A little messy because this is a workaround to the
+ * no-OOP restriction we have). Open to improvements.
+ *
+ * */
+
+enum SceneLocation {
+    SCENE_TEST_SCENE,
+    SCENE_DEMO_SCENE,
+    SCENE_MAIN_MENU,
+};
 
 /* The Interaction enum will list all the interactions of the game. When these
  * interactions are to be made, the code in handleInteraction() will use a
@@ -87,19 +101,6 @@ enum Interaction {
     INTERACTION_TALK
 };
 
-
-/* TravelLocation will basically contain identifiers for all the locations the
- * player can travel to. (A little messy because this is a workaround to the
- * no-OOP restriction we have). Open to improvements.
- *
- * */
-
-enum TravelLocation {
-    TRAVEL_TEST_SCENE,
-    TRAVEL_DEMO_SCENE
-};
-
-
 /* Finally the InteractionPoint struct itself. This struct defines any point of
  * interaction in a scene.
  * */
@@ -107,9 +108,24 @@ enum TravelLocation {
 struct InteractionPoint {
     Interaction name = INTERACTION_NULL;
     std::string label = "Interact";
-    TravelLocation travelTo;
+    SceneLocation travelTo;
     sf::Vector2f position;
 };
+
+/* The IdleAnimatingSprite struct is primarily for placing breathing NPCs in
+ * a scene, which is why this is called "Idle Animating". Any scene has an array
+ * of these, and IdleAnimatingSprite variables are defined in Assets.h.
+ *
+ * */
+struct IdleAnimatingSprite {
+    std::string path;
+    sf::Vector2f position;
+    int width;
+    int height;
+    int animFrames = 0;
+    int animSpeed;
+};
+
 
 /* The Scene struct: This struct defines every property of a Scene, from its
  * background to the camera settings, from the player properties to the hitboxes
@@ -118,6 +134,7 @@ struct InteractionPoint {
 
 struct Scene {
     SceneType type;
+    SceneLocation location;
     std::string name;
     std::string backgroundSpritePath;
     sf::Texture background;
@@ -130,6 +147,9 @@ struct Scene {
 
     sf::IntRect colliderHitboxes[32];
     InteractionPoint interactibles[32];
+    IdleAnimatingSprite animatedSprites[32];
+    int animatedSpritesFrames[32]; // This is used by a render loop to store the
+                                   // current frame of each animated sprite here
 };
 
 /* This struct is just for the player. Contains all related stuff about the
@@ -147,4 +167,3 @@ struct {
     int direction;
     int currentAnimFrame;
 } player;
-

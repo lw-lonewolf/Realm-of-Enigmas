@@ -5,27 +5,41 @@
  * */
 
 void onOverrideEvent(sf::Event event) {
-    switch (currentScene.type) {
+    switch (currentScene.location) {
         /* Each of these cases will detect which specific scene is running
          * currently, and passes the event handling to a function for that
          * scene.
          * */
 
-        case SCENE_MENU:
+        case SCENE_MAIN_MENU:
             menuEventHandler(event);
             break;
+
+        /* An example would be:
+
+        case SCENE_TEST_SCENE:
+            testSceneEvent(window);
+            break;
+         */
+        }
     }
-}
 
-void onOverrideRender(sf::RenderWindow& window) {
-    switch (currentScene.type) {
-        /* Each of these cases will detect which specific scene is running
-         * currently, and passes the render handling to a function for that
-         * scene.
-         * */
+    void onOverrideRender(sf::RenderWindow& window) {
+        switch (currentScene.location) {
+            /* Each of these cases will detect which specific scene is running
+             * currently, and passes the render handling to a function for that
+             * scene.
+             * */
 
-        case SCENE_MENU:
+        case SCENE_MAIN_MENU:
             onMenuRender(window);
             break;
+
+        /* An example would be:
+
+        case SCENE_TEST_SCENE:
+            onTestRender(window);
+            break;
+        */
     }
 }

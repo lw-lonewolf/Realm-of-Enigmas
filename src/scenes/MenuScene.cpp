@@ -82,6 +82,7 @@ Scene initMenuScene() {
     Scene scene;
 
     scene.name = "Main menu";
+    scene.location = SCENE_MAIN_MENU;
     scene.type = SCENE_MENU;
     scene.backgroundSpritePath = BACKGROUND_TEST_PATH;
     scene.playerEnabled = false;

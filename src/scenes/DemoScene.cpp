@@ -9,9 +9,10 @@ Scene initDemoScene() {
 
     scene.name = "Test Scene";
     scene.type = SCENE_GAME;
+    scene.location = SCENE_DEMO_SCENE;
     scene.backgroundSpritePath = BACKGROUND_DEMO_PATH;
     scene.defaultPlayerDir = PLAYER_SPRITE_DOWN;
-    scene.defaultPlayerPos = sf::Vector2f(173.f, 244.f);
+    scene.defaultPlayerPos = sf::Vector2f(173.f, 250.f);
 
     scene.view = sf::View(scene.defaultPlayerPos, sf::Vector2f(400.f, 300.f));
 
@@ -26,10 +27,18 @@ Scene initDemoScene() {
     InteractionPoint changeSceneInteraction;
     changeSceneInteraction.name = INTERACTION_TRAVEL;
     changeSceneInteraction.label = "Go to Test Scene";
-    changeSceneInteraction.travelTo = TRAVEL_TEST_SCENE;
-    changeSceneInteraction.position = sf::Vector2f(175, 225);
+    changeSceneInteraction.travelTo = SCENE_TEST_SCENE;
+    changeSceneInteraction.position = sf::Vector2f(175, 180);
 
     scene.interactibles[0] = changeSceneInteraction;
+
+    InteractionPoint changeSceneInCornerInteraction;
+    changeSceneInCornerInteraction.name = INTERACTION_TRAVEL;
+    changeSceneInCornerInteraction.label = "Go to Test Scene";
+    changeSceneInCornerInteraction.travelTo = SCENE_TEST_SCENE;
+    changeSceneInCornerInteraction.position = sf::Vector2f(0, 150);
+
+    scene.interactibles[1] = changeSceneInCornerInteraction;
 
 
 

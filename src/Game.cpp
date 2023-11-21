@@ -45,6 +45,8 @@ void playerLoop() {
 
         player.sprite.move(effectiveMovementVector);
 
+        std::cout << "player position: " << player.sprite.getPosition().x << "," << player.sprite.getPosition().y << std::endl;
+
         if (player.movementVector.x == 0 && player.movementVector.y == 0)
             player.moving = false;
     }
@@ -55,12 +57,12 @@ void playerLoop() {
     setView();
 }
 
-void handleTravel(TravelLocation location) {
+void handleTravel(SceneLocation location) {
     switch (location) {
-        case TRAVEL_DEMO_SCENE:
+        case SCENE_DEMO_SCENE:
             loadScene(initDemoScene());
             break;
-        case TRAVEL_TEST_SCENE:
+        case SCENE_TEST_SCENE:
             loadScene(initTestScene());
             break;
     }
@@ -87,6 +89,8 @@ void interactionLoop(sf::RenderWindow& window) {
 
     for (int i = 0; currentScene.interactibles[i].name != INTERACTION_NULL; i++) {
         InteractionPoint interaction = currentScene.interactibles[i];
+        sf::Vector2f correctedIntercationPosition = centerByDimensions(interaction.position, sf::Vector2i(INTERACTIBLE_THRESHOLD, INTERACTIBLE_THRESHOLD));
+        interaction.position = correctedIntercationPosition;
         int displacementX = abs(interaction.position.x - (player.sprite.getPosition().x + (PLAYER_SPRITE_WIDTH/2)));
         int displacementY = abs(interaction.position.y - (player.sprite.getPosition().y + (PLAYER_SPRITE_HEIGHT/2)));
 

@@ -31,3 +31,14 @@ enum PLAYER_SPRITE_DIR {
 
 #define UI_FONT_HEAD_LOCATION "assets/fonts/8-bit Arcade In.ttf"
 #define UI_FONT_BODY_LOCATION "assets/fonts/Retro Gaming.ttf"
+
+/* UI Sprite */
+#define UI_SPRITE_PATH "assets/sprites/GUI.png"
+
+const sf::IntRect UI_SPR_BTN_SQUARE(sf::Vector2(1, 81), sf::Vector2(14, 14));
+const sf::IntRect UI_SPR_BTN_SQUARE_PRESSED(sf::Vector2(16, 81), sf::Vector2(14, 14));
+
+const sf::IntRect UI_SPR_BTN(sf::Vector2(113, 81), sf::Vector2(25, 13));
+const sf::IntRect UI_SPR_BTN_PRESSED(sf::Vector2(112, 97), sf::Vector2(26, 14));
+
+

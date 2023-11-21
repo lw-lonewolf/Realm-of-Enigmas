@@ -15,3 +15,4 @@ void setView();
 sf::View uiView;
 int framecount = 0;
 std::string uiStatus = "";
+sf::Texture uiSpriteTexture;

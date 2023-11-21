@@ -85,14 +85,20 @@ void loadScene(Scene scene) {
 
 void renderInteraction(sf::RenderWindow& window, InteractionPoint interaction) {
 
+    sf::Vector2f targetPosition = centerByDimensions(player.sprite.getPosition(), sf::Vector2i(PLAYER_SPRITE_WIDTH, PLAYER_SPRITE_HEIGHT));
+    targetPosition.x -= 3; // Fixing the alignment a little bit
+    targetPosition.y -= 40; // To make the icon popup a little above the player's head
+    sf::Sprite interactionIcon = newButtonSquare(targetPosition);
+
     sf::Text interactionTx;
-    interactionTx.setString("[E]");
+    interactionTx.setString("E");
     interactionTx.setFont(UI_FONT_BODY);
     interactionTx.setCharacterSize(UI_BODY_3_SIZE);
     interactionTx.setFillColor(sf::Color::White);
-    interactionTx.setPosition(interaction.position.x, interaction.position.y - UI_BODY_3_SIZE);
-    interactionTx.setOrigin(UI_BODY_3_SIZE/2, UI_BODY_3_SIZE/2);
+    interactionTx.setPosition(interactionIcon.getPosition());
+    interactionTx.setOrigin(-UI_BODY_3_SIZE/3, 0);
 
+    window.draw(interactionIcon);
     window.draw(interactionTx);
 }
 

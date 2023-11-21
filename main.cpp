@@ -16,6 +16,8 @@
 #include "src/scenes/TestScene.cpp"
 
 /* Source files */
+#include "src/Helper.cpp"
+#include "src/UI.cpp"
 #include "src/Physics.cpp"
 #include "src/Game.cpp"
 #include "src/Render.cpp"
@@ -30,10 +32,13 @@ int main() {
     window.setFramerateLimit(REFRESH_RATE);
 
     uiView = sf::View(sf::Vector2f(SCREEN_W/2, SCREEN_H/2), sf::Vector2f(SCREEN_W, SCREEN_H));
-    // Preloading the fonts:
+    // Preloading the fonts and UI spritesheet:
 
     UI_FONT_HEAD.loadFromFile(UI_FONT_HEAD_LOCATION);
     UI_FONT_BODY.loadFromFile(UI_FONT_BODY_LOCATION);
+
+    if (!uiSpriteTexture.loadFromFile(UI_SPRITE_PATH))
+        std::cout << "Failed to load from file: " << UI_SPRITE_PATH << std::endl;
 
     // Loading the first scene, the MenuScene.cpp: (initMenuScene is defined in
     // MenuScene.cpp)

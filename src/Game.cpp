@@ -3,6 +3,15 @@
  *
  * */
 
+void pauseGame() {
+    isGamePaused = true;
+}
+
+void resumeGame() {
+    isGamePaused = false;
+    isDialogOpen = false;
+}
+
 /* The playerLoop runs every frame, and handles all the player logic.
  * */
 void playerLoop() {
@@ -57,6 +66,18 @@ void playerLoop() {
     setView();
 }
 
+void nextDialog() {
+    if (!isDialogOpen) return;
+
+    currentDialogIndex++;
+
+    if (!currentDialog.messages[currentDialogIndex].speaker.animFrames) // checking if the next dialog message exists
+        resumeGame();
+
+    currentDialogText = currentDialog.messages[currentDialogIndex].message;
+    currentDialogNPC = currentDialog.messages[currentDialogIndex].speaker;
+}
+
 void handleTravel(SceneLocation location) {
     switch (location) {
         case SCENE_DEMO_SCENE:
@@ -68,8 +89,21 @@ void handleTravel(SceneLocation location) {
     }
 }
 
+void handleDialog(Dialog dialog) {
+    pauseGame();
+    isDialogOpen = true;
+
+    currentDialog = dialog;
+    currentDialogIndex = -1;
+    currentDialogText = "";
+    nextDialog();
+}
+
 void handleInteraction(InteractionPoint interaction) {
-     if (interaction.name == INTERACTION_NULL) return;
+    // Don't respond to interactions when the game is paused
+    if (isGamePaused) return;
+    else if (interaction.name == INTERACTION_NULL) return;
+
 
     switch (interaction.name) {
         case INTERACTION_NULL:
@@ -78,6 +112,10 @@ void handleInteraction(InteractionPoint interaction) {
 
         case INTERACTION_TRAVEL:
             handleTravel(interaction.travelTo);
+            break;
+
+        case INTERACTION_TALK:
+            handleDialog(interaction.dialog);
             break;
 
     }

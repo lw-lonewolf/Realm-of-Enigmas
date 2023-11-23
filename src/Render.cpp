@@ -120,9 +120,9 @@ void renderInteraction(sf::RenderWindow& window, InteractionPoint interaction) {
 
 void NPCsRenderLoop(sf::RenderWindow& window) {
     for (int i = 0; currentScene.animatedSprites[i].animFrames > 0; i++) {
-        IdleAnimatingSprite npcSprite = currentScene.animatedSprites[i];
+        NPC npcSprite = currentScene.animatedSprites[i];
 
-        if (framecount % (REFRESH_RATE * npcSprite.animSpeed / 1000) == 0) {
+        if ((framecount % (REFRESH_RATE * npcSprite.animSpeed / 1000) == 0) && !isGamePaused) {
             currentScene.animatedSpritesFrames[i]++;
             if (currentScene.animatedSpritesFrames[i] > npcSprite.animFrames)
                 currentScene.animatedSpritesFrames[i] = 1;
@@ -137,30 +137,71 @@ void NPCsRenderLoop(sf::RenderWindow& window) {
     }
 }
 
+/* The dialogRender function is responsible for all the dialog related rendering
+ * */
+
+void dialogRender(sf::RenderWindow& window) {
+    sf::Sprite dialogBg(uiSpriteTexture);
+    dialogBg.setTextureRect(UI_SPR_DIALOG_BG);
+    dialogBg.setScale(12, 12);
+    dialogBg.setPosition(centerByDimensions(sf::Vector2f(SCREEN_W/2, SCREEN_H/2), sf::Vector2i(UI_SPR_DIALOG_BG.width * dialogBg.getScale().x, UI_SPR_DIALOG_BG.height * dialogBg.getScale().y), true));
+
+    sf::Text dialogHead(currentDialogNPC.name, UI_FONT_HEAD);
+    dialogHead.setCharacterSize(UI_HEAD_2_SIZE);
+    dialogHead.setPosition(centerByDimensions(sf::Vector2f(SCREEN_W/2, SCREEN_H/5), sf::Vector2i(dialogHead.getCharacterSize() * (currentDialogNPC.name.length() / 2), dialogHead.getCharacterSize()), true));
+
+    sf::Text dialogBody(currentDialogText, UI_FONT_BODY);
+    dialogBody.setPosition(dialogBg.getPosition().x + 80, dialogBg.getPosition().y + 80);
+    dialogBody.setCharacterSize(UI_BODY_2_SIZE);
+    textWrapper(dialogBody, (UI_SPR_DIALOG_BG.width * dialogBg.getScale().x) - 160);
+
+
+    window.draw(dialogBg);
+    window.draw(dialogHead);
+    window.draw(dialogBody);
+}
+
 /* The UILayer function renders the UI of the game. It renders above the game
  * objects, right after setting the uiView as the view (window.setView).
  *
  * */
 void UILayer(sf::RenderWindow& window) {
+    /* The bottom statusbar
+     * */
 
+    if (!isGamePaused) {
+        if (uiStatus.length()) {// this will be true when the uiStatus has text
+            sf::RectangleShape uiStatusBg(sf::Vector2f(SCREEN_W, UI_BODY_2_SIZE + 10));
+            uiStatusBg.setPosition(0, SCREEN_H - 10);
+            uiStatusBg.setOrigin(sf::Vector2f(0, UI_BODY_2_SIZE));
+            uiStatusBg.setFillColor(sf::Color(0, 0, 0, 100));
+            window.draw(uiStatusBg);
+        }
 
-    if (uiStatus.length()) {// this will be true when the uiStatus has text
-        sf::RectangleShape uiStatusBg(sf::Vector2f(SCREEN_W, UI_BODY_2_SIZE + 10));
-        uiStatusBg.setPosition(0, SCREEN_H - 10);
-        uiStatusBg.setOrigin(sf::Vector2f(0, UI_BODY_2_SIZE));
-        uiStatusBg.setFillColor(sf::Color(0, 0, 0, 100));
-        window.draw(uiStatusBg);
+        sf::Text uiStatusTx;
+        uiStatusTx.setString(uiStatus);
+        uiStatusTx.setFont(UI_FONT_BODY);
+        uiStatusTx.setCharacterSize(UI_BODY_2_SIZE);
+        uiStatusTx.setFillColor(sf::Color::White);
+        uiStatusTx.setPosition(0, SCREEN_H);
+        uiStatusTx.setOrigin(-10, UI_BODY_2_SIZE + 10);
+
+        window.draw(uiStatusTx);
     }
+    /* The dialogs stuff
+     * */
 
-    sf::Text uiStatusTx;
-    uiStatusTx.setString(uiStatus);
-    uiStatusTx.setFont(UI_FONT_BODY);
-    uiStatusTx.setCharacterSize(UI_BODY_2_SIZE);
-    uiStatusTx.setFillColor(sf::Color::White);
-    uiStatusTx.setPosition(0, SCREEN_H);
-    uiStatusTx.setOrigin(-10, UI_BODY_2_SIZE + 10);
+    if (isGamePaused) {
+        sf::RectangleShape gamePauseScreenDarken(sf::Vector2f(SCREEN_W, SCREEN_H));
+        gamePauseScreenDarken.setPosition(0, 0);
+        gamePauseScreenDarken.setFillColor(sf::Color(0, 0, 0, 128));
 
-    window.draw(uiStatusTx);
+        window.draw(gamePauseScreenDarken);
+
+        if (isDialogOpen) {
+            dialogRender(window);
+        }
+    }
 }
 
 /* Debug mode render:
@@ -197,7 +238,7 @@ void Render(sf::RenderWindow& window) {
         window.draw(currentScene.backgroundSprite);
 
         NPCsRenderLoop(window);
-        interactionLoop(window);
+        if (!isGamePaused) interactionLoop(window);
 
         if (currentScene.playerEnabled)
             window.draw(player.sprite);

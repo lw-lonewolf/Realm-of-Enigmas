@@ -30,6 +30,8 @@ Scene initTestScene() {
     talkToGuideInteraction.name = INTERACTION_TALK;
     talkToGuideInteraction.label = "Talk to ???";
     talkToGuideInteraction.position = scene.animatedSprites[0].position;
+    talkToGuideInteraction.dialog = testDialog();
+    talkToGuideInteraction.associatedNPC = scene.animatedSprites[0];
 
     scene.interactibles[1] = talkToGuideInteraction;
 

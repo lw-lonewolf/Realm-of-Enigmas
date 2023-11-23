@@ -33,8 +33,20 @@ void menuEventHandler(sf::Event event) {
  *
  * */
 void onMovement(sf::Vector2f dir) {
+    // Don't carry out movement when the game is paused
+    if (isGamePaused) return;
+
     player.movementVector = dir;
     player.moving = true;
+}
+
+
+/* This function controls the global back function which occurs when the user
+ * presses the Esc key.
+ * */
+void onEscape() {
+    isGamePaused = !isGamePaused;
+    isDialogOpen = false;
 }
 
 /* Finally, the EventHandler is the heart of all the event handling in the
@@ -67,6 +79,14 @@ void EventHandler(sf::Event event) {
 
             case KEY_ACTION:
                 handleInteraction(player.interactionInRange);
+                break;
+
+            case KEY_NEXT:
+                nextDialog();
+                break;
+
+            case KEY_NAV_BACK:
+                onEscape();
                 break;
 
         }

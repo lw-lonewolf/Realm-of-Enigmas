@@ -14,5 +14,12 @@ void setView();
 
 sf::View uiView;
 int framecount = 0;
+bool isGamePaused = false;
 std::string uiStatus = "";
 sf::Texture uiSpriteTexture;
+
+bool isDialogOpen = false;
+Dialog currentDialog;
+std::string currentDialogText = "";
+int currentDialogIndex = 0;
+NPC currentDialogNPC;

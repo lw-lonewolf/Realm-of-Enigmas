@@ -32,6 +32,7 @@ const sf::Keyboard::Key KEY_DOWN = sf::Keyboard::S;
 const sf::Keyboard::Key KEY_RIGHT = sf::Keyboard::D;
 
 const sf::Keyboard::Key KEY_ACTION = sf::Keyboard::E;
+const sf::Keyboard::Key KEY_NEXT = sf::Keyboard::Space;
 
 const sf::Keyboard::Key KEY_NAV_UP = sf::Keyboard::Up;
 const sf::Keyboard::Key KEY_NAV_LEFT = sf::Keyboard::Left;
@@ -101,6 +102,42 @@ enum Interaction {
     INTERACTION_TALK
 };
 
+
+/* The NPC struct is primarily for placing animated Non-Playable Characters in
+ * a scene. Any scene has an array of these, and NPCs are defined in Assets.h.
+ *
+ * */
+struct NPC {
+    std::string path;
+    sf::Vector2f position;
+    std::string name;
+    int width;
+    int height;
+    int animFrames = 0; // This initializaton acts as an identifier for any
+                        // uninitialized NPC object. If animFrames is 0, then
+                        // the NPC is null.
+    int animSpeed;
+};
+
+/* Now the dialogs. The DialogOption struct is the building block for each
+ * dialog (a conversation with an NPC). This will define each of the individual
+ * messages that form a dialog.
+ * */
+
+struct DialogOption {
+    NPC speaker;
+    std::string message;
+};
+
+
+/* The Dialog struct will define a dialog. This
+ * contains all info about the conversation, and an array for each DialogOption.
+ * */
+struct Dialog {
+    std::string title;
+    DialogOption messages[64];
+};
+
 /* Finally the InteractionPoint struct itself. This struct defines any point of
  * interaction in a scene.
  * */
@@ -108,24 +145,11 @@ enum Interaction {
 struct InteractionPoint {
     Interaction name = INTERACTION_NULL;
     std::string label = "Interact";
+    sf::Vector2f position;
+    NPC associatedNPC;
     SceneLocation travelTo;
-    sf::Vector2f position;
+    Dialog dialog;
 };
-
-/* The IdleAnimatingSprite struct is primarily for placing breathing NPCs in
- * a scene, which is why this is called "Idle Animating". Any scene has an array
- * of these, and IdleAnimatingSprite variables are defined in Assets.h.
- *
- * */
-struct IdleAnimatingSprite {
-    std::string path;
-    sf::Vector2f position;
-    int width;
-    int height;
-    int animFrames = 0;
-    int animSpeed;
-};
-
 
 /* The Scene struct: This struct defines every property of a Scene, from its
  * background to the camera settings, from the player properties to the hitboxes
@@ -147,7 +171,7 @@ struct Scene {
 
     sf::IntRect colliderHitboxes[32];
     InteractionPoint interactibles[32];
-    IdleAnimatingSprite animatedSprites[32];
+    NPC animatedSprites[32];
     int animatedSpritesFrames[32]; // This is used by a render loop to store the
                                    // current frame of each animated sprite here
 };

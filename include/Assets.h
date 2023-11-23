@@ -24,9 +24,10 @@ enum PLAYER_SPRITE_DIR {
 /* Guide character constants */
 
 sf::Texture guideCharTexture;
-IdleAnimatingSprite guideChar;
+NPC guideChar;
 void initGuideCharSprite() {
     guideChar.path = "assets/sprites/character_guide.png";
+    guideChar.name = "Guide";
     guideChar.width = 32;
     guideChar.height = 32;
 
@@ -54,4 +55,5 @@ const sf::IntRect UI_SPR_BTN_SQUARE_PRESSED(sf::Vector2(17, 81), sf::Vector2(14,
 const sf::IntRect UI_SPR_BTN(sf::Vector2(113, 81), sf::Vector2(25, 13));
 const sf::IntRect UI_SPR_BTN_PRESSED(sf::Vector2(112, 97), sf::Vector2(26, 14));
 
+const sf::IntRect UI_SPR_DIALOG_BG(sf::Vector2(0, 96), sf::Vector2(47, 32));
 

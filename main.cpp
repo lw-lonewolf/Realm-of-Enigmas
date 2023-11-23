@@ -10,6 +10,10 @@
 #include "include/Assets.h"
 #include "include/Globals.h"
 
+/* Data loading files */
+#include "src/Dialog.cpp"
+#include "src/Preload.cpp"
+
 /* Scene files */
 #include "src/scenes/DemoScene.cpp"
 #include "src/scenes/MenuScene.cpp"
@@ -24,7 +28,6 @@
 #include "src/EventHandler.cpp"
 #include "src/Override.cpp"
 
-
 int main() {
     // Code starts off here, setting up the window:
 
@@ -34,17 +37,7 @@ int main() {
     uiView = sf::View(sf::Vector2f(SCREEN_W/2, SCREEN_H/2), sf::Vector2f(SCREEN_W, SCREEN_H));
     
     // Preloading the fonts and UI spritesheet:
-
-    UI_FONT_HEAD.loadFromFile(UI_FONT_HEAD_LOCATION);
-    UI_FONT_BODY.loadFromFile(UI_FONT_BODY_LOCATION);
-
-    if (!uiSpriteTexture.loadFromFile(UI_SPRITE_PATH))
-        std::cout << "Failed to load from file: " << UI_SPRITE_PATH << std::endl;
-
-    initGuideCharSprite();
-    if (!guideCharTexture.loadFromFile(guideChar.path))
-        std::cout << "Failed to load from file: " << guideChar.path << std::endl;
-
+    loadAssets();
 
     // Loading the first scene, the MenuScene.cpp: (initMenuScene is defined in
     // MenuScene.cpp)

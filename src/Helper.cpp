@@ -22,7 +22,7 @@ sf::Vector2f centerByDimensions(sf::Vector2f orgVector, sf::Vector2i dimensions,
 void textWrapper(sf::Text& text, int width, int continueIndex = 0) {
     std::string textStr = text.getString();
     for (int i = continueIndex; i < textStr.length(); i++) {
-        sf::Vector2 characterPos = text.findCharacterPos(i);
+        sf::Vector2<float> characterPos = text.findCharacterPos(i);
         if (characterPos.x >= (text.getPosition().x + width)) {
 
             char extraChar = textStr[textStr.length() - 1];

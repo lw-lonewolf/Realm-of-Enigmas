@@ -1,5 +1,5 @@
 # Realm-of-Enigmas
-## (thomascatt's branch!)
+## (feature's branch!)
 
 Official Repository for the Realm of Enigmas first prototype
 ```

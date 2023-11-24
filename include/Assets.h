@@ -37,6 +37,8 @@ void initGuideCharSprite()
     guideChar.animSpeed = 500;
 }
 
+
+
 /* Background constants */
 
 #define BACKGROUND_DEMO_PATH "assets/imgs/demo-bg-sprite.jpg"

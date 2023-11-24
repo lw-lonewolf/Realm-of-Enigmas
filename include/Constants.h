@@ -201,3 +201,5 @@ struct
     int direction;
     int currentAnimFrame;
 } player;
+
+

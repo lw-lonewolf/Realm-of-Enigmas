@@ -6,7 +6,7 @@
 
 /* Player constants */
 
-#define PLAYER_SPRITE_PATH "../../assets/sprites/player-sprite.png"
+#define PLAYER_SPRITE_PATH "assets/sprites/player-sprite.png"
 #define PLAYER_SPRITE_WIDTH 64
 #define PLAYER_SPRITE_HEIGHT 64
 
@@ -26,7 +26,7 @@ enum PLAYER_SPRITE_DIR {
 sf::Texture guideCharTexture;
 NPC guideChar;
 void initGuideCharSprite() {
-    guideChar.path = "../../assets/sprites/character_guide.png";
+    guideChar.path = "assets/sprites/character_guide.png";
     guideChar.name = "Guide";
     guideChar.width = 32;
     guideChar.height = 32;
@@ -38,18 +38,18 @@ void initGuideCharSprite() {
 /* Background constants */
 
 
-#define BACKGROUND_DEMO_PATH "../../assets/imgs/demo-bg-sprite.jpg"
-#define BACKGROUND_TEST_PATH "../../assets/imgs/BackgroundV4.png"
+#define BACKGROUND_DEMO_PATH "assets/imgs/demo-bg-sprite.jpg"
+#define BACKGROUND_TEST_PATH "assets/imgs/BackgroundV4.png"
 
 /* Fonts */
 
-#define UI_FONT_HEAD_LOCATION "../../assets/fonts/8-bit Arcade In.ttf"
-#define UI_FONT_BODY_LOCATION "../../assets/fonts/Retro Gaming.ttf"
+#define UI_FONT_HEAD_LOCATION "assets/fonts/8-bit Arcade In.ttf"
+#define UI_FONT_BODY_LOCATION "assets/fonts/Retro Gaming.ttf"
 
 /* UI Sprite */
-#define UI_SPRITE_PATH "../../assets/sprites/GUI.png"
+#define UI_SPRITE_PATH "assets/sprites/GUI.png"
 
-const sf::IntRect UI_SPR_BTN_SQUARE(sf::Vector2<int>(1, 81), sf::Vector2<int>(14, 14));
+const sf::IntRect UI_SPR_BTN_SQUARE(sf::Vector2i(1, 81), sf::Vector2i(14, 14));
 const sf::IntRect UI_SPR_BTN_SQUARE_PRESSED(sf::Vector2<int>(17, 81), sf::Vector2<int>(14, 14));
 
 const sf::IntRect UI_SPR_BTN(sf::Vector2<int>(113, 81), sf::Vector2<int>(25, 13));

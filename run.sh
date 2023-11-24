@@ -1,3 +1,15 @@
+
+
+# Compile and run:
+
+rm ./bin/window;
+clear;
+cmake .;
+make;
+
+echo 'Running bin/window...';
+./bin/window;
+
 # Cleaning previous CMake cache:
 
 echo "Removing the following files/directories:";
@@ -43,13 +55,3 @@ if [ -f "CPackSourceConfig.cmake" ]; then
 else
   echo "Skipped: CPackSourceConfig.cmake [not found]";
 fi
-
-# Compile and run:
-
-rm ./bin/window;
-clear;
-cmake .;
-make;
-
-echo 'Running bin/window...';
-./bin/window;

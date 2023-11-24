@@ -50,10 +50,10 @@ void initGuideCharSprite() {
 #define UI_SPRITE_PATH "assets/sprites/GUI.png"
 
 const sf::IntRect UI_SPR_BTN_SQUARE(sf::Vector2i(1, 81), sf::Vector2i(14, 14));
-const sf::IntRect UI_SPR_BTN_SQUARE_PRESSED(sf::Vector2<int>(17, 81), sf::Vector2<int>(14, 14));
+const sf::IntRect UI_SPR_BTN_SQUARE_PRESSED(sf::Vector2i(17, 81), sf::Vector2i(14, 14));
 
-const sf::IntRect UI_SPR_BTN(sf::Vector2<int>(113, 81), sf::Vector2<int>(25, 13));
-const sf::IntRect UI_SPR_BTN_PRESSED(sf::Vector2<int>(112, 97), sf::Vector2<int>(26, 14));
+const sf::IntRect UI_SPR_BTN(sf::Vector2i(113, 81), sf::Vector2i(30, 14));
+const sf::IntRect UI_SPR_BTN_PRESSED(sf::Vector2i(113, 97), sf::Vector2i(30, 14));
 
-const sf::IntRect UI_SPR_DIALOG_BG(sf::Vector2<int>(0, 96), sf::Vector2<int>(47, 32));
+const sf::IntRect UI_SPR_DIALOG_BG(sf::Vector2i(0, 96), sf::Vector2i(47, 32));
 

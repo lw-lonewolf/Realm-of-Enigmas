@@ -1,7 +1,6 @@
 # Realm-of-Enigmas
-## (feature's branch!)
 
-Official Repository for the Realm of Enigmas first prototype
+Official Repository for the Realm of Enigma Game.
 ```
 - 🌐
   |- 📁 assets           # Resources (media, images, audio, etc.)

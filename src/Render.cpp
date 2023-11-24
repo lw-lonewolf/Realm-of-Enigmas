@@ -30,6 +30,7 @@ void setView() {
     bool isViewPassingRightSide = viewCenter.x > rightCorner;
     bool isViewPassingBottomSide = viewCenter.y > bottomCorner;
 
+    // KEEP CAMERA WITHIN LIMITS 
 
     if (isViewPassingLeftSide && isViewPassingTopSide)
         currentScene.view.setCenter(leftCorner, topCorner);

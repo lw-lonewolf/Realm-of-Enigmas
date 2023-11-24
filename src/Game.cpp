@@ -3,21 +3,25 @@
  *
  * */
 
-void pauseGame() {
+void pauseGame()
+{
     isGamePaused = true;
 }
 
-void resumeGame() {
+void resumeGame()
+{
     isGamePaused = false;
     isDialogOpen = false;
 }
 
 /* The playerLoop runs every frame, and handles all the player logic.
  * */
-void playerLoop() {
+void playerLoop()
+{
     if (!player.moving)
         player.currentAnimFrame = 0;
-    else if (framecount % (REFRESH_RATE * PLAYER_ANIM_SPEED / 1000) == 0) {
+    else if (framecount % (REFRESH_RATE * PLAYER_ANIM_SPEED / 1000) == 0)
+    {
         player.currentAnimFrame++;
         if (player.currentAnimFrame > PLAYER_ANIM_FRAMES)
             player.currentAnimFrame = 1;
@@ -26,22 +30,26 @@ void playerLoop() {
     bool isDiagonalMovement = abs(player.movementVector.x / PLAYER_MOVE_MULTIPLIER) && abs(player.movementVector.y / PLAYER_MOVE_MULTIPLIER);
     sf::Vector2f effectiveMovementVector = player.movementVector;
 
-    if (player.moving) {
+    if (player.moving)
+    {
         player.prevPosition = player.sprite.getPosition();
 
-        if (player.movementVector.x/PLAYER_MOVE_MULTIPLIER == -1) player.direction = PLAYER_SPRITE_LEFT;
-        if (player.movementVector.x/PLAYER_MOVE_MULTIPLIER == 1) player.direction = PLAYER_SPRITE_RIGHT;
-        if (player.movementVector.y/PLAYER_MOVE_MULTIPLIER == -1) player.direction = PLAYER_SPRITE_UP;
-        if (player.movementVector.y/PLAYER_MOVE_MULTIPLIER == 1) player.direction = PLAYER_SPRITE_DOWN;
-
+        if (player.movementVector.x / PLAYER_MOVE_MULTIPLIER == -1)
+            player.direction = PLAYER_SPRITE_LEFT;
+        if (player.movementVector.x / PLAYER_MOVE_MULTIPLIER == 1)
+            player.direction = PLAYER_SPRITE_RIGHT;
+        if (player.movementVector.y / PLAYER_MOVE_MULTIPLIER == -1)
+            player.direction = PLAYER_SPRITE_UP;
+        if (player.movementVector.y / PLAYER_MOVE_MULTIPLIER == 1)
+            player.direction = PLAYER_SPRITE_DOWN;
 
         // Normalizing input vector
 
-        if (isDiagonalMovement) {
+        if (isDiagonalMovement)
+        {
             effectiveMovementVector.x = player.movementVector.x * (0.707f);
             effectiveMovementVector.y = player.movementVector.y * (0.707f);
         }
-
 
         // Physics checks:
         // Validate new player position before moving the player sprite
@@ -66,8 +74,10 @@ void playerLoop() {
     setView();
 }
 
-void nextDialog() {
-    if (!isDialogOpen) return;
+void nextDialog()
+{
+    if (!isDialogOpen)
+        return;
 
     currentDialogIndex++;
 
@@ -78,18 +88,21 @@ void nextDialog() {
     currentDialogNPC = currentDialog.messages[currentDialogIndex].speaker;
 }
 
-void handleTravel(SceneLocation location) {
-    switch (location) {
-        case SCENE_DEMO_SCENE:
-            loadScene(initDemoScene());
-            break;
-        case SCENE_TEST_SCENE:
-            loadScene(initTestScene());
-            break;
+void handleTravel(SceneLocation location)
+{
+    switch (location)
+    {
+    case SCENE_DEMO_SCENE:
+        loadScene(initDemoScene());
+        break;
+    case SCENE_TEST_SCENE:
+        loadScene(initTestScene());
+        break;
     }
 }
 
-void handleDialog(Dialog dialog) {
+void handleDialog(Dialog dialog)
+{
     pauseGame();
     isDialogOpen = true;
 
@@ -99,54 +112,60 @@ void handleDialog(Dialog dialog) {
     nextDialog();
 }
 
-void handleInteraction(InteractionPoint interaction) {
+void handleInteraction(InteractionPoint interaction)
+{
     // Don't respond to interactions when the game is paused
-    if (isGamePaused) return;
-    else if (interaction.name == INTERACTION_NULL) return;
+    if (isGamePaused)
+        return;
+    else if (interaction.name == INTERACTION_NULL)
+        return;
 
+    switch (interaction.name)
+    {
+    case INTERACTION_NULL:
+        return;
+        break;
 
-    switch (interaction.name) {
-        case INTERACTION_NULL:
-            return;
-            break;
+    case INTERACTION_TRAVEL:
+        handleTravel(interaction.travelTo);
+        break;
 
-        case INTERACTION_TRAVEL:
-            handleTravel(interaction.travelTo);
-            break;
-
-        case INTERACTION_TALK:
-            handleDialog(interaction.dialog);
-            break;
-
+    case INTERACTION_TALK:
+        handleDialog(interaction.dialog);
+        break;
     }
 }
 
-void interactionLoop(sf::RenderWindow& window) {
+void interactionLoop(sf::RenderWindow &window)
+{
     // The InteractionPoint variable, this will set the closest interaction to the player
     InteractionPoint interactionInRange;
 
-    for (int i = 0; currentScene.interactibles[i].name != INTERACTION_NULL; i++) {
+    for (int i = 0; currentScene.interactibles[i].name != INTERACTION_NULL; i++)
+    {
         InteractionPoint interaction = currentScene.interactibles[i];
         sf::Vector2f correctedIntercationPosition = centerByDimensions(interaction.position, sf::Vector2i(INTERACTIBLE_THRESHOLD, INTERACTIBLE_THRESHOLD));
         interaction.position = correctedIntercationPosition;
-        int displacementX = abs(interaction.position.x - (player.sprite.getPosition().x + (PLAYER_SPRITE_WIDTH/2)));
-        int displacementY = abs(interaction.position.y - (player.sprite.getPosition().y + (PLAYER_SPRITE_HEIGHT/2)));
+        int displacementX = abs(interaction.position.x - (player.sprite.getPosition().x + (PLAYER_SPRITE_WIDTH / 2)));
+        int displacementY = abs(interaction.position.y - (player.sprite.getPosition().y + (PLAYER_SPRITE_HEIGHT / 2)));
 
-        int displacement = sqrt( (displacementX*displacementX) + (displacementY*displacementY) );
+        int displacement = sqrt((displacementX * displacementX) + (displacementY * displacementY));
 
-        if (displacement < INTERACTIBLE_THRESHOLD) {
+        if (displacement < INTERACTIBLE_THRESHOLD)
+        {
             interactionInRange = interaction;
             player.interactionInRange = interaction;
             renderInteraction(window, interaction);
         }
-
-
     }
 
     player.interactionInRange = interactionInRange;
-    if (interactionInRange.name == INTERACTION_NULL) { // If there is no interaction in range
+    if (interactionInRange.name == INTERACTION_NULL)
+    { // If there is no interaction in range
         uiStatus = "";
-    } else {
+    }
+    else
+    {
         uiStatus = "[INTERACT] Press E - " + interactionInRange.label;
     }
 }

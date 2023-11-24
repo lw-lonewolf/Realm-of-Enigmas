@@ -15,10 +15,11 @@
 /* Game values */
 
 #define PI 3.141
-#define PLAYER_MOVE_MULTIPLIER 2
-#define INTERACTIBLE_THRESHOLD 40
+#define PLAYER_MOVE_MULTIPLIER 2  // PLAYER SPEED
+#define INTERACTIBLE_THRESHOLD 40 // DISTANCE TO TRIGGER INTERACTION EVENT
 
-enum MenuItem {
+enum MenuItem
+{
     MENU_PLAY,
     MENU_SETTINGS,
     MENU_QUIT
@@ -63,7 +64,8 @@ const int UI_SMALL_3_SIZE = 5;
  * SCENE_CUSTOM will be used for any custom handling.
  * */
 
-enum SceneType {
+enum SceneType
+{
     SCENE_MENU,
     SCENE_GAME,
     SCENE_CUSTOM
@@ -72,7 +74,8 @@ enum SceneType {
 /* InputAction for the keyboard navigation. Used by the menu handling.
  * */
 
-enum InputAction {
+enum InputAction
+{
     INPUT_NAVIGATE,
     INPUT_SELECT,
     INPUT_BACK
@@ -84,10 +87,12 @@ enum InputAction {
  *
  * */
 
-enum SceneLocation {
+enum SceneLocation
+{
     SCENE_TEST_SCENE,
     SCENE_DEMO_SCENE,
     SCENE_MAIN_MENU,
+    SCENE_ROCK_GAME
 };
 
 /* The Interaction enum will list all the interactions of the game. When these
@@ -96,18 +101,19 @@ enum SceneLocation {
  * intractable.
  */
 
-enum Interaction {
+enum Interaction
+{
     INTERACTION_NULL,
     INTERACTION_TRAVEL,
     INTERACTION_TALK
 };
 
-
 /* The NPC struct is primarily for placing animated Non-Playable Characters in
  * a scene. Any scene has an array of these, and NPCs are defined in Assets.h.
  *
  * */
-struct NPC {
+struct NPC
+{
     std::string path;
     sf::Vector2f position;
     std::string name;
@@ -124,16 +130,17 @@ struct NPC {
  * messages that form a dialog.
  * */
 
-struct DialogOption {
+struct DialogOption
+{
     NPC speaker;
     std::string message;
 };
 
-
 /* The Dialog struct will define a dialog. This
  * contains all info about the conversation, and an array for each DialogOption.
  * */
-struct Dialog {
+struct Dialog
+{
     std::string title;
     DialogOption messages[64];
 };
@@ -142,7 +149,8 @@ struct Dialog {
  * interaction in a scene.
  * */
 
-struct InteractionPoint {
+struct InteractionPoint
+{
     Interaction name = INTERACTION_NULL;
     std::string label = "Interact";
     sf::Vector2f position;
@@ -156,10 +164,11 @@ struct InteractionPoint {
  * and interactibles. Everything of any Scene is stored in a Scene object.
  * */
 
-struct Scene {
+struct Scene
+{
     SceneType type;
     SceneLocation location;
-    std::string name;
+    std::string name; // SCENE NAME
     std::string backgroundSpritePath;
     sf::Texture background;
     sf::Sprite backgroundSprite;
@@ -170,7 +179,7 @@ struct Scene {
     sf::Vector2f defaultPlayerPos;
 
     sf::IntRect colliderHitboxes[32];
-    InteractionPoint interactibles[32];
+    InteractionPoint interactibles[32]; // TRIGGER POINTS
     NPC animatedSprites[32];
     int animatedSpritesFrames[32]; // This is used by a render loop to store the
                                    // current frame of each animated sprite here
@@ -180,7 +189,8 @@ struct Scene {
  * player.
  * */
 
-struct {
+struct
+{
     sf::Sprite sprite;
     sf::Vector2f movementVector;
     sf::Texture texture;

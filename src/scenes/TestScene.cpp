@@ -1,4 +1,5 @@
-Scene initTestScene() {
+Scene initTestScene()
+{
     Scene scene;
 
     scene.name = "Test scene";

@@ -14,7 +14,8 @@
 
 #define PLAYER_ANIM_SPEED 100
 
-enum PLAYER_SPRITE_DIR {
+enum PLAYER_SPRITE_DIR
+{
     PLAYER_SPRITE_UP,
     PLAYER_SPRITE_LEFT,
     PLAYER_SPRITE_DOWN,
@@ -25,7 +26,8 @@ enum PLAYER_SPRITE_DIR {
 
 sf::Texture guideCharTexture;
 NPC guideChar;
-void initGuideCharSprite() {
+void initGuideCharSprite()
+{
     guideChar.path = "assets/sprites/character_guide.png";
     guideChar.name = "Guide";
     guideChar.width = 32;
@@ -37,9 +39,9 @@ void initGuideCharSprite() {
 
 /* Background constants */
 
-
 #define BACKGROUND_DEMO_PATH "assets/imgs/demo-bg-sprite.jpg"
 #define BACKGROUND_TEST_PATH "assets/imgs/BackgroundV4.png"
+#define BACKGROUND_ROCK_PATH  "assets/imgs/BackgroundV4.png"
 
 /* Fonts */
 
@@ -49,6 +51,7 @@ void initGuideCharSprite() {
 /* UI Sprite */
 #define UI_SPRITE_PATH "assets/sprites/GUI.png"
 
+// SPECIFIC PORTIONS OF THE TEXTURE TO RENDER
 const sf::IntRect UI_SPR_BTN_SQUARE(sf::Vector2i(1, 81), sf::Vector2i(14, 14));
 const sf::IntRect UI_SPR_BTN_SQUARE_PRESSED(sf::Vector2i(17, 81), sf::Vector2i(14, 14));
 
@@ -56,4 +59,3 @@ const sf::IntRect UI_SPR_BTN(sf::Vector2i(113, 81), sf::Vector2i(30, 14));
 const sf::IntRect UI_SPR_BTN_PRESSED(sf::Vector2i(113, 97), sf::Vector2i(30, 14));
 
 const sf::IntRect UI_SPR_DIALOG_BG(sf::Vector2i(0, 96), sf::Vector2i(47, 32));
-

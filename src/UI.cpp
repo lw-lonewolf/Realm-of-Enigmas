@@ -4,7 +4,8 @@
  * */
 #include <SFML/Graphics.hpp>
 
-sf::Sprite newButtonSquare(sf::Vector2f position) {
+sf::Sprite newButtonSquare(sf::Vector2f position)
+{
     sf::Sprite widget;
 
     widget.setTexture(uiSpriteTexture);
@@ -16,7 +17,8 @@ sf::Sprite newButtonSquare(sf::Vector2f position) {
     return widget;
 }
 
-sf::Sprite newButton(sf::Vector2f position) {
+sf::Sprite newButton(sf::Vector2f position)
+{
     sf::Sprite widget;
 
     widget.setTexture(uiSpriteTexture);
@@ -27,5 +29,3 @@ sf::Sprite newButton(sf::Vector2f position) {
 
     return widget;
 }
-
-

@@ -33,7 +33,7 @@ int main() {
 
     sf::RenderWindow window(sf::VideoMode(SCREEN_W, SCREEN_H), WINDOW_TITLE);
     window.setFramerateLimit(REFRESH_RATE);
-
+    
     uiView = sf::View(sf::Vector2f(SCREEN_W/2, SCREEN_H/2), sf::Vector2f(SCREEN_W, SCREEN_H));
     
     // Preloading the fonts and UI spritesheet:

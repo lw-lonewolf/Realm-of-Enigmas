@@ -3,7 +3,7 @@ project(window LANGUAGES C CXX)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 
-find_package(SFML 2.6 COMPONENTS graphics system REQUIRED)
+find_package(SFML 2.5 COMPONENTS graphics system REQUIRED)
 
 # Set the output directory for the build
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

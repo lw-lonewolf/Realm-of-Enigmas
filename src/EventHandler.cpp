@@ -103,8 +103,8 @@ void EventHandler(sf::Event event) {
             
         break;
 
-//    case sf::Event::MouseMoved:
-//        std::cout << "mouse: x:" << event.mouseMove.x << " y:" << event.mouseMove.y << std::endl;
+    case sf::Event::MouseMoved:
+        std::cout << "mouse: x:" << event.mouseMove.x << " y:" << event.mouseMove.y << std::endl;
 
     default:
         break;

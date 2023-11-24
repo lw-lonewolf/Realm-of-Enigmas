@@ -145,21 +145,54 @@ void dialogRender(sf::RenderWindow& window) {
     sf::Sprite dialogBg(uiSpriteTexture);
     dialogBg.setTextureRect(UI_SPR_DIALOG_BG);
     dialogBg.setScale(12, 12);
-    dialogBg.setPosition(centerByDimensions(sf::Vector2f(SCREEN_W/2, SCREEN_H/2), sf::Vector2i(UI_SPR_DIALOG_BG.width * dialogBg.getScale().x, UI_SPR_DIALOG_BG.height * dialogBg.getScale().y), true));
+    dialogBg.setPosition(centerByDimensions(sf::Vector2f(SCREEN_W/2, 50 + SCREEN_H/2), sf::Vector2i(UI_SPR_DIALOG_BG.width * dialogBg.getScale().x, UI_SPR_DIALOG_BG.height * dialogBg.getScale().y), true));
 
     sf::Text dialogHead(currentDialogNPC.name, UI_FONT_HEAD);
     dialogHead.setCharacterSize(UI_HEAD_2_SIZE);
-    dialogHead.setPosition(centerByDimensions(sf::Vector2f(SCREEN_W/2, SCREEN_H/5), sf::Vector2i(dialogHead.getCharacterSize() * (currentDialogNPC.name.length() / 2), dialogHead.getCharacterSize()), true));
+    dialogHead.setPosition(centerByDimensions(sf::Vector2f(SCREEN_W/2, 50 + SCREEN_H/5), sf::Vector2i(dialogHead.getCharacterSize() * (currentDialogNPC.name.length() / 2), dialogHead.getCharacterSize()), true));
+
+    sf::Texture dialogNPCTexture;
+    if (!dialogNPCTexture.loadFromFile(currentDialogNPC.path))
+        std::cout << "Failed to load from file: " << currentDialogNPC.path << std::endl;
+
+    sf::Sprite dialogNPCPic;
+    dialogNPCPic.setTexture(dialogNPCTexture);
+    dialogNPCPic.setTextureRect(sf::IntRect(0, 0, currentDialogNPC.width, currentDialogNPC.height));
+    dialogNPCPic.setScale(200.f/currentDialogNPC.width, 200.f/currentDialogNPC.width);
+    dialogNPCPic.setPosition(centerByDimensions(sf::Vector2f(SCREEN_W/2, SCREEN_H/6), sf::Vector2i(200, 200 * ((float)currentDialogNPC.width/currentDialogNPC.height)), true));
+
 
     sf::Text dialogBody(currentDialogText, UI_FONT_BODY);
     dialogBody.setPosition(dialogBg.getPosition().x + 80, dialogBg.getPosition().y + 80);
     dialogBody.setCharacterSize(UI_BODY_2_SIZE);
     textWrapper(dialogBody, (UI_SPR_DIALOG_BG.width * dialogBg.getScale().x) - 160);
 
+    sf::Sprite dialogBtnHint = newButton(sf::Vector2f(SCREEN_W/2 - 15, 50 + SCREEN_H/1.18));
+    dialogBtnHint.setScale(3, 3);
+    sf::Text dialogBtnTx("SPACE", UI_FONT_BODY);
+    dialogBtnTx.setCharacterSize(UI_BODY_3_SIZE);
+    dialogBtnTx.setFillColor(sf::Color::White);
+    dialogBtnTx.setPosition(dialogBtnHint.getPosition());
 
+    std::string dialogBtnTxString = dialogBtnTx.getString();
+    dialogBtnTx.setOrigin((-UI_BODY_3_SIZE)/0.85, -UI_BODY_3_SIZE/1.5);
+
+    if (framecount > (REFRESH_RATE/2)) {
+        // if half a second has passed, change the icon into a pressed button
+        dialogBtnHint.setTextureRect(UI_SPR_BTN_PRESSED);
+
+        // also move the text a little lower too
+        dialogBtnTx.setPosition(dialogBtnTx.getPosition().x, dialogBtnTx.getPosition().y + 2);
+
+    }
+
+
+    window.draw(dialogNPCPic);
     window.draw(dialogBg);
     window.draw(dialogHead);
     window.draw(dialogBody);
+    window.draw(dialogBtnHint);
+    window.draw(dialogBtnTx);
 }
 
 /* The UILayer function renders the UI of the game. It renders above the game

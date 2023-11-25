@@ -39,6 +39,13 @@ int main() {
     // Preloading the fonts and UI spritesheet:
     loadAssets();
 
+    // Set a non-timezone-dependent time:
+
+    srand(static_cast<unsigned>(time(nullptr)));
+    sf::Clock clock;
+
+    int deltaTime = clock.getElapsedTime();
+
     // Loading the first scene, the MenuScene.cpp: (initMenuScene is defined in
     // MenuScene.cpp)
 
@@ -51,6 +58,12 @@ int main() {
             // EventHandler.cpp file. The event handling is forked down to
             // various levels in that file.
             EventHandler(event);
+
+            // Sets The DeltaTime:
+
+            sf::Time deltaTime = clock.restart();
+            float dtSeconds = deltaTime.asSeconds();
+
             
             if (event.type == sf::Event::Closed)
                 window.close();

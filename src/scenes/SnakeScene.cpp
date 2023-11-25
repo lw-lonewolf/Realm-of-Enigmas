@@ -55,9 +55,9 @@
 
 
 // // Function to update the snake's position and body segments
-// void updateSnake(Snake& snake, float deltaTime) {
+// void updateSnake(Snake& snake, float dtSeconds) {
 //     // Update the snake's position
-//     snake.position += snake.direction * snake.speed * dt;
+//     snake.position += snake.direction * snake.speed * dtSeconds;
 
 //     // Update the body segments
 //     for (int i = snake.length - 1; i > 0; --i) {

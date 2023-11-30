@@ -41,9 +41,12 @@ void initGuideCharSprite()
 
 /* Background constants */
 
+#define BACKGROUND_MENU_PATH "assets/imgs/ParallexBG.png"
 #define BACKGROUND_DEMO_PATH "assets/imgs/demo-bg-sprite.jpg"
 #define BACKGROUND_TEST_PATH "assets/imgs/BackgroundV4.png"
-#define BACKGROUND_ROCK_PATH  "assets/imgs/BackgroundV4.png"
+#define BACKGROUND_ROCK_PATH "assets/imgs/BackgroundV4.png"
+
+sf::Texture menuBgTexture;
 
 /* Fonts */
 

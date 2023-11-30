@@ -17,30 +17,47 @@
 #define PI 3.141
 #define PLAYER_MOVE_MULTIPLIER 2  // PLAYER SPEED
 #define INTERACTIBLE_THRESHOLD 40 // DISTANCE TO TRIGGER INTERACTION EVENT
+const float MENU_BG_SCROLL_SPEED = 10.f;
 
 enum MenuItem
 {
     MENU_PLAY,
-    MENU_SETTINGS,
+    MENU_ABOUT,
     MENU_QUIT
+};
+
+enum GameMenuItem
+{
+    GAME_MENU_PLAY,
+    GAME_MENU_QUIT
 };
 
 /* Game controls */
 
 const sf::Keyboard::Key KEY_UP = sf::Keyboard::W;
+const sf::Keyboard::Key KEY_UP_ALT = sf::Keyboard::Up;
 const sf::Keyboard::Key KEY_LEFT = sf::Keyboard::A;
+const sf::Keyboard::Key KEY_LEFT_ALT = sf::Keyboard::Left;
 const sf::Keyboard::Key KEY_DOWN = sf::Keyboard::S;
+const sf::Keyboard::Key KEY_DOWN_ALT = sf::Keyboard::Down;
 const sf::Keyboard::Key KEY_RIGHT = sf::Keyboard::D;
+const sf::Keyboard::Key KEY_RIGHT_ALT = sf::Keyboard::Right;
 
 const sf::Keyboard::Key KEY_ACTION = sf::Keyboard::E;
 const sf::Keyboard::Key KEY_NEXT = sf::Keyboard::Space;
+const sf::Keyboard::Key KEY_NEXT_ALT = sf::Keyboard::Enter;
 
 const sf::Keyboard::Key KEY_NAV_UP = sf::Keyboard::Up;
+const sf::Keyboard::Key KEY_NAV_UP_ALT = sf::Keyboard::W;
 const sf::Keyboard::Key KEY_NAV_LEFT = sf::Keyboard::Left;
+const sf::Keyboard::Key KEY_NAV_LEFT_ALT = sf::Keyboard::A;
 const sf::Keyboard::Key KEY_NAV_DOWN = sf::Keyboard::Down;
+const sf::Keyboard::Key KEY_NAV_DOWN_ALT = sf::Keyboard::S;
 const sf::Keyboard::Key KEY_NAV_RIGHT = sf::Keyboard::Right;
+const sf::Keyboard::Key KEY_NAV_RIGHT_ALT = sf::Keyboard::D;
 
 const sf::Keyboard::Key KEY_NAV_SELECT = sf::Keyboard::Enter;
+const sf::Keyboard::Key KEY_NAV_SELECT_ALT = sf::Keyboard::Space;
 const sf::Keyboard::Key KEY_NAV_BACK = sf::Keyboard::Escape;
 
 /* Fonts & Sizes */

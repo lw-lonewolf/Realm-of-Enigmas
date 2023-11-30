@@ -35,6 +35,10 @@ void onOverrideEvent(sf::Event event) {
             onMenuRender(window);
             break;
 
+//        case SCENE_ROCK_GAME:
+//            onRockSceneRender(window);
+//            break;
+
         /* An example would be:
 
         case SCENE_TEST_SCENE:

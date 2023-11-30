@@ -59,6 +59,10 @@ void setView()
         currentScene.view.setCenter(viewCenter.x, bottomCorner);
 }
 
+void clearScene() {
+    uiStatus = "";
+}
+
 /* The loadScene simply loads up the scene passed as the parameter. The previous
  * scene objects are automatically stashed.
  *
@@ -107,7 +111,7 @@ void renderInteraction(sf::RenderWindow &window, InteractionPoint interaction)
     interactionText.setPosition(interactionIcon.getPosition());
     interactionText.setOrigin(-UI_SMALL_1_SIZE / 2, -UI_SMALL_1_SIZE / 4);
 
-    if (framecount > (REFRESH_RATE / 2))
+    if (framecount > (REFRESH_RATE / 2) && !isGamePaused)
     {
         // if half a second has passed, change the icon into a pressed button
         interactionIcon.setTextureRect(UI_SPR_BTN_SQUARE_PRESSED);
@@ -181,7 +185,7 @@ void dialogRender(sf::RenderWindow &window)
     std::string dialogBtnTxString = dialogBtnTx.getString();
     dialogBtnTx.setOrigin((-UI_BODY_3_SIZE) / 0.85, -UI_BODY_3_SIZE / 1.5);
 
-    if (framecount > (REFRESH_RATE / 2))
+    if (framecount > (REFRESH_RATE / 2) && !isGamePaused)
     {
         // if half a second has passed, change the icon into a pressed button
         dialogBtnHint.setTextureRect(UI_SPR_BTN_PRESSED);
@@ -196,6 +200,86 @@ void dialogRender(sf::RenderWindow &window)
     window.draw(dialogBody);
     window.draw(dialogBtnHint);
     window.draw(dialogBtnTx);
+}
+
+void gameMenuRender(sf::RenderWindow& window) {
+    // don't accidentally render the game menu when the player is already on
+    // the main menu
+    if (currentScene.type == SCENE_MENU) return;
+
+    sf::Text menuTitle("Game Paused", UI_FONT_HEAD);
+    menuTitle.setPosition(25, 25);
+    menuTitle.setCharacterSize(UI_HEAD_1_SIZE);
+    menuTitle.setFillColor(sf::Color::White);
+
+    sf::Text menuItems[3];
+    for (int i = 0; i < gameMenuItemsLength; i++) {
+        menuItems[i].setString(gameMenuItemNames[i]);
+        menuItems[i].setFont(UI_FONT_BODY);
+        menuItems[i].setCharacterSize(UI_BODY_1_SIZE);
+        menuItems[i].setPosition(40, 50 + 45 * (i + 2));
+        menuItems[i].setFillColor(sf::Color::White);
+
+        if (gameMenuCurrentSelection == i) {
+            sf::Text menuSelection;
+            menuSelection.setString(">");
+            menuSelection.setFont(UI_FONT_BODY);
+            menuSelection.setCharacterSize(UI_BODY_1_SIZE);
+            menuSelection.setPosition(10, 50 + 45 * (i + 2));
+            menuSelection.setFillColor(sf::Color(0, 255, 0));
+
+            menuItems[i].setFillColor(sf::Color(0, 255, 0));
+            menuItems[i].setString(gameMenuItemNames[i] + " <");
+
+            window.draw(menuSelection);
+        }
+
+        window.draw(menuItems[i]);
+    }
+
+    window.draw(menuTitle);
+}
+
+
+void renderPopup(sf::RenderWindow& window, std::string titleText, std::string bodyText) {
+    sf::Sprite popupBg(uiSpriteTexture);
+    popupBg.setTextureRect(UI_SPR_DIALOG_BG);
+    popupBg.setScale(16, 16);
+    popupBg.setPosition(centerByDimensions(sf::Vector2f(SCREEN_W / 2, SCREEN_H / 2 - 30), sf::Vector2i(UI_SPR_DIALOG_BG.width * popupBg.getScale().x, UI_SPR_DIALOG_BG.height * popupBg.getScale().y), true));
+
+    sf::Text popupHead(titleText, UI_FONT_HEAD);
+    popupHead.setCharacterSize(UI_HEAD_2_SIZE);
+    popupHead.setPosition(centerByDimensions(sf::Vector2f(SCREEN_W / 2, SCREEN_H / 6 - 60), sf::Vector2i(popupHead.getCharacterSize() * (titleText.length() / 2), popupHead.getCharacterSize()), true));
+
+    sf::Text popupBody(bodyText, UI_FONT_BODY);
+    popupBody.setPosition(popupBg.getPosition().x + 105, popupBg.getPosition().y + 100);
+    popupBody.setCharacterSize(UI_BODY_2_SIZE);
+    textWrapper(popupBody, (UI_SPR_DIALOG_BG.width - 13) * popupBg.getScale().x);
+
+    sf::Sprite popupBtnHint = newButton(sf::Vector2f(SCREEN_W / 2 - 15, SCREEN_H - 50));
+    popupBtnHint.setScale(3, 3);
+    sf::Text popupBtnTx("SPACE", UI_FONT_BODY);
+    popupBtnTx.setCharacterSize(UI_BODY_3_SIZE);
+    popupBtnTx.setFillColor(sf::Color::White);
+    popupBtnTx.setPosition(popupBtnHint.getPosition());
+
+    std::string popupBtnTxString = popupBtnTx.getString();
+    popupBtnTx.setOrigin((-UI_BODY_3_SIZE) / 0.85, -UI_BODY_3_SIZE / 1.5);
+
+    if (framecount > (REFRESH_RATE / 2))
+    {
+        // if half a second has passed, change the icon into a pressed button
+        popupBtnHint.setTextureRect(UI_SPR_BTN_PRESSED);
+
+        // also move the text a little lower too
+        popupBtnTx.setPosition(popupBtnTx.getPosition().x, popupBtnTx.getPosition().y + 2);
+    }
+
+    window.draw(popupBg);
+    window.draw(popupHead);
+    window.draw(popupBody);
+    window.draw(popupBtnHint);
+    window.draw(popupBtnTx);
 }
 
 /* The UILayer function renders the UI of the game. It renders above the game
@@ -239,9 +323,12 @@ void UILayer(sf::RenderWindow &window)
 
         window.draw(gamePauseScreenDarken);
 
-        if (isDialogOpen)
-        {
+        if (isPopupOpen) {
+            renderPopup(window, currentPopupTitle, currentPopupBodyText);
+        } else if (isDialogOpen) {
             dialogRender(window);
+        } else {
+            gameMenuRender(window);
         }
     }
 }
@@ -275,6 +362,10 @@ void renderDebug(sf::RenderWindow &window)
 void Render(sf::RenderWindow &window)
 {
     window.clear();
+
+    // Sets The DeltaTime:
+    sf::Time elapsed = gameClock.restart();
+    int deltaTime = elapsed.asMilliseconds();
 
     if (currentScene.type == SCENE_GAME)
     {

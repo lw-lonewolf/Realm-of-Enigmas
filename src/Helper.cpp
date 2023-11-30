@@ -20,6 +20,14 @@ sf::Vector2f centerByDimensions(sf::Vector2f orgVector, sf::Vector2i dimensions,
     return sf::Vector2f(orgVector.x + (invertFactor * dimensions.x / 2), orgVector.y + (invertFactor * dimensions.y / 2));
 }
 
+sf::Text dropShadow(sf::Text tx) {
+    sf::Text txShadow = tx;
+    txShadow.setFillColor(sf::Color::Black);
+    txShadow.setPosition(txShadow.getPosition().x + 2, txShadow.getPosition().y + 2);
+
+    return txShadow;
+}
+
 void textWrapper(sf::Text &text, int width, int continueIndex = 0)
 {
     std::string textStr = text.getString();

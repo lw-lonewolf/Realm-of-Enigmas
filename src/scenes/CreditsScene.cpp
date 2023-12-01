@@ -27,7 +27,6 @@ const char creditsData[64][256] = {
     "#",
 };
 
-Scene scene;
 int totalCreditsHeight;
 
 void onCreditsRender(sf::RenderWindow& window) {
@@ -81,6 +80,8 @@ void onCreditsRender(sf::RenderWindow& window) {
 }
 
 Scene initCreditsScene() {
+    Scene scene;
+
     scene.name = "Credits";
     scene.type = SCENE_CUSTOM;
     scene.location = SCENE_CREDITS;

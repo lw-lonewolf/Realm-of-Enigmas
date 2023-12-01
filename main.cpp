@@ -17,10 +17,11 @@
 
 /* Scene files */
 #include "src/scenes/DemoScene.cpp"
+#include "src/scenes/IntroScene.cpp"
 #include "src/scenes/CreditsScene.cpp"
 #include "src/scenes/MenuScene.cpp"
 #include "src/scenes/TestScene.cpp"
-//#include "src/scenes/RockScene.cpp"
+#include "src/scenes/SnakeScene.cpp"
 
 /* Source files */
 #include "src/Helper.cpp"

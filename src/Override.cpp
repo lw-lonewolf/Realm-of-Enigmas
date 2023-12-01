@@ -39,6 +39,10 @@ void onOverrideRender(sf::RenderWindow& window) {
             onCreditsRender(window);
             break;
 
+        case SCENE_INTRO:
+            onIntroRender(window);
+            break;
+
         /* An example would be:
 
         case SCENE_TEST_SCENE:

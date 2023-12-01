@@ -34,8 +34,8 @@ Scene initDemoScene() {
 
     InteractionPoint changeSceneInCornerInteraction;
     changeSceneInCornerInteraction.name = INTERACTION_TRAVEL;
-    changeSceneInCornerInteraction.label = "Try out some rocks!";
-    changeSceneInCornerInteraction.travelTo = SCENE_ROCK_GAME;
+    changeSceneInCornerInteraction.label = "Try out some snake!";
+    changeSceneInCornerInteraction.travelTo = SCENE_SNAKE_GAME;
     changeSceneInCornerInteraction.position = sf::Vector2f(0, 150);
 
     scene.interactibles[1] = changeSceneInCornerInteraction;

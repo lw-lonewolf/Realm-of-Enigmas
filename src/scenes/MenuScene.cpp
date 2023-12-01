@@ -20,7 +20,7 @@ void onMenuNavigation(InputAction action, int value = 0) {
         case INPUT_SELECT:
             switch (menuCurrentSelection) {
                 case MENU_PLAY:
-                    loadScene(initDemoScene());
+                    loadScene(initIntroScene());
                     break;
 
                 case MENU_ABOUT:

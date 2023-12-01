@@ -4,6 +4,7 @@
 /* Native */
 #include <iostream>
 #include <math.h>
+#include <fstream>
 
 /* Header files */
 #include "include/Constants.h"

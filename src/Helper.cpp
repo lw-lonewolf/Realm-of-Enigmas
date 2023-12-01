@@ -20,7 +20,8 @@ sf::Vector2f centerByDimensions(sf::Vector2f orgVector, sf::Vector2i dimensions,
     return sf::Vector2f(orgVector.x + (invertFactor * dimensions.x / 2), orgVector.y + (invertFactor * dimensions.y / 2));
 }
 
-sf::Text dropShadow(sf::Text tx) {
+sf::Text dropShadow(sf::Text tx)
+{
     sf::Text txShadow = tx;
     txShadow.setFillColor(sf::Color::Black);
     txShadow.setPosition(txShadow.getPosition().x + 2, txShadow.getPosition().y + 2);
@@ -49,4 +50,32 @@ void textWrapper(sf::Text &text, int width, int continueIndex = 0)
             break;
         }
     }
+}
+
+void Read(bool rockKey, bool snakeKey, bool cipherKey, int lastScene, int posX, int posY)
+{
+    int keys = 0;
+    std::ifstream data("data.csv");
+
+    if (data.is_open())
+    {
+        data >> rockKey >> snakeKey >> cipherKey;
+        data >> lastScene;
+        data >> posX >> posY;
+    }
+    data.close();
+}
+
+void Write(bool rockKey, bool snakeKey, bool cipherKey, int lastScene, int posX, int posY)
+{
+    int keys = 0;
+    std::ofstream data("data.csv");
+
+    if (data.is_open())
+    {
+        data << rockKey <<  " " << snakeKey  <<  " " << cipherKey  <<  " " << std::endl;
+        data << lastScene << std::endl;
+        data << posX  <<  " " << posY << std::endl;
+    }
+    data.close();
 }

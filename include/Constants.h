@@ -109,6 +109,7 @@ enum SceneLocation
     SCENE_TEST_SCENE,
     SCENE_DEMO_SCENE,
     SCENE_MAIN_MENU,
+    SCENE_CREDITS,
     SCENE_ROCK_GAME
 };
 

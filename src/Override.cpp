@@ -24,20 +24,20 @@ void onOverrideEvent(sf::Event event) {
         }
     }
 
-    void onOverrideRender(sf::RenderWindow& window) {
-        switch (currentScene.location) {
-            /* Each of these cases will detect which specific scene is running
-             * currently, and passes the render handling to a function for that
-             * scene.
-             * */
+void onOverrideRender(sf::RenderWindow& window) {
+    switch (currentScene.location) {
+        /* Each of these cases will detect which specific scene is running
+         * currently, and passes the render handling to a function for that
+         * scene.
+         * */
 
         case SCENE_MAIN_MENU:
             onMenuRender(window);
             break;
 
-//        case SCENE_ROCK_GAME:
-//            onRockSceneRender(window);
-//            break;
+        case SCENE_CREDITS:
+            onCreditsRender(window);
+            break;
 
         /* An example would be:
 

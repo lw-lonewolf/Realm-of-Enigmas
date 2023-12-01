@@ -19,6 +19,7 @@
 #define INTERACTIBLE_THRESHOLD 40 // DISTANCE TO TRIGGER INTERACTION EVENT
 const float MENU_BG_SCROLL_SPEED = 10.f;
 const float SCENE_FADE_SPEED = 10.f;
+const float INTRO_SCREEN_TIME = 4.f;
 
 enum MenuItem
 {
@@ -111,7 +112,9 @@ enum SceneLocation
     SCENE_DEMO_SCENE,
     SCENE_MAIN_MENU,
     SCENE_CREDITS,
-    SCENE_ROCK_GAME
+    SCENE_INTRO,
+    SCENE_ROCK_GAME,
+    SCENE_SNAKE_GAME
 };
 
 /* The Interaction enum will list all the interactions of the game. When these

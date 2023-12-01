@@ -127,9 +127,9 @@ void handleTravel(SceneLocation location)
     case SCENE_DEMO_SCENE:
         loadScene(initDemoScene());
         break;
-//    case SCENE_ROCK_GAME:
-//        loadScene(initRockScene());
-//        break;
+    case SCENE_SNAKE_GAME:
+        loadScene(initSnakeScene());
+        break;
     case SCENE_TEST_SCENE:
         loadScene(initTestScene());
         break;

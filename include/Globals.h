@@ -28,6 +28,7 @@ std::string currentPopupTitle = "";
 std::string currentPopupBodyText = "";
 Scene sceneToLoad;
 int loadingScene = 0;
+bool sceneLoaded = false;
 int currentDialogIndex = 0;
 NPC currentDialogNPC;
 void pauseGame();

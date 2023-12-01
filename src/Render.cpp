@@ -69,19 +69,23 @@ void clearScene() {
  * */
 void loadScene(Scene scene)
 {
-    if (scene.location == currentScene.location) {
-        if (loadingScene >= 0)
-            loadingScene -= SCENE_FADE_SPEED * 2;
+    if (sceneLoaded) {
+        if (loadingScene > 0)
+            loadingScene -= SCENE_FADE_SPEED;
+        if (loadingScene <= 0)
+            sceneLoaded = false;
 
     } else {
-        if (loadingScene <= 100) {
+        if (loadingScene < 100) {
             sceneToLoad = scene;
             loadingScene += SCENE_FADE_SPEED;
+        } else {
+            sceneLoaded = true;
         }
     }
     if (loadingScene < 100 && loadingScene > 0) return;
 
-
+    clearScene();
     currentScene = scene;
 
     if (currentScene.backgroundEnabled) {
@@ -350,10 +354,14 @@ void UILayer(sf::RenderWindow &window)
 
     // Scene loading fade:
     if (loadingScene) {
-        std::cout << "Scene loading" << std::endl;
+        loadingScene = loadingScene > 100 ? 100 : loadingScene;
+        loadingScene = loadingScene < 0 ? 0 : loadingScene;
+
         sf::RectangleShape sceneLoadScreenDarken(sf::Vector2f(SCREEN_W, SCREEN_H));
         sceneLoadScreenDarken.setPosition(0, 0);
         sceneLoadScreenDarken.setFillColor(sf::Color(0, 0, 0, 255 * loadingScene / 100));
+
+        std::cout << loadingScene << std::endl;
 
         window.draw(sceneLoadScreenDarken);
     }

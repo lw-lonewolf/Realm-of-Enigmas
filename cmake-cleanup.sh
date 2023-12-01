@@ -1,13 +1,13 @@
 echo "Removing the following files/directories:";
 
-if [ -f "./cmake-build-default" ]; then
+if [ -d "./cmake-build-default/" ]; then
   rm -rf ./cmake-build-default;
   echo "Deleted: ./cmake-build-default";
 else
   echo "Skipped: ./cmake-build-default [not found]";
 fi
 
-if [ -f "./CMakeFiles" ]; then
+if [ -d "./CMakeFiles/" ]; then
   rm -rf ./CMakeFiles;
   echo "Deleted: ./CMakeFiles";
 else

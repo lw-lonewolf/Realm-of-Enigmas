@@ -10,7 +10,7 @@
  * the top left edge.
  *
  * */
-sf::Vector2f centerByDimensions(sf::Vector2f orgVector, sf::Vector2i dimensions, bool invertAlignment = false)
+sf::Vector2f centerByDimensions(sf::Vector2f orgVector, sf::Vector2i dimensions, bool invertAlignment)
 {
     /* The invertAlignment inverts the target location to be opposite to the
      * object instead of pushing within it

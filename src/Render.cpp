@@ -69,12 +69,28 @@ void clearScene() {
  * */
 void loadScene(Scene scene)
 {
+    if (scene.location == currentScene.location) {
+        if (loadingScene >= 0)
+            loadingScene -= SCENE_FADE_SPEED * 2;
+
+    } else {
+        if (loadingScene <= 100) {
+            sceneToLoad = scene;
+            loadingScene += SCENE_FADE_SPEED;
+        }
+    }
+    if (loadingScene < 100 && loadingScene > 0) return;
+
+
     currentScene = scene;
 
-    if (!currentScene.background.loadFromFile(currentScene.backgroundSpritePath))
-        std::cout << "Failed to load from file: " << currentScene.backgroundSpritePath << std::endl;
+    if (currentScene.backgroundEnabled) {
+        if (!currentScene.background.loadFromFile(currentScene.backgroundSpritePath))
+            std::cout << "Failed to load from file: " << currentScene.backgroundSpritePath << std::endl;
 
-    currentScene.backgroundSprite.setTexture(currentScene.background);
+        currentScene.backgroundSprite.setTexture(currentScene.background);
+    }
+
 
     if (!player.texture.loadFromFile(PLAYER_SPRITE_PATH))
         std::cout << "Failed to load from file: " << PLAYER_SPRITE_PATH << std::endl;
@@ -207,7 +223,7 @@ void gameMenuRender(sf::RenderWindow& window) {
     // the main menu
     if (currentScene.type == SCENE_MENU) return;
 
-    sf::Text menuTitle("Game Paused", UI_FONT_HEAD);
+    sf::Text menuTitle("Paused", UI_FONT_HEAD);
     menuTitle.setPosition(25, 25);
     menuTitle.setCharacterSize(UI_HEAD_1_SIZE);
     menuTitle.setFillColor(sf::Color::White);
@@ -331,6 +347,16 @@ void UILayer(sf::RenderWindow &window)
             gameMenuRender(window);
         }
     }
+
+    // Scene loading fade:
+    if (loadingScene) {
+        std::cout << "Scene loading" << std::endl;
+        sf::RectangleShape sceneLoadScreenDarken(sf::Vector2f(SCREEN_W, SCREEN_H));
+        sceneLoadScreenDarken.setPosition(0, 0);
+        sceneLoadScreenDarken.setFillColor(sf::Color(0, 0, 0, 255 * loadingScene / 100));
+
+        window.draw(sceneLoadScreenDarken);
+    }
 }
 
 /* Debug mode render:
@@ -367,13 +393,16 @@ void Render(sf::RenderWindow &window)
     sf::Time elapsed = gameClock.restart();
     int deltaTime = elapsed.asMilliseconds();
 
+    if (loadingScene) loadScene(sceneToLoad);
+
     if (currentScene.type == SCENE_GAME)
     {
         if (currentScene.playerEnabled)
             playerLoop();
 
         window.setView(currentScene.view);
-        window.draw(currentScene.backgroundSprite);
+        if (currentScene.backgroundEnabled)
+            window.draw(currentScene.backgroundSprite);
 
         NPCsRenderLoop(window);
         if (!isGamePaused)

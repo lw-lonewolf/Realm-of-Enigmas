@@ -18,6 +18,7 @@
 #define PLAYER_MOVE_MULTIPLIER 2  // PLAYER SPEED
 #define INTERACTIBLE_THRESHOLD 40 // DISTANCE TO TRIGGER INTERACTION EVENT
 const float MENU_BG_SCROLL_SPEED = 10.f;
+const float SCENE_FADE_SPEED = 10.f;
 
 enum MenuItem
 {
@@ -187,6 +188,7 @@ struct Scene
     SceneType type;
     SceneLocation location;
     std::string name; // SCENE NAME
+    bool backgroundEnabled = true;
     std::string backgroundSpritePath;
     sf::Texture background;
     sf::Sprite backgroundSprite;

@@ -16,9 +16,9 @@
 
 /* Scene files */
 #include "src/scenes/DemoScene.cpp"
+#include "src/scenes/CreditsScene.cpp"
 #include "src/scenes/MenuScene.cpp"
 #include "src/scenes/TestScene.cpp"
-#include "src/scenes/CreditsScene.cpp"
 //#include "src/scenes/RockScene.cpp"
 
 /* Source files */

@@ -26,11 +26,16 @@ Dialog currentDialog;
 std::string currentDialogText = "";
 std::string currentPopupTitle = "";
 std::string currentPopupBodyText = "";
+Scene sceneToLoad;
+int loadingScene = 0;
 int currentDialogIndex = 0;
 NPC currentDialogNPC;
 void pauseGame();
 void resumeGame();
 
+Scene initMenuScene();
+
+sf::Vector2f centerByDimensions(sf::Vector2f orgVector, sf::Vector2i dimensions, bool invertAlignment = false);
 sf::Text dropShadow(sf::Text tx);
 
 sf::Sprite newButton(sf::Vector2f position, bool dontCenterByDimensions);
@@ -41,14 +46,14 @@ float menuBgPosition = 0;
 MenuItem menuCurrentSelection = MENU_PLAY;
 const int menuItemsLength = 3;
 std::string menuItemNames[menuItemsLength] = {
-        "Play",
-        "Credits",
-        "Quit",
+    "Play",
+    "Credits",
+    "Quit",
 };
 
 const int gameMenuItemsLength = 2;
 GameMenuItem gameMenuCurrentSelection = GAME_MENU_PLAY;
 std::string gameMenuItemNames[gameMenuItemsLength] = {
-        "Resume",
-        "Main Menu",
+    "Resume",
+    "Main Menu",
 };

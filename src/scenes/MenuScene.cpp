@@ -24,7 +24,7 @@ void onMenuNavigation(InputAction action, int value = 0) {
                     break;
 
                 case MENU_ABOUT:
-                     createPopup("Credits", "A top-down platformer game presented by:\n\n23L-2555 Armaghan Ahmed\n23L-XXXX Arham Khurram\n23L-XXXX M. Ibrahim\n23L-XXXX Jabeen Zahra\n23L-XXXX Amar Waqar\n\nMade possible with the SFML Graphics library.");
+                    loadScene(initCreditsScene());
                     break;
 
                 case MENU_QUIT:

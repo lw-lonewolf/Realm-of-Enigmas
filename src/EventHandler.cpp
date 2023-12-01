@@ -78,6 +78,8 @@ void onEscape() {
  *
  * */
 void EventHandler(sf::Event event) {
+    if (loadingScene) return;
+
     switch (event.type) {
     case sf::Event::KeyPressed:
         // std::cout << "key: " << event.key.code << std::endl;

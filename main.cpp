@@ -67,7 +67,6 @@ int main() {
             EventHandler(event);
 
             if (event.type == sf::Event::Closed){
-            stop_music();
             window.close();
             }
 

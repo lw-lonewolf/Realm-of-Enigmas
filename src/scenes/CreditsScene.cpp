@@ -80,6 +80,7 @@ void onCreditsRender(sf::RenderWindow& window) {
 }
 
 Scene initCreditsScene() {
+    music.stop();
     Scene scene;
 
     scene.name = "Credits";
@@ -89,6 +90,8 @@ Scene initCreditsScene() {
     scene.backgroundEnabled = false;
 
     totalCreditsHeight = SCREEN_H;
-
+    initMusic(END_CREDIT);
+    music.setLoop(true);
+    music.setVolume(50);
     return scene;
 }

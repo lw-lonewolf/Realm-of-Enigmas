@@ -40,6 +40,9 @@ Scene initIntroScene(int lastIntro = -1, int lastSecondsPassed = INTRO_SCREEN_TI
     introCompleted = false;
 
     return scene;
+    music.setLoop(true);
+    music.setVolume(50);
+    initMusic(SELF_TALK_MUSIC);
 }
 
 void onIntroRender(sf::RenderWindow& window) {

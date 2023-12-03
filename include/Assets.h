@@ -135,3 +135,12 @@ const sf::IntRect UI_SPR_BTN_PRESSED(sf::Vector2i(113, 97), sf::Vector2i(30, 14)
 const sf::IntRect UI_SPR_DIALOG_BG(sf::Vector2i(0, 96), sf::Vector2i(48, 32));
 
 #define MAIN_SCREEN_MUSIC "assets/audio/Main_Screen.wav"
+#define SELF_TALK_MUSIC "assets/audio/Self_Talk.wav"
+#define STARTING_AREA_MUSIC "assets/audio/Starting_Area.wav"
+#define ROCK_GAME_MUSIC "assets/audio/Rock_Minigame.wav"
+#define PLATFORMER_MUSIC "assets/audio/Platformer.wav"
+#define OTHER_WORLD_INTRO_MUSIC "assets/audio/Other_World_Into.wav"
+#define OTHER_WORLD_ROAMING_MUSIC "assets/audio/Other_World_Roaming.ogg"
+#define MAZE_MUSIC "assets/audio/Maze.wav"
+#define LAST_MAZE_MUSIC "assets/audio/Last_Maze.wav"
+#define END_CREDIT "assets/audio/End_Credit.ogg"

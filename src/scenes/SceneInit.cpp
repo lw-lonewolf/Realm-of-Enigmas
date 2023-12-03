@@ -5,6 +5,7 @@
  * */
 
 void onSceneInit(SceneLocation sceneLocation) {
+    music.stop();
     switch (sceneLocation) {
         case SCENE_OPTIMUS:
             if (showMinigameFeedbackDialog) {
@@ -25,5 +26,11 @@ void onSceneInit(SceneLocation sceneLocation) {
             break;
 
     }
-
+    
+    
+    initMusic(OTHER_WORLD_INTRO_MUSIC);
+    music.setLoop(true);
+    music.setVolume(50);
+    music.play();
+    
 }

@@ -1,4 +1,5 @@
 Scene initOptimusPrimeScene() {
+    music.stop();
     Scene scene;
     scene.type = SCENE_GAME;
     scene.location = SCENE_OPTIMUS;
@@ -45,6 +46,9 @@ Scene initOptimusPrimeScene() {
         scene.interactibles[nextNPCIndex] = talkToRockInteraction;
         nextNPCIndex++;
     }
-
+    initMusic(OTHER_WORLD_ROAMING_MUSIC);
+    music.setLoop(true);
+    music.setVolume(50);
+    music.play();
     return scene;
 }

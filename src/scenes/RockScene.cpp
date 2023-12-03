@@ -136,6 +136,7 @@ void onRockSceneShown() {
 }
 
 Scene initRockScene() {
+    music.stop();
     Scene scene;
 
     scene.name = "Rock Scene";
@@ -148,5 +149,9 @@ Scene initRockScene() {
     scene.view = sf::View(sf::FloatRect(0, 0, 500, SCREEN_H));
 
     return scene;
+    music.getLoop(true);
+    music.setVolume(50);
+    initMusic(ROCK_GAME_MUSIC);
+    
  }
 

@@ -26,6 +26,7 @@ bool introCompleted = false;
 void onIntroRender(sf::RenderWindow& window);
 
 Scene initIntroScene(int lastIntro = -1, int lastSecondsPassed = INTRO_SCREEN_TIME - 1) {
+    music.stop();
     Scene scene;
 
     scene.name = "Intro";

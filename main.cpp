@@ -50,9 +50,6 @@ int main() {
     // Preloading the fonts and UI spritesheet:
     loadAssets();
 
-    // Set a non-timezone-dependent time:
-    srand(static_cast<unsigned>(time(nullptr)));
-
     // Loading the first scene, the MenuScene.cpp: (initMenuScene is defined in
     // MenuScene.cpp)
 

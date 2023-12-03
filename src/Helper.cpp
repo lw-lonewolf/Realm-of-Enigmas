@@ -3,6 +3,25 @@
  *
  * */
 
+/* Calculates and returns the string length till \0
+ * */
+
+int  strLength(std::string str) {
+    int length = 0;
+    for (int i = 0; str[i] != '\0'; i++) {
+        length++;
+    }
+    return length;
+}
+
+int strLength(char str[]) {
+    int length = 0;
+    for (int i = 0; str[i] != '\0'; i++) {
+        length++;
+    }
+    return length;
+}
+
 /* The centerByDimensions function converts a position to represent the center
  * of the object. By default, SFML's position always represents the top left edge
  * of the objects. This function takes in the dimensions and returns a properly
@@ -32,50 +51,67 @@ sf::Text dropShadow(sf::Text tx)
 void textWrapper(sf::Text &text, int width, int continueIndex = 0)
 {
     std::string textStr = text.getString();
+    int lastSpaceIndex = 0;
     for (int i = continueIndex; i < textStr.length(); i++)
     {
+        if (textStr[i] == ' ')
+            lastSpaceIndex = i;
+
         sf::Vector2<float> characterPos = text.findCharacterPos(i);
         if (characterPos.x >= (text.getPosition().x + width))
         {
 
-            char extraChar = textStr[textStr.length() - 1];
-            for (int j = textStr.length(); j > i; j--)
-            {
-                textStr[j] = textStr[j - 1];
-            }
-            textStr[i] = '\n';
+//            char extraChar = textStr[textStr.length() - 1];
+//            for (int j = textStr.length(); j > i; j--)
+//            {
+//                textStr[j] = textStr[j - 1];
+//            }
+            textStr[lastSpaceIndex] = '\n';
 
-            text.setString(textStr + extraChar);
+            text.setString(textStr);
+//            text.setString(textStr + extraChar);
             textWrapper(text, width, i + 1);
             break;
         }
+
     }
 }
 
-void Read(bool rockKey, bool snakeKey, bool cipherKey, int lastScene, int posX, int posY)
+bool ReadSaveFile(bool& rockKey, bool& snakeKey, bool& cipherKey, SceneLocation& currentSceneLocation, sf::Vector2f& lastPlayerPos)
 {
-    int keys = 0;
-    std::ifstream data("data.csv");
+    std::ifstream data(SAVE_FILE_NAME);
 
     if (data.is_open())
     {
+        int currentSceneLocationInt = 0;
+        int posX, posY;
+
         data >> rockKey >> snakeKey >> cipherKey;
-        data >> lastScene;
+        data >> currentSceneLocationInt;
         data >> posX >> posY;
+
+        currentSceneLocation = (SceneLocation)currentSceneLocationInt;
+        lastPlayerPos = sf::Vector2f(posX, posY);
+    } else {
+        return false;
     }
     data.close();
+    return true;
 }
 
-void Write(bool rockKey, bool snakeKey, bool cipherKey, int lastScene, int posX, int posY)
+bool WriteSaveFile(bool rockKey, bool snakeKey, bool cipherKey, SceneLocation currentSceneLocation, sf::Vector2f lastPlayerPos = sf::Vector2f(-1, -1))
 {
     int keys = 0;
-    std::ofstream data("data.csv");
+    std::ofstream data(SAVE_FILE_NAME);
 
     if (data.is_open())
     {
         data << rockKey <<  " " << snakeKey  <<  " " << cipherKey  <<  " " << std::endl;
-        data << lastScene << std::endl;
-        data << posX  <<  " " << posY << std::endl;
+        data << (int)currentSceneLocation << std::endl;
+        data << (int)lastPlayerPos.x  <<  " " << (int)lastPlayerPos.y << std::endl;
+    } else {
+        return false;
     }
     data.close();
+    return true;
 }

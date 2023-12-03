@@ -15,6 +15,7 @@
 /* Game values */
 
 #define PI 3.141
+#define SAVE_FILE_NAME "save.dat"
 #define PLAYER_MOVE_MULTIPLIER 2  // PLAYER SPEED
 #define INTERACTIBLE_THRESHOLD 40 // DISTANCE TO TRIGGER INTERACTION EVENT
 const float MENU_BG_SCROLL_SPEED = 10.f;
@@ -108,12 +109,13 @@ enum InputAction
 
 enum SceneLocation
 {
-    SCENE_TEST_SCENE,
+    SCENE_INTRO,
+    SCENE_ROCK_GAME,
     SCENE_DEMO_SCENE,
     SCENE_MAIN_MENU,
     SCENE_CREDITS,
-    SCENE_INTRO,
-    SCENE_ROCK_GAME,
+    SCENE_OPTIMUS,
+    SCENE_TEST_SCENE,
     SCENE_SNAKE_GAME
 };
 
@@ -130,12 +132,18 @@ enum Interaction
     INTERACTION_TALK
 };
 
+enum InteractionID {
+    INTERACTION_NULLID,
+    INTERACTION_GUIDE_FIRST_DIALOG
+};
+
 /* The NPC struct is primarily for placing animated Non-Playable Characters in
  * a scene. Any scene has an array of these, and NPCs are defined in Assets.h.
  *
  * */
 struct NPC
 {
+    sf::Texture texture;
     std::string path;
     sf::Vector2f position;
     std::string name;
@@ -174,6 +182,7 @@ struct Dialog
 struct InteractionPoint
 {
     Interaction name = INTERACTION_NULL;
+    InteractionID identifier = INTERACTION_NULLID;
     std::string label = "Interact";
     sf::Vector2f position;
     NPC associatedNPC;
@@ -197,6 +206,7 @@ struct Scene
     sf::Sprite backgroundSprite;
     sf::View view;
 
+    bool horizontalMovementOnly = false;
     bool playerEnabled = true;
     int defaultPlayerDir;
     sf::Vector2f defaultPlayerPos;
@@ -207,6 +217,12 @@ struct Scene
     int animatedSpritesFrames[32]; // This is used by a render loop to store the
                                    // current frame of each animated sprite here
 };
+
+struct {
+    bool rock = false;
+    bool snake = false;
+    bool cipher = false;
+} keysStore;
 
 /* This struct is just for the player. Contains all related stuff about the
  * player.

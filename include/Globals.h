@@ -7,10 +7,11 @@
 void onOverrideEvent(sf::Event event);
 void onOverrideRender(sf::RenderWindow& window);
 
-void loadScene(Scene scene);
+void loadScene(Scene scene, bool positionFromSaveFile = false);
 void clearScene();
 bool PhysicsValidatePosition(sf::Vector2f testPosition);
 void renderInteraction(sf::RenderWindow& window, InteractionPoint interaction);
+void handleTravel(SceneLocation location, bool positionFromSaveFile = false);
 void setView();
 
 sf::View uiView;
@@ -19,20 +20,27 @@ int framecount = 0;
 bool isGamePaused = false;
 std::string uiStatus = "";
 sf::Texture uiSpriteTexture;
+sf::Texture keysSpriteTexture;
+sf::Texture rockTexture;
 
 bool isDialogOpen = false;
 bool isPopupOpen = false;
 Dialog currentDialog;
+InteractionID currentInteraction;
 std::string currentDialogText = "";
 std::string currentPopupTitle = "";
 std::string currentPopupBodyText = "";
 Scene sceneToLoad;
 int loadingScene = 0;
 bool sceneLoaded = false;
+bool loadPositionFromFile = false;
+bool newGame = false;
 int currentDialogIndex = 0;
+int currentDialogStrCharacterIndex = 0;
 NPC currentDialogNPC;
 void pauseGame();
 void resumeGame();
+void saveGame();
 
 Scene initMenuScene();
 

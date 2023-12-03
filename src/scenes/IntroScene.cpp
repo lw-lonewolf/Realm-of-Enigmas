@@ -42,9 +42,15 @@ Scene initIntroScene(int lastIntro = -1, int lastSecondsPassed = INTRO_SCREEN_TI
 }
 
 void onIntroRender(sf::RenderWindow& window) {
-    if (introSecondsPassed == 0 && introData[currentIntro + 1][0] == '\0') {
-        if (!introCompleted)
+    if (introSecondsPassed == INTRO_SCREEN_TIME && introData[currentIntro + 1][0] == '\0') {
+        if (!introCompleted) {
             loadScene(initDemoScene());
+
+            if (newGame) {
+                newGame = false;
+//                saveGame();
+            }
+        }
         introCompleted = true;
     }
     sf::Text introTx(introData[currentIntro], UI_FONT_BODY);
@@ -53,16 +59,17 @@ void onIntroRender(sf::RenderWindow& window) {
 
     window.draw(introTx);
 
+    if (introSecondsPassed >= INTRO_SCREEN_TIME && !introCompleted) {
+        introSecondsPassed = 0;
+        loadScene(initIntroScene(currentIntro, introSecondsPassed));
+    }
+
     if (!loadingScene) {
-        if (framecount % REFRESH_RATE == 0)
+        if (framecount % REFRESH_RATE == 0 && !isGamePaused)
             introSecondsPassed++;
     } else if (sceneLoaded && loadingScene == 100) {
         // Screen has fully faded in
         currentIntro++;
     }
 
-    if (introSecondsPassed >= INTRO_SCREEN_TIME) {
-        introSecondsPassed = 0;
-        loadScene(initIntroScene(currentIntro, introSecondsPassed));
-    }
 }

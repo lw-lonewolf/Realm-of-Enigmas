@@ -5,6 +5,9 @@
  * the onOverrideEvent and onOverrideRender methods properly).
  *
  * */
+SceneLocation lastSceneLocation;
+sf::Vector2f lastPlayerPosition;
+
 void onMenuNavigation(InputAction action, int value = 0) {
     switch (action) {
         case INPUT_NAVIGATE:
@@ -20,7 +23,11 @@ void onMenuNavigation(InputAction action, int value = 0) {
         case INPUT_SELECT:
             switch (menuCurrentSelection) {
                 case MENU_PLAY:
-                    loadScene(initIntroScene());
+//                    loadScene(initDemoScene());
+                    if (newGame)
+                        loadScene(initIntroScene());
+                    else
+                        handleTravel(lastSceneLocation, true);
                     break;
 
                 case MENU_ABOUT:
@@ -54,14 +61,16 @@ void onMenuRender(sf::RenderWindow& window) {
     window.draw(menuBg);
     window.draw(menuBgNext);
 
-    sf::Text menuTitle("Main menu", UI_FONT_HEAD);
+    sf::Text menuTitle("Realm Of Enigmas", UI_FONT_HEAD);
     menuTitle.setCharacterSize(UI_HEAD_1_SIZE);
     menuTitle.setPosition(40, 0);
-    menuTitle.setFillColor(sf::Color(200, 200, 200));
+    menuTitle.setFillColor(sf::Color(255, 255, 255));
 
     sf::Text menuItems[3];
     for (int i = 0; i < 3; i++) {
         menuItems[i].setString(menuItemNames[i]);
+        if (newGame && menuItemNames[i] == "Play")
+            menuItems[i].setString("New game");
         menuItems[i].setFont(UI_FONT_BODY);
         menuItems[i].setCharacterSize(UI_BODY_1_SIZE);
         menuItems[i].setPosition(40, 45 * (i + 2));
@@ -76,7 +85,7 @@ void onMenuRender(sf::RenderWindow& window) {
             menuSelection.setFillColor(sf::Color(0, 255, 0));
 
             menuItems[i].setFillColor(sf::Color(0, 255, 0));
-            menuItems[i].setString(menuItemNames[i] + " <");
+            menuItems[i].setString(menuItems[i].getString() + " <");
 
             window.draw(dropShadow(menuSelection));
             window.draw(menuSelection);
@@ -150,7 +159,6 @@ void onMenuRender(sf::RenderWindow& window) {
     window.draw(menuTitle);
 }
 
-
 Scene initMenuScene() {
     Scene scene;
 
@@ -160,6 +168,11 @@ Scene initMenuScene() {
     scene.backgroundSpritePath = BACKGROUND_TEST_PATH;
     scene.playerEnabled = false;
 
+    menuCurrentSelection = MENU_PLAY;
+
+    if (!ReadSaveFile(keysStore.rock, keysStore.snake, keysStore.cipher, lastSceneLocation, lastPlayerPosition)) {
+        newGame = true;
+    }
 
     return scene;
 }

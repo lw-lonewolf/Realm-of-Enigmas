@@ -12,7 +12,7 @@
 const char creditsData[64][256] = {
     "#CREDITS",
     "#",
-    "#Realms Of Enigmas",
+    "#Realm Of Enigmas",
     "A top-down platformer game presented by:",
     "#",
     "23L-2555 Armaghan Ahmed",

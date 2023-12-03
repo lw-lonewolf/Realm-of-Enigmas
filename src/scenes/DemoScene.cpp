@@ -12,7 +12,7 @@ Scene initDemoScene() {
     scene.location = SCENE_DEMO_SCENE;
     scene.backgroundSpritePath = BACKGROUND_DEMO_PATH;
     scene.defaultPlayerDir = PLAYER_SPRITE_DOWN;
-    scene.defaultPlayerPos = sf::Vector2f(173.f, 250.f);
+    scene.defaultPlayerPos = sf::Vector2f(142.f, 212.f);
 
     scene.view = sf::View(scene.defaultPlayerPos, sf::Vector2f(400.f, 300.f));
 
@@ -34,13 +34,11 @@ Scene initDemoScene() {
 
     InteractionPoint changeSceneInCornerInteraction;
     changeSceneInCornerInteraction.name = INTERACTION_TRAVEL;
-    changeSceneInCornerInteraction.label = "Try out some snake!";
-    changeSceneInCornerInteraction.travelTo = SCENE_SNAKE_GAME;
+    changeSceneInCornerInteraction.label = "Try out some rocks!";
+    changeSceneInCornerInteraction.travelTo = SCENE_ROCK_GAME;
     changeSceneInCornerInteraction.position = sf::Vector2f(0, 150);
 
     scene.interactibles[1] = changeSceneInCornerInteraction;
-
-
 
     return scene;
 }

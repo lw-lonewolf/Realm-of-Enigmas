@@ -16,6 +16,10 @@ void resumeGame()
     gameMenuCurrentSelection = GAME_MENU_PLAY;
 }
 
+void saveGame() {
+    WriteSaveFile(keysStore.rock, keysStore.snake, keysStore.cipher, currentScene.location, player.sprite.getPosition());
+}
+
 void onGameMenuNavigation(InputAction action, int value = 0) {
     switch (action) {
         case INPUT_NAVIGATE:
@@ -36,6 +40,8 @@ void onGameMenuNavigation(InputAction action, int value = 0) {
 
                 case GAME_MENU_QUIT:
                     resumeGame();
+                    // Save the game whenever the player quits to main menu
+                    saveGame();
                     clearScene();
                     loadScene(initMenuScene());
                     break;
@@ -92,9 +98,14 @@ void playerLoop()
         if (!PhysicsValidatePosition(sf::Vector2f(player.sprite.getPosition().x, player.sprite.getPosition().y + effectiveMovementVector.y)))
             effectiveMovementVector.y = 0;
 
+        if (currentScene.horizontalMovementOnly) {
+            effectiveMovementVector.y = 0;
+            effectiveMovementVector.x = player.movementVector.x;
+        }
+
         player.sprite.move(effectiveMovementVector);
 
-//        std::cout << "player position: " << player.sprite.getPosition().x << "," << player.sprite.getPosition().y << std::endl;
+        std::cout << "player position: " << player.sprite.getPosition().x << "," << player.sprite.getPosition().y << std::endl;
 
         if (player.movementVector.x == 0 && player.movementVector.y == 0)
             player.moving = false;
@@ -106,32 +117,54 @@ void playerLoop()
     setView();
 }
 
+void postInteraction(InteractionID interactionIdentifier) {
+    switch (interactionIdentifier) {
+        case INTERACTION_GUIDE_FIRST_DIALOG:
+            loadScene(initTestScene());
+            break;
+    }
+}
+
 void nextDialog()
 {
     if (!isDialogOpen)
         return;
 
+    if (currentDialogText[currentDialogStrCharacterIndex] != '\0') {
+        currentDialogStrCharacterIndex = 200; // Jugaar :(
+        return;
+    }
     currentDialogIndex++;
+    currentDialogStrCharacterIndex = 0;
 
-    if (!currentDialog.messages[currentDialogIndex].speaker.animFrames) // checking if the next dialog message exists
+    if (!currentDialog.messages[currentDialogIndex].speaker.animFrames) {
+        // checking if the next dialog message exists
         resumeGame();
-
+        postInteraction(currentInteraction);
+    }
     currentDialogText = currentDialog.messages[currentDialogIndex].message;
     currentDialogNPC = currentDialog.messages[currentDialogIndex].speaker;
 }
 
-void handleTravel(SceneLocation location)
+void handleTravel(SceneLocation location, bool positionFromSaveFile)
 {
+
     switch (location)
     {
     case SCENE_DEMO_SCENE:
-        loadScene(initDemoScene());
+        loadScene(initDemoScene(), positionFromSaveFile);
         break;
     case SCENE_SNAKE_GAME:
-        loadScene(initSnakeScene());
+        loadScene(initSnakeScene(), positionFromSaveFile);
         break;
     case SCENE_TEST_SCENE:
-        loadScene(initTestScene());
+        loadScene(initTestScene(), positionFromSaveFile);
+        break;
+    case SCENE_ROCK_GAME:
+        loadScene(initRockScene(), positionFromSaveFile);
+        break;
+    case SCENE_OPTIMUS:
+        loadScene(initOptimusPrimeScene(), positionFromSaveFile);
         break;
     }
 }
@@ -155,6 +188,8 @@ void handleInteraction(InteractionPoint interaction)
     else if (interaction.name == INTERACTION_NULL)
         return;
 
+    currentInteraction = interaction.identifier;
+
     switch (interaction.name)
     {
     case INTERACTION_NULL:
@@ -162,10 +197,14 @@ void handleInteraction(InteractionPoint interaction)
         break;
 
     case INTERACTION_TRAVEL:
+        // Save the game whenever the player goes to a new scene
+        saveGame();
         handleTravel(interaction.travelTo);
         break;
 
     case INTERACTION_TALK:
+        // Save the game whenever the player interacts with an NPC
+        saveGame();
         handleDialog(interaction.dialog);
         break;
     }

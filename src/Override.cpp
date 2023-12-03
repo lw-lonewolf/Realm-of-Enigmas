@@ -25,6 +25,7 @@ void onOverrideEvent(sf::Event event) {
     }
 
 void onOverrideRender(sf::RenderWindow& window) {
+    std::cout << currentScene.location << std::endl;
     switch (currentScene.location) {
         /* Each of these cases will detect which specific scene is running
          * currently, and passes the render handling to a function for that
@@ -41,6 +42,10 @@ void onOverrideRender(sf::RenderWindow& window) {
 
         case SCENE_INTRO:
             onIntroRender(window);
+            break;
+
+        case SCENE_ROCK_GAME:
+            RockSceneRender(window);
             break;
 
         /* An example would be:

@@ -21,8 +21,8 @@ Scene initTestScene()
 
     InteractionPoint changeSceneInteraction;
     changeSceneInteraction.name = INTERACTION_TRAVEL;
-    changeSceneInteraction.label = "Back to Demo";
-    changeSceneInteraction.travelTo = SCENE_DEMO_SCENE;
+    changeSceneInteraction.label = "Enter the mysterious cave";
+    changeSceneInteraction.travelTo = SCENE_OPTIMUS;
     changeSceneInteraction.position = sf::Vector2f(130, 110);
 
     scene.interactibles[0] = changeSceneInteraction;

@@ -35,6 +35,27 @@ void initGuideCharSprite()
 
     guideChar.animFrames = 4;
     guideChar.animSpeed = 500;
+
+    if (!guideChar.texture.loadFromFile(guideChar.path))
+        std::cout << "Failed to load from file: " << guideChar.path << std::endl;
+}
+
+
+/* Rock game character constants */
+
+NPC rockChar;
+void initRockCharSprite()
+{
+    rockChar.path = "assets/sprites/character_rock.png";
+    rockChar.name = "Rock Guy";
+    rockChar.width = 30;
+    rockChar.height = 39;
+
+    rockChar.animFrames = 6;
+    rockChar.animSpeed = 83; // 12 FPS
+
+    if (!rockChar.texture.loadFromFile(rockChar.path))
+        std::cout << "Failed to load from file: " << rockChar.path << std::endl;
 }
 
 
@@ -43,10 +64,20 @@ void initGuideCharSprite()
 
 #define BACKGROUND_MENU_PATH "assets/imgs/ParallexBG.png"
 #define BACKGROUND_DEMO_PATH "assets/imgs/demo-bg-sprite.jpg"
+#define BACKGROUND_OPTIMUS_PRIME_PATH "assets/imgs/main-bg.png"
 #define BACKGROUND_TEST_PATH "assets/imgs/BackgroundV4.png"
 #define BACKGROUND_ROCK_PATH "assets/imgs/BackgroundV4.png"
 
 sf::Texture menuBgTexture;
+
+
+/* Keys */
+
+#define KEYS_SPRITE_PATH "assets/sprites/Keys.png"
+const sf::IntRect KEY_SPRITE_ROCK(sf::Vector2i(0, 0), sf::Vector2i(32, 32));
+const sf::IntRect KEY_SPRITE_SNAKE(sf::Vector2i(96, 0), sf::Vector2i(32, 32));
+const sf::IntRect KEY_SPRITE_CIPHER(sf::Vector2i(32, 0), sf::Vector2i(32, 32));
+
 
 /* Fonts */
 

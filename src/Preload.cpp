@@ -14,8 +14,14 @@ void loadAssets() {
     if (!menuBgTexture.loadFromFile(BACKGROUND_MENU_PATH))
         std::cout << "Failed to load from file: " << BACKGROUND_MENU_PATH << std::endl;
 
+    if (!keysSpriteTexture.loadFromFile(KEYS_SPRITE_PATH))
+        std::cout << "Failed to load from file: " << KEYS_SPRITE_PATH << std::endl;
+
+    if (!rockTexture.loadFromFile("assets/sprites/DawayneJohnsun.png")) {
+        std::cout << "Failed to load Rock." << std::endl;
+    }
+
     initGuideCharSprite();
-    if (!guideCharTexture.loadFromFile(guideChar.path))
-        std::cout << "Failed to load from file: " << guideChar.path << std::endl;
+    initRockCharSprite();
 
 }

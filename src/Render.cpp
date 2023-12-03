@@ -61,13 +61,15 @@ void setView()
 
 void clearScene() {
     uiStatus = "";
+    InteractionPoint nullInteraction;
+    player.interactionInRange = nullInteraction;
 }
 
 /* The loadScene simply loads up the scene passed as the parameter. The previous
  * scene objects are automatically stashed.
  *
  * */
-void loadScene(Scene scene)
+void loadScene(Scene scene, bool positionFromSaveFile)
 {
     if (sceneLoaded) {
         if (loadingScene > 0)
@@ -78,6 +80,7 @@ void loadScene(Scene scene)
     } else {
         if (loadingScene < 100) {
             sceneToLoad = scene;
+            loadPositionFromFile = positionFromSaveFile;
             loadingScene += SCENE_FADE_SPEED;
         } else {
             sceneLoaded = true;
@@ -87,6 +90,7 @@ void loadScene(Scene scene)
 
     clearScene();
     currentScene = scene;
+    onSceneInit(currentScene.location);
 
     if (currentScene.backgroundEnabled) {
         if (!currentScene.background.loadFromFile(currentScene.backgroundSpritePath))
@@ -99,8 +103,12 @@ void loadScene(Scene scene)
     if (!player.texture.loadFromFile(PLAYER_SPRITE_PATH))
         std::cout << "Failed to load from file: " << PLAYER_SPRITE_PATH << std::endl;
 
+    sf::Vector2f playerPositionToSet = lastPlayerPosition;
+    if (!positionFromSaveFile)
+        playerPositionToSet = currentScene.defaultPlayerPos;
+
     player.sprite.setTexture(player.texture);
-    player.sprite.setPosition(currentScene.defaultPlayerPos.x - PLAYER_SPRITE_WIDTH / 2, currentScene.defaultPlayerPos.y - PLAYER_SPRITE_HEIGHT / 2);
+    player.sprite.setPosition(playerPositionToSet.x, playerPositionToSet.y);
 
     player.moving = false;
     player.currentAnimFrame = 0;
@@ -158,7 +166,7 @@ void NPCsRenderLoop(sf::RenderWindow &window)
         }
 
         sf::Sprite npc;
-        npc.setTexture(guideCharTexture);
+        npc.setTexture(npcSprite.texture);
         npc.setTextureRect(sf::IntRect(npcSprite.width * (currentScene.animatedSpritesFrames[i] - 1), 0, npcSprite.width, npcSprite.height));
         npc.setPosition(npcSprite.position);
 
@@ -187,12 +195,25 @@ void dialogRender(sf::RenderWindow &window)
     sf::Sprite dialogNPCPic;
     dialogNPCPic.setTexture(dialogNPCTexture);
     dialogNPCPic.setTextureRect(sf::IntRect(0, 0, currentDialogNPC.width, currentDialogNPC.height));
-    dialogNPCPic.setScale(200.f / currentDialogNPC.width, 200.f / currentDialogNPC.width);
-    dialogNPCPic.setPosition(centerByDimensions(sf::Vector2f(SCREEN_W / 2, SCREEN_H / 6), sf::Vector2i(200, 200 * ((float)currentDialogNPC.width / currentDialogNPC.height)), true));
+    dialogNPCPic.setScale(100.f / currentDialogNPC.height, 100.f / currentDialogNPC.height);
+    dialogNPCPic.setPosition(centerByDimensions(sf::Vector2f(SCREEN_W / 2, SCREEN_H / 6), sf::Vector2i(100 * ((float)currentDialogNPC.width / currentDialogNPC.height), 100), true));
 
     sf::Text dialogBody(currentDialogText, UI_FONT_BODY);
     dialogBody.setPosition(dialogBg.getPosition().x + 80, dialogBg.getPosition().y + 80);
     dialogBody.setCharacterSize(UI_BODY_2_SIZE);
+
+    char textToSet[256];
+    int i;
+    for (i = 0; i < currentDialogStrCharacterIndex; i++) {
+        textToSet[i] = currentDialogText[i];
+    }
+    textToSet[i] = '\0';
+    dialogBody.setString(textToSet);
+
+    if (framecount % (30 * REFRESH_RATE / 1000) == 0 && currentDialogText[currentDialogStrCharacterIndex] != '\0') {
+        currentDialogStrCharacterIndex++;
+    }
+
     textWrapper(dialogBody, (UI_SPR_DIALOG_BG.width * dialogBg.getScale().x) - 160);
 
     sf::Sprite dialogBtnHint = newButton(sf::Vector2f(SCREEN_W / 2 - 15, 50 + SCREEN_H / 1.18));
@@ -308,11 +329,11 @@ void renderPopup(sf::RenderWindow& window, std::string titleText, std::string bo
  * */
 void UILayer(sf::RenderWindow &window)
 {
-    /* The bottom statusbar
-     * */
 
     if (!isGamePaused)
     {
+        /* The bottom statusbar */
+
         if (uiStatus.length())
         { // this will be true when the uiStatus has text
             sf::RectangleShape uiStatusBg(sf::Vector2f(SCREEN_W, UI_BODY_2_SIZE + 10));
@@ -331,6 +352,34 @@ void UILayer(sf::RenderWindow &window)
         uiStatusTx.setOrigin(-10, UI_BODY_2_SIZE + 10);
 
         window.draw(uiStatusTx);
+
+        /* The keys indicator: only shown in a game scene */
+        if (currentScene.type == SCENE_GAME) {
+            sf::Sprite keyRock(keysSpriteTexture);
+            keyRock.setTextureRect(KEY_SPRITE_ROCK);
+            keyRock.setScale(2, 2);
+            keyRock.setPosition(SCREEN_W - 228, 36);
+            if (!keysStore.rock)
+                keyRock.setColor(sf::Color(0, 0, 0, 100));
+
+            sf::Sprite keySnake(keysSpriteTexture);
+            keySnake.setTextureRect(KEY_SPRITE_SNAKE);
+            keySnake.setScale(2, 2);
+            keySnake.setPosition(SCREEN_W - 164, 36);
+            if (!keysStore.snake)
+                keySnake.setColor(sf::Color(0, 0, 0, 100));
+
+            sf::Sprite keyCipher(keysSpriteTexture);
+            keyCipher.setTextureRect(KEY_SPRITE_CIPHER);
+            keyCipher.setScale(2, 2);
+            keyCipher.setPosition(SCREEN_W - 100, 36);
+            if (!keysStore.cipher)
+                keyCipher.setColor(sf::Color(0, 0, 0, 100));
+
+            window.draw(keyRock);
+            window.draw(keySnake);
+            window.draw(keyCipher);
+        }
     }
     /* The dialogs stuff
      * */
@@ -360,8 +409,6 @@ void UILayer(sf::RenderWindow &window)
         sf::RectangleShape sceneLoadScreenDarken(sf::Vector2f(SCREEN_W, SCREEN_H));
         sceneLoadScreenDarken.setPosition(0, 0);
         sceneLoadScreenDarken.setFillColor(sf::Color(0, 0, 0, 255 * loadingScene / 100));
-
-        std::cout << loadingScene << std::endl;
 
         window.draw(sceneLoadScreenDarken);
     }
@@ -401,9 +448,9 @@ void Render(sf::RenderWindow &window)
     sf::Time elapsed = gameClock.restart();
     int deltaTime = elapsed.asMilliseconds();
 
-    if (loadingScene) loadScene(sceneToLoad);
+    if (loadingScene) loadScene(sceneToLoad, loadPositionFromFile);
 
-    if (currentScene.type == SCENE_GAME)
+    if (currentScene.type != SCENE_MENU)
     {
         if (currentScene.playerEnabled)
             playerLoop();

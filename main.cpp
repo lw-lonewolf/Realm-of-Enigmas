@@ -11,9 +11,10 @@
 #include "include/Assets.h"
 #include "include/Globals.h"
 
-/* Data loading files */
+/* Data loading files & General Helper */
 #include "src/Dialog.cpp"
 #include "src/Preload.cpp"
+#include "src/Helper.cpp"
 
 /* Scene files */
 #include "src/scenes/DemoScene.cpp"
@@ -22,10 +23,12 @@
 #include "src/scenes/MenuScene.cpp"
 #include "src/scenes/TestScene.cpp"
 #include "src/scenes/SnakeScene.cpp"
+#include "src/scenes/RockScene.cpp"
+#include "src/scenes/OptimusPrimeScene.cpp"
 
 /* Source files */
-#include "src/Helper.cpp"
 #include "src/UI.cpp"
+#include "src/scenes/SceneInit.cpp"
 #include "src/Physics.cpp"
 #include "src/Game.cpp"
 #include "src/Render.cpp"
@@ -33,6 +36,8 @@
 #include "src/Override.cpp"
 
 int main() {
+    srand(time(0));
+
     // Code starts off here, setting up the window:
 
     sf::RenderWindow window(sf::VideoMode(SCREEN_W, SCREEN_H), WINDOW_TITLE);

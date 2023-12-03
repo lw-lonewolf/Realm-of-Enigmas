@@ -134,4 +134,4 @@ const sf::IntRect UI_SPR_BTN_PRESSED(sf::Vector2i(113, 97), sf::Vector2i(30, 14)
 
 const sf::IntRect UI_SPR_DIALOG_BG(sf::Vector2i(0, 96), sf::Vector2i(48, 32));
 
-#define MAIN_SCREEN_MUSIC "assets/audio/Dialog_BG.wav"
+#define MAIN_SCREEN_MUSIC "assets/audio/Main_Screen.wav"

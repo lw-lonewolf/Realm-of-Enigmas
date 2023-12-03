@@ -176,6 +176,7 @@ Scene initMenuScene() {
     }
     initMusic(MAIN_SCREEN_MUSIC);
     music.setLoop(true);
+    music.setVolume(50);
     music.play();
     return scene;
 }

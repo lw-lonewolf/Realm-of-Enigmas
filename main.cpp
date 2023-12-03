@@ -1,6 +1,6 @@
 /* SFML */
 #include <SFML/Graphics.hpp>
-
+#include <SFML/Audio.hpp>
 /* Native */
 #include <iostream>
 #include <math.h>
@@ -15,6 +15,7 @@
 #include "src/Dialog.cpp"
 #include "src/Preload.cpp"
 #include "src/Helper.cpp"
+#include "src/Audio.cpp"
 
 /* Scene files */
 #include "src/scenes/DemoScene.cpp"
@@ -65,8 +66,11 @@ int main() {
             // various levels in that file.
             EventHandler(event);
 
-            if (event.type == sf::Event::Closed)
-                window.close();
+            if (event.type == sf::Event::Closed){
+            stop_music();
+            window.close();
+            }
+
         }
 
         // This PhysicsLoop (Physics.cpp) ensures the player is not inside of any

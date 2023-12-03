@@ -12,7 +12,6 @@ void load_music(const std::string &PATH)
 
     sound.setBuffer(buffer);
     sound.setLoop(true); 
-    sound.play();
 }
 
 void stop_music()

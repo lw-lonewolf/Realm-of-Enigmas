@@ -16,16 +16,14 @@ Scene initOptimusPrimeScene() {
     scene.colliderHitboxes[5] = sf::IntRect(1515, 1486, 30, 30);
     scene.colliderHitboxes[6] = sf::IntRect(1705, 1378, 30, 30);
 
+    int nextNPCIndex = 1;
+
     scene.animatedSprites[0] = guideChar;
     scene.animatedSprites[0].position = sf::Vector2f(1900, 1260);
-
-    scene.animatedSprites[1] = rockChar;
-    scene.animatedSprites[1].position = sf::Vector2f(1300, 1477);
 
     InteractionPoint talkToGuideInteraction;
     talkToGuideInteraction.name = INTERACTION_TALK;
     talkToGuideInteraction.label = "Try to go back";
-    talkToGuideInteraction.identifier = INTERACTION_GUIDE_FIRST_DIALOG;
     talkToGuideInteraction.position = scene.animatedSprites[0].position;
     talkToGuideInteraction.dialog = noGoingBackDialog();
     talkToGuideInteraction.associatedNPC = scene.animatedSprites[0];
@@ -33,14 +31,20 @@ Scene initOptimusPrimeScene() {
     scene.interactibles[0] = talkToGuideInteraction;
 
 
-    InteractionPoint talkToRockInteraction;
-    talkToRockInteraction.name = INTERACTION_TALK;
-    talkToRockInteraction.label = "Talk";
-    talkToRockInteraction.position = scene.animatedSprites[1].position;
-    talkToRockInteraction.dialog = rockDialog();
-    talkToRockInteraction.associatedNPC = scene.animatedSprites[1];
+    if (!keysStore.rock) {
+        scene.animatedSprites[nextNPCIndex] = rockChar;
+        scene.animatedSprites[nextNPCIndex].position = sf::Vector2f(1300, 1477);
 
-    scene.interactibles[1] = talkToRockInteraction;
+        InteractionPoint talkToRockInteraction;
+        talkToRockInteraction.name = INTERACTION_TALK;
+        talkToRockInteraction.label = "Talk";
+        talkToRockInteraction.position = scene.animatedSprites[nextNPCIndex].position;
+        talkToRockInteraction.dialog = rockDialog();
+        talkToRockInteraction.associatedNPC = scene.animatedSprites[nextNPCIndex];
+
+        scene.interactibles[nextNPCIndex] = talkToRockInteraction;
+        nextNPCIndex++;
+    }
 
     return scene;
 }

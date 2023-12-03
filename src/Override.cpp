@@ -25,7 +25,6 @@ void onOverrideEvent(sf::Event event) {
     }
 
 void onOverrideRender(sf::RenderWindow& window) {
-    std::cout << currentScene.location << std::endl;
     switch (currentScene.location) {
         /* Each of these cases will detect which specific scene is running
          * currently, and passes the render handling to a function for that

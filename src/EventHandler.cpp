@@ -106,9 +106,9 @@ void EventHandler(sf::Event event) {
                 break;
 
             case KEY_NEXT: case KEY_NEXT_ALT:
-//                if (isPopupOpen)
-//                    hidePopup();
-//                else
+                if (isPopupOpen)
+                    hidePopup();
+                else
                     nextDialog();
 
                 break;

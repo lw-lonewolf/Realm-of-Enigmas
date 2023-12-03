@@ -17,7 +17,38 @@ void resumeGame()
 }
 
 void saveGame() {
+    if (currentScene.location == SCENE_CREDITS || currentScene.location == SCENE_MAIN_MENU) return;
     WriteSaveFile(keysStore.rock, keysStore.snake, keysStore.cipher, currentScene.location, player.sprite.getPosition());
+}
+
+int countKeys() {
+    return ((int)keysStore.snake + (int)keysStore.rock + (int)keysStore.cipher);
+}
+
+std::string setKeysDialogTx() {
+    int keys = countKeys();
+    std::cout << "totalkeys: " << keys << std::endl;
+    if (keys == 3) {
+        return "Congratulations... You have collected all three keys!\n\nHead to your guide to seek what's next...";
+    }
+    else {
+        return "You just completed the challenge successfully and obtained a key. Only " + std::to_string(3 - keys) + " more left. Great work!";
+    }
+}
+
+void miniGameDefeat(Minigame lostMiniGame) {
+    minigameFeedbackDialog = lostMiniGameDialog(lostMiniGame);
+    showMinigameFeedbackDialog = true;
+
+    loadScene(initOptimusPrimeScene(), lastSceneLocation == SCENE_OPTIMUS);
+}
+
+void miniGameVictory(Minigame wonMiniGame, bool& wonKey) {
+    minigameFeedbackDialog = wonMiniGameDialog(wonMiniGame);
+
+    showMinigameFeedbackDialog = true;
+    wonKey = true;
+    loadScene(initOptimusPrimeScene(), lastSceneLocation == SCENE_OPTIMUS);
 }
 
 void onGameMenuNavigation(InputAction action, int value = 0) {
@@ -76,9 +107,9 @@ void playerLoop()
             player.direction = PLAYER_SPRITE_LEFT;
         if (player.movementVector.x / PLAYER_MOVE_MULTIPLIER == 1)
             player.direction = PLAYER_SPRITE_RIGHT;
-        if (player.movementVector.y / PLAYER_MOVE_MULTIPLIER == -1)
+        if (player.movementVector.y / PLAYER_MOVE_MULTIPLIER == -1 && !currentScene.horizontalMovementOnly)
             player.direction = PLAYER_SPRITE_UP;
-        if (player.movementVector.y / PLAYER_MOVE_MULTIPLIER == 1)
+        if (player.movementVector.y / PLAYER_MOVE_MULTIPLIER == 1 && !currentScene.horizontalMovementOnly)
             player.direction = PLAYER_SPRITE_DOWN;
 
         // Normalizing input vector
@@ -105,8 +136,6 @@ void playerLoop()
 
         player.sprite.move(effectiveMovementVector);
 
-        std::cout << "player position: " << player.sprite.getPosition().x << "," << player.sprite.getPosition().y << std::endl;
-
         if (player.movementVector.x == 0 && player.movementVector.y == 0)
             player.moving = false;
     }
@@ -117,10 +146,15 @@ void playerLoop()
     setView();
 }
 
-void postInteraction(InteractionID interactionIdentifier) {
-    switch (interactionIdentifier) {
-        case INTERACTION_GUIDE_FIRST_DIALOG:
-            loadScene(initTestScene());
+void postInteraction(DialogID DialogIdentifier) {
+    switch (DialogIdentifier) {
+        case DIALOG_GUIDE_FIRST:
+            if (countKeys() == 3) loadScene(initCreditsScene());
+            break;
+        case DIALOG_ROCK_GAME:
+            loadScene(initRockScene());
+            break;
+        case DIALOG_MINIGAME_VICTORY:
             break;
     }
 }
@@ -140,7 +174,7 @@ void nextDialog()
     if (!currentDialog.messages[currentDialogIndex].speaker.animFrames) {
         // checking if the next dialog message exists
         resumeGame();
-        postInteraction(currentInteraction);
+        postInteraction(currentDialog.identifier);
     }
     currentDialogText = currentDialog.messages[currentDialogIndex].message;
     currentDialogNPC = currentDialog.messages[currentDialogIndex].speaker;
@@ -187,8 +221,6 @@ void handleInteraction(InteractionPoint interaction)
         return;
     else if (interaction.name == INTERACTION_NULL)
         return;
-
-    currentInteraction = interaction.identifier;
 
     switch (interaction.name)
     {

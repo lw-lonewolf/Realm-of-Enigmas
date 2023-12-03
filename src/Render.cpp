@@ -120,6 +120,10 @@ void loadScene(Scene scene, bool positionFromSaveFile)
         currentScene.animatedSpritesFrames[i] = 1;
     }
 
+    if (currentScene.view.getSize().x == -1) {
+        currentScene.view = defaultView;
+    }
+
     playerLoop();
 }
 
@@ -214,7 +218,7 @@ void dialogRender(sf::RenderWindow &window)
         currentDialogStrCharacterIndex++;
     }
 
-    textWrapper(dialogBody, (UI_SPR_DIALOG_BG.width * dialogBg.getScale().x) - 160);
+    textWrapper(dialogBody, (UI_SPR_DIALOG_BG.width * dialogBg.getScale().x) - 165);
 
     sf::Sprite dialogBtnHint = newButton(sf::Vector2f(SCREEN_W / 2 - 15, 50 + SCREEN_H / 1.18));
     dialogBtnHint.setScale(3, 3);
@@ -295,7 +299,7 @@ void renderPopup(sf::RenderWindow& window, std::string titleText, std::string bo
     sf::Text popupBody(bodyText, UI_FONT_BODY);
     popupBody.setPosition(popupBg.getPosition().x + 105, popupBg.getPosition().y + 100);
     popupBody.setCharacterSize(UI_BODY_2_SIZE);
-    textWrapper(popupBody, (UI_SPR_DIALOG_BG.width - 13) * popupBg.getScale().x);
+    textWrapper(popupBody, (UI_SPR_DIALOG_BG.width - 15) * popupBg.getScale().x);
 
     sf::Sprite popupBtnHint = newButton(sf::Vector2f(SCREEN_W / 2 - 15, SCREEN_H - 50));
     popupBtnHint.setScale(3, 3);
@@ -445,8 +449,8 @@ void Render(sf::RenderWindow &window)
     window.clear();
 
     // Sets The DeltaTime:
-    sf::Time elapsed = gameClock.restart();
-    int deltaTime = elapsed.asMilliseconds();
+//    sf::Time elapsed = gameClock.restart();
+//    int deltaTime = elapsed.asMilliseconds();
 
     if (loadingScene) loadScene(sceneToLoad, loadPositionFromFile);
 

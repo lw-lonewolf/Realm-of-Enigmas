@@ -23,5 +23,6 @@ void loadAssets() {
 
     initGuideCharSprite();
     initRockCharSprite();
-
+    initEmptyCharSprite();
+    initPlayerCharSprite();
 }

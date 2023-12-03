@@ -58,6 +58,44 @@ void initRockCharSprite()
         std::cout << "Failed to load from file: " << rockChar.path << std::endl;
 }
 
+/* This NPC would basically act as the narrator or the speaker, won't have
+ * any image, and so.
+ *
+ * */
+
+NPC emptyChar;
+void initEmptyCharSprite()
+{
+    emptyChar.path = "assets/sprites/character_rock.png";
+    emptyChar.name = "Message";
+    emptyChar.width = 1;
+    emptyChar.height = 1;
+
+    emptyChar.animFrames = 2;
+    emptyChar.animSpeed = 1000;
+
+    if (!emptyChar.texture.loadFromFile(emptyChar.path))
+        std::cout << "Failed to load from file: " << emptyChar.path << std::endl;
+}
+
+
+
+/* The player himself. (Yes we are declaring him as an NPC) */
+
+NPC playerChar;
+void initPlayerCharSprite()
+{
+    playerChar.path = "assets/sprites/player-sprite.png";
+    playerChar.name = "Message";
+    playerChar.width = PLAYER_SPRITE_WIDTH;
+    playerChar.height = PLAYER_SPRITE_HEIGHT;
+
+    playerChar.animFrames = 1;
+    playerChar.animSpeed = 1000;
+
+    playerChar.texture = player.texture;
+}
+
 
 
 /* Background constants */
@@ -94,4 +132,4 @@ const sf::IntRect UI_SPR_BTN_SQUARE_PRESSED(sf::Vector2i(17, 81), sf::Vector2i(1
 const sf::IntRect UI_SPR_BTN(sf::Vector2i(113, 81), sf::Vector2i(30, 14));
 const sf::IntRect UI_SPR_BTN_PRESSED(sf::Vector2i(113, 97), sf::Vector2i(30, 14));
 
-const sf::IntRect UI_SPR_DIALOG_BG(sf::Vector2i(0, 96), sf::Vector2i(47, 32));
+const sf::IntRect UI_SPR_DIALOG_BG(sf::Vector2i(0, 96), sf::Vector2i(48, 32));

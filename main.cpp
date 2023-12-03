@@ -8,8 +8,8 @@
 
 /* Header files */
 #include "include/Constants.h"
-#include "include/Assets.h"
 #include "include/Globals.h"
+#include "include/Assets.h"
 
 /* Data loading files & General Helper */
 #include "src/Dialog.cpp"
@@ -44,6 +44,7 @@ int main() {
     window.setFramerateLimit(REFRESH_RATE);
 
     uiView = sf::View(sf::Vector2f(SCREEN_W/2, SCREEN_H/2), sf::Vector2f(SCREEN_W, SCREEN_H));
+    defaultView = sf::View(sf::Vector2f(SCREEN_W/2, SCREEN_H/2), sf::Vector2f(SCREEN_W, SCREEN_H));
 
     // Preloading the fonts and UI spritesheet:
     loadAssets();

@@ -45,5 +45,8 @@ void createPopup(std::string titleText, std::string bodyText) {
 }
 
 void hidePopup() {
-    resumeGame();
+    if (!isDialogOpen)
+        resumeGame();
+    else
+        isPopupOpen = false;
 }

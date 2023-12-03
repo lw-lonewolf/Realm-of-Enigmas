@@ -11,10 +11,14 @@ void loadScene(Scene scene, bool positionFromSaveFile = false);
 void clearScene();
 bool PhysicsValidatePosition(sf::Vector2f testPosition);
 void renderInteraction(sf::RenderWindow& window, InteractionPoint interaction);
+void miniGameDefeat(Minigame lostMiniGame);
+void miniGameVictory(Minigame wonMiniGame, bool& wonKey);
+void handleDialog(Dialog dialog);
 void handleTravel(SceneLocation location, bool positionFromSaveFile = false);
 void setView();
 
 sf::View uiView;
+sf::View defaultView;
 sf::Clock gameClock;
 int framecount = 0;
 bool isGamePaused = false;
@@ -26,7 +30,6 @@ sf::Texture rockTexture;
 bool isDialogOpen = false;
 bool isPopupOpen = false;
 Dialog currentDialog;
-InteractionID currentInteraction;
 std::string currentDialogText = "";
 std::string currentPopupTitle = "";
 std::string currentPopupBodyText = "";
@@ -38,9 +41,14 @@ bool newGame = false;
 int currentDialogIndex = 0;
 int currentDialogStrCharacterIndex = 0;
 NPC currentDialogNPC;
+Dialog minigameFeedbackDialog;
+bool showMinigameFeedbackDialog = false;
+
 void pauseGame();
 void resumeGame();
 void saveGame();
+int countKeys();
+std::string setKeysDialogTx();
 
 Scene initMenuScene();
 

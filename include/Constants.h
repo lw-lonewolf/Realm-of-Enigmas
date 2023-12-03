@@ -110,13 +110,19 @@ enum InputAction
 enum SceneLocation
 {
     SCENE_INTRO,
-    SCENE_ROCK_GAME,
+    SCENE_TEST_SCENE,
     SCENE_DEMO_SCENE,
     SCENE_MAIN_MENU,
     SCENE_CREDITS,
     SCENE_OPTIMUS,
-    SCENE_TEST_SCENE,
+    SCENE_ROCK_GAME,
     SCENE_SNAKE_GAME
+};
+
+enum Minigame {
+    MINIGAME_ROCK_FALLING,
+    MINIGAME_SNAKE,
+    MINIGAME_CIPHER
 };
 
 /* The Interaction enum will list all the interactions of the game. When these
@@ -132,9 +138,12 @@ enum Interaction
     INTERACTION_TALK
 };
 
-enum InteractionID {
-    INTERACTION_NULLID,
-    INTERACTION_GUIDE_FIRST_DIALOG
+enum DialogID {
+    DIALOG_NULLID,
+    DIALOG_GUIDE_FIRST,
+    DIALOG_ROCK_GAME,
+    DIALOG_MINIGAME_VICTORY,
+    DIALOG_MINIGAME_DEFEAT
 };
 
 /* The NPC struct is primarily for placing animated Non-Playable Characters in
@@ -173,6 +182,7 @@ struct Dialog
 {
     std::string title;
     DialogOption messages[64];
+    DialogID identifier = DIALOG_NULLID;
 };
 
 /* Finally the InteractionPoint struct itself. This struct defines any point of
@@ -182,7 +192,6 @@ struct Dialog
 struct InteractionPoint
 {
     Interaction name = INTERACTION_NULL;
-    InteractionID identifier = INTERACTION_NULLID;
     std::string label = "Interact";
     sf::Vector2f position;
     NPC associatedNPC;
@@ -204,7 +213,7 @@ struct Scene
     std::string backgroundSpritePath;
     sf::Texture background;
     sf::Sprite backgroundSprite;
-    sf::View view;
+    sf::View view = sf::View(sf::FloatRect(0, 0, -1, -1));
 
     bool horizontalMovementOnly = false;
     bool playerEnabled = true;

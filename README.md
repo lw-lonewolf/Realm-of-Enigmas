@@ -40,4 +40,4 @@ The last two steps can be automatically performed through the install script:
 nope :>
   
 # About the Project: 
-This project was created by the four of us as our semester project for our first semester as SE majors.
+This project was created by us as our semester project for our first semester as SE majors.

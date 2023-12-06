@@ -15,31 +15,52 @@
 /* Game values */
 
 #define PI 3.141
-#define PLAYER_MOVE_MULTIPLIER 2
-#define INTERACTIBLE_THRESHOLD 40
+#define SAVE_FILE_NAME "save.dat"
+#define PLAYER_MOVE_MULTIPLIER 2  // PLAYER SPEED
+#define INTERACTIBLE_THRESHOLD 40 // DISTANCE TO TRIGGER INTERACTION EVENT
+const float MENU_BG_SCROLL_SPEED = 10.f;
+const float SCENE_FADE_SPEED = 10.f;
+const float INTRO_SCREEN_TIME = 4.f;
 
-enum MenuItem {
+enum MenuItem
+{
     MENU_PLAY,
-    MENU_SETTINGS,
+    MENU_ABOUT,
     MENU_QUIT
+};
+
+enum GameMenuItem
+{
+    GAME_MENU_PLAY,
+    GAME_MENU_QUIT
 };
 
 /* Game controls */
 
 const sf::Keyboard::Key KEY_UP = sf::Keyboard::W;
+const sf::Keyboard::Key KEY_UP_ALT = sf::Keyboard::Up;
 const sf::Keyboard::Key KEY_LEFT = sf::Keyboard::A;
+const sf::Keyboard::Key KEY_LEFT_ALT = sf::Keyboard::Left;
 const sf::Keyboard::Key KEY_DOWN = sf::Keyboard::S;
+const sf::Keyboard::Key KEY_DOWN_ALT = sf::Keyboard::Down;
 const sf::Keyboard::Key KEY_RIGHT = sf::Keyboard::D;
+const sf::Keyboard::Key KEY_RIGHT_ALT = sf::Keyboard::Right;
 
 const sf::Keyboard::Key KEY_ACTION = sf::Keyboard::E;
 const sf::Keyboard::Key KEY_NEXT = sf::Keyboard::Space;
+const sf::Keyboard::Key KEY_NEXT_ALT = sf::Keyboard::Enter;
 
 const sf::Keyboard::Key KEY_NAV_UP = sf::Keyboard::Up;
+const sf::Keyboard::Key KEY_NAV_UP_ALT = sf::Keyboard::W;
 const sf::Keyboard::Key KEY_NAV_LEFT = sf::Keyboard::Left;
+const sf::Keyboard::Key KEY_NAV_LEFT_ALT = sf::Keyboard::A;
 const sf::Keyboard::Key KEY_NAV_DOWN = sf::Keyboard::Down;
+const sf::Keyboard::Key KEY_NAV_DOWN_ALT = sf::Keyboard::S;
 const sf::Keyboard::Key KEY_NAV_RIGHT = sf::Keyboard::Right;
+const sf::Keyboard::Key KEY_NAV_RIGHT_ALT = sf::Keyboard::D;
 
 const sf::Keyboard::Key KEY_NAV_SELECT = sf::Keyboard::Enter;
+const sf::Keyboard::Key KEY_NAV_SELECT_ALT = sf::Keyboard::Space;
 const sf::Keyboard::Key KEY_NAV_BACK = sf::Keyboard::Escape;
 
 /* Fonts & Sizes */
@@ -63,7 +84,8 @@ const int UI_SMALL_3_SIZE = 5;
  * SCENE_CUSTOM will be used for any custom handling.
  * */
 
-enum SceneType {
+enum SceneType
+{
     SCENE_MENU,
     SCENE_GAME,
     SCENE_CUSTOM
@@ -72,7 +94,8 @@ enum SceneType {
 /* InputAction for the keyboard navigation. Used by the menu handling.
  * */
 
-enum InputAction {
+enum InputAction
+{
     INPUT_NAVIGATE,
     INPUT_SELECT,
     INPUT_BACK
@@ -84,10 +107,27 @@ enum InputAction {
  *
  * */
 
-enum SceneLocation {
+enum SceneLocation
+{
+    SCENE_INTRO,
     SCENE_TEST_SCENE,
     SCENE_DEMO_SCENE,
     SCENE_MAIN_MENU,
+    SCENE_CREDITS,
+    SCENE_OPTIMUS,
+    SCENE_ROCK_GAME,
+    SCENE_CIPHER_GAME,
+    SCENE_CIPHER_PUZZLE,
+    SCENE_CIPHER_VIGENERE,
+    SCENE_CIPHER_BRAILLE,
+    SCENE_PLATFORMER_GAME,
+    SCENE_SNAKE_GAME
+};
+
+enum Minigame {
+    MINIGAME_ROCK_FALLING,
+    MINIGAME_PLATFORMER,
+    MINIGAME_CIPHER
 };
 
 /* The Interaction enum will list all the interactions of the game. When these
@@ -96,26 +136,43 @@ enum SceneLocation {
  * intractable.
  */
 
-enum Interaction {
+enum Interaction
+{
     INTERACTION_NULL,
     INTERACTION_TRAVEL,
     INTERACTION_TALK
 };
 
+enum DialogID {
+    DIALOG_NULLID,
+    DIALOG_GUIDE_FIRST,
+    DIALOG_PLAYER_BEFORE_CAVE,
+    DIALOG_ROCK_GAME,
+    DIALOG_PLATFORMER_GAME,
+    DIALOG_CIPHER_GAME,
+    DIALOG_MINIGAME_VICTORY,
+    DIALOG_MINIGAME_DEFEAT,
+    DIALOG_CIPHER_GOBACK,
+};
 
 /* The NPC struct is primarily for placing animated Non-Playable Characters in
  * a scene. Any scene has an array of these, and NPCs are defined in Assets.h.
  *
  * */
-struct NPC {
+struct NPC
+{
+    sf::Texture texture;
     std::string path;
     sf::Vector2f position;
     std::string name;
+    int verticalOffset = 0;
     int width;
     int height;
     int animFrames = 0; // This initializaton acts as an identifier for any
                         // uninitialized NPC object. If animFrames is 0, then
                         // the NPC is null.
+    float scaleX = 1;
+    float scaleY = 1;
     int animSpeed;
 };
 
@@ -124,25 +181,28 @@ struct NPC {
  * messages that form a dialog.
  * */
 
-struct DialogOption {
+struct DialogOption
+{
     NPC speaker;
     std::string message;
 };
 
-
 /* The Dialog struct will define a dialog. This
  * contains all info about the conversation, and an array for each DialogOption.
  * */
-struct Dialog {
+struct Dialog
+{
     std::string title;
     DialogOption messages[64];
+    DialogID identifier = DIALOG_NULLID;
 };
 
 /* Finally the InteractionPoint struct itself. This struct defines any point of
  * interaction in a scene.
  * */
 
-struct InteractionPoint {
+struct InteractionPoint
+{
     Interaction name = INTERACTION_NULL;
     std::string label = "Interact";
     sf::Vector2f position;
@@ -156,31 +216,47 @@ struct InteractionPoint {
  * and interactibles. Everything of any Scene is stored in a Scene object.
  * */
 
-struct Scene {
+struct Scene
+{
     SceneType type;
     SceneLocation location;
-    std::string name;
+    std::string name; // SCENE NAME
+    bool backgroundEnabled = true;
     std::string backgroundSpritePath;
     sf::Texture background;
     sf::Sprite backgroundSprite;
-    sf::View view;
+    bool foregroundEnabled = false;
+    std::string foregroundSpritePath;
+    sf::Texture foreground;
+    sf::Sprite foregroundSprite;
+    sf::View view = sf::View(sf::FloatRect(0, 0, -1, -1));
 
+    bool noView = false;
+    bool horizontalMovementOnly = false;
     bool playerEnabled = true;
     int defaultPlayerDir;
     sf::Vector2f defaultPlayerPos;
+    int playerSpeedMultiplier = 1;
 
     sf::IntRect colliderHitboxes[32];
-    InteractionPoint interactibles[32];
+    InteractionPoint interactibles[32]; // TRIGGER POINTS
     NPC animatedSprites[32];
     int animatedSpritesFrames[32]; // This is used by a render loop to store the
                                    // current frame of each animated sprite here
 };
 
+struct {
+    bool rock = false;
+    bool horse = false;
+    bool cipher = false;
+} keysStore;
+
 /* This struct is just for the player. Contains all related stuff about the
  * player.
  * */
 
-struct {
+struct
+{
     sf::Sprite sprite;
     sf::Vector2f movementVector;
     sf::Texture texture;
@@ -191,3 +267,5 @@ struct {
     int direction;
     int currentAnimFrame;
 } player;
+
+

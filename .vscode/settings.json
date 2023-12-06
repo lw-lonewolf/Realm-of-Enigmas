@@ -70,5 +70,6 @@
         "variant": "cpp"
     },
     "C_Cpp.default.compilerPath": "/usr/bin/clang++",
-    "cmake.configureOnOpen": true
+    "cmake.configureOnOpen": true,
+    "C_Cpp.errorSquiggles": "disabled"
 }

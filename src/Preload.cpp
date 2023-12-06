@@ -11,8 +11,26 @@ void loadAssets() {
     if (!uiSpriteTexture.loadFromFile(UI_SPRITE_PATH))
         std::cout << "Failed to load from file: " << UI_SPRITE_PATH << std::endl;
 
-    initGuideCharSprite();
-    if (!guideCharTexture.loadFromFile(guideChar.path))
-        std::cout << "Failed to load from file: " << guideChar.path << std::endl;
+    if (!menuBgTexture.loadFromFile(BACKGROUND_MENU_PATH))
+        std::cout << "Failed to load from file: " << BACKGROUND_MENU_PATH << std::endl;
 
+    if (!keysSpriteTexture.loadFromFile(KEYS_SPRITE_PATH))
+        std::cout << "Failed to load from file: " << KEYS_SPRITE_PATH << std::endl;
+
+    if (!rockTexture.loadFromFile(ROCK_TEXTURE_PATH)) {
+        std::cout << "Failed to load Rock." << std::endl;
+    }
+
+    if (!puzzleCipherTexture.loadFromFile(PUZZLE_CIPHER_PATH)) {
+        std::cout << "Failed to load from file: " << PUZZLE_CIPHER_PATH << std::endl;
+    }
+
+    initGuideCharSprite();
+    initRockCharSprite();
+    initCipherCharSprite();
+    initHorseCharSprite();
+    initPlatformerCharSprite();
+    initEmptyCharSprite();
+    initPlayerCharSprite();
+    initPuzzleCipherSprite();
 }

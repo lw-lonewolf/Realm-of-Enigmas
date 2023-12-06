@@ -12,21 +12,42 @@
 void menuEventHandler(sf::Event event) {
     switch (event.type) {
         case sf::Event::KeyPressed:
-            if (event.key.code == KEY_NAV_UP)
+            if (event.key.code == KEY_NAV_UP || event.key.code == KEY_NAV_UP_ALT)
                 onMenuNavigation(INPUT_NAVIGATE, -1);
 
-            else if (event.key.code == KEY_NAV_DOWN)
+            else if (event.key.code == KEY_NAV_DOWN || event.key.code == KEY_NAV_DOWN_ALT)
                 onMenuNavigation(INPUT_NAVIGATE, 1);
 
-            else if (event.key.code == KEY_NAV_SELECT)
-                onMenuNavigation(INPUT_SELECT, -1);
+            else if (event.key.code == KEY_NAV_SELECT || event.key.code == KEY_NAV_SELECT_ALT)
+                onMenuNavigation(INPUT_SELECT);
 
             else if (event.key.code == KEY_NAV_BACK)
-                onMenuNavigation(INPUT_BACK, -1);
+                onMenuNavigation(INPUT_BACK);
 
             break;
     }
 }
+
+void gameMenuEventHandler(sf::Event event) {
+    switch (event.type) {
+        case sf::Event::KeyPressed:
+            if (event.key.code == KEY_NAV_UP || event.key.code == KEY_NAV_UP_ALT)
+                onGameMenuNavigation(INPUT_NAVIGATE, -1);
+
+            else if (event.key.code == KEY_NAV_DOWN || event.key.code == KEY_NAV_DOWN_ALT)
+                onGameMenuNavigation(INPUT_NAVIGATE, 1);
+
+            else if (event.key.code == KEY_NAV_SELECT || event.key.code == KEY_NAV_SELECT_ALT)
+                onGameMenuNavigation(INPUT_SELECT);
+
+            else if (event.key.code == KEY_NAV_BACK)
+                onGameMenuNavigation(INPUT_BACK);
+
+            break;
+    }
+}
+
+
 
 /* This small function is responsible for converting the keyboard direction
  * (from the EventHandler below) into a usable player movementVector.
@@ -45,8 +66,11 @@ void onMovement(sf::Vector2f dir) {
  * presses the Esc key.
  * */
 void onEscape() {
+    if (currentScene.type == SCENE_MENU) return;
     isGamePaused = !isGamePaused;
     isDialogOpen = false;
+    isPopupOpen = false;
+    isImagePopupOpen = false;
 }
 
 /* Finally, the EventHandler is the heart of all the event handling in the
@@ -56,24 +80,26 @@ void onEscape() {
  *
  * */
 void EventHandler(sf::Event event) {
+    if (loadingScene) return;
+
     switch (event.type) {
     case sf::Event::KeyPressed:
         // std::cout << "key: " << event.key.code << std::endl;
 
         switch (event.key.code) {
-            case KEY_UP:
+            case KEY_UP: case KEY_UP_ALT:
                 onMovement(sf::Vector2f(player.movementVector.x, -1.f * PLAYER_MOVE_MULTIPLIER));
                 break;
 
-            case KEY_DOWN:
+            case KEY_DOWN: case KEY_DOWN_ALT:
                 onMovement(sf::Vector2f(player.movementVector.x, 1.f * PLAYER_MOVE_MULTIPLIER));
                 break;
 
-            case KEY_LEFT:
+            case KEY_LEFT: case KEY_LEFT_ALT:
                 onMovement(sf::Vector2f(-1.f * PLAYER_MOVE_MULTIPLIER, player.movementVector.y));
                 break;
 
-            case KEY_RIGHT:
+            case KEY_RIGHT: case KEY_RIGHT_ALT:
                 onMovement(sf::Vector2f(1.f * PLAYER_MOVE_MULTIPLIER, player.movementVector.y));
                 break;
 
@@ -81,8 +107,12 @@ void EventHandler(sf::Event event) {
                 handleInteraction(player.interactionInRange);
                 break;
 
-            case KEY_NEXT:
-                nextDialog();
+            case KEY_NEXT: case KEY_NEXT_ALT:
+                if (isPopupOpen)
+                    hidePopup();
+                else
+                    nextDialog();
+
                 break;
 
             case KEY_NAV_BACK:
@@ -95,23 +125,27 @@ void EventHandler(sf::Event event) {
 
     case sf::Event::KeyReleased:
         
-        if (event.key.code == KEY_UP || event.key.code == KEY_DOWN)
+        if (event.key.code == KEY_UP || event.key.code == KEY_UP_ALT || event.key.code == KEY_DOWN || event.key.code == KEY_DOWN_ALT)
             onMovement(sf::Vector2f(player.movementVector.x, 0));
             
-        else if (event.key.code == KEY_LEFT || event.key.code == KEY_RIGHT)
+        else if (event.key.code == KEY_LEFT || event.key.code == KEY_LEFT_ALT || event.key.code == KEY_RIGHT || event.key.code == KEY_RIGHT_ALT)
             onMovement(sf::Vector2f(0, player.movementVector.y));
             
         break;
 
-    case sf::Event::MouseMoved:
-        std::cout << "mouse: x:" << event.mouseMove.x << " y:" << event.mouseMove.y << std::endl;
+//    case sf::Event::MouseMoved:
+//        std::cout << "mouse: x:" << event.mouseMove.x << " y:" << event.mouseMove.y << std::endl;
 
     default:
         break;
     }
 
-    /* This is overriding call which extends the EventHandler to any of the
-     * scenes that may also require it.
-     * */
-    onOverrideEvent(event);
+    if (isGamePaused && !isDialogOpen) {
+        gameMenuEventHandler(event);
+    } else {
+        /* This is overriding call which extends the EventHandler to any of the
+         * scenes that may also require it.
+         * */
+        onOverrideEvent(event);
+    }
 }

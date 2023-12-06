@@ -5,7 +5,6 @@
  * */
 
 void onSceneInit(SceneLocation sceneLocation) {
-    music.stop();
     switch (sceneLocation) {
         case SCENE_OPTIMUS:
             if (showMinigameFeedbackDialog) {
@@ -21,16 +20,30 @@ void onSceneInit(SceneLocation sceneLocation) {
         case SCENE_DEMO_SCENE:
             createPopup("Tutorial", "Use WASD or the arrow keys to move around.");
             break;
+
         case SCENE_ROCK_GAME:
             onRockSceneShown();
             break;
 
+        case SCENE_CIPHER_GAME:
+            onCipherSceneCreate();
+            break;
+
+        case SCENE_CIPHER_PUZZLE:
+            puzzleCipherInit();
+            break;
+
+        case SCENE_PLATFORMER_GAME:
+            onPlatformerStart();
+            break;
+
+        case SCENE_CIPHER_VIGENERE:
+            onVigenereStart();
+            break;
+
+        case SCENE_CIPHER_BRAILLE:
+            onBrailleStart();
+            break;
     }
-    
-    
-    initMusic(OTHER_WORLD_INTRO_MUSIC);
-    music.setLoop(true);
-    music.setVolume(50);
-    music.play();
-    
+
 }

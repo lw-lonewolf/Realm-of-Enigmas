@@ -116,12 +116,17 @@ enum SceneLocation
     SCENE_CREDITS,
     SCENE_OPTIMUS,
     SCENE_ROCK_GAME,
+    SCENE_CIPHER_GAME,
+    SCENE_CIPHER_PUZZLE,
+    SCENE_CIPHER_VIGENERE,
+    SCENE_CIPHER_BRAILLE,
+    SCENE_PLATFORMER_GAME,
     SCENE_SNAKE_GAME
 };
 
 enum Minigame {
     MINIGAME_ROCK_FALLING,
-    MINIGAME_SNAKE,
+    MINIGAME_PLATFORMER,
     MINIGAME_CIPHER
 };
 
@@ -141,9 +146,13 @@ enum Interaction
 enum DialogID {
     DIALOG_NULLID,
     DIALOG_GUIDE_FIRST,
+    DIALOG_PLAYER_BEFORE_CAVE,
     DIALOG_ROCK_GAME,
+    DIALOG_PLATFORMER_GAME,
+    DIALOG_CIPHER_GAME,
     DIALOG_MINIGAME_VICTORY,
-    DIALOG_MINIGAME_DEFEAT
+    DIALOG_MINIGAME_DEFEAT,
+    DIALOG_CIPHER_GOBACK,
 };
 
 /* The NPC struct is primarily for placing animated Non-Playable Characters in
@@ -156,11 +165,14 @@ struct NPC
     std::string path;
     sf::Vector2f position;
     std::string name;
+    int verticalOffset = 0;
     int width;
     int height;
     int animFrames = 0; // This initializaton acts as an identifier for any
                         // uninitialized NPC object. If animFrames is 0, then
                         // the NPC is null.
+    float scaleX = 1;
+    float scaleY = 1;
     int animSpeed;
 };
 
@@ -213,12 +225,18 @@ struct Scene
     std::string backgroundSpritePath;
     sf::Texture background;
     sf::Sprite backgroundSprite;
+    bool foregroundEnabled = false;
+    std::string foregroundSpritePath;
+    sf::Texture foreground;
+    sf::Sprite foregroundSprite;
     sf::View view = sf::View(sf::FloatRect(0, 0, -1, -1));
 
+    bool noView = false;
     bool horizontalMovementOnly = false;
     bool playerEnabled = true;
     int defaultPlayerDir;
     sf::Vector2f defaultPlayerPos;
+    int playerSpeedMultiplier = 1;
 
     sf::IntRect colliderHitboxes[32];
     InteractionPoint interactibles[32]; // TRIGGER POINTS
@@ -229,7 +247,7 @@ struct Scene
 
 struct {
     bool rock = false;
-    bool snake = false;
+    bool horse = false;
     bool cipher = false;
 } keysStore;
 

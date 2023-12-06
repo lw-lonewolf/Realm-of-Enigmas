@@ -22,6 +22,10 @@ enum PLAYER_SPRITE_DIR
     PLAYER_SPRITE_RIGHT
 };
 
+/* Rock texture */
+
+#define ROCK_TEXTURE_PATH "assets/sprites/DawayneJohnsun.png"
+
 /* Guide character constants */
 
 sf::Texture guideCharTexture;
@@ -46,16 +50,66 @@ void initGuideCharSprite()
 NPC rockChar;
 void initRockCharSprite()
 {
-    rockChar.path = "assets/sprites/character_rock.png";
+    rockChar.path = "assets/sprites/golem.png";
     rockChar.name = "Rock Guy";
-    rockChar.width = 30;
-    rockChar.height = 39;
+    rockChar.width = 80;
+    rockChar.height = 108;
 
-    rockChar.animFrames = 6;
+    rockChar.animFrames = 9;
     rockChar.animSpeed = 83; // 12 FPS
 
     if (!rockChar.texture.loadFromFile(rockChar.path))
         std::cout << "Failed to load from file: " << rockChar.path << std::endl;
+}
+
+/* Cipher game character constants */
+
+NPC cipherChar;
+void initCipherCharSprite()
+{
+    cipherChar.path = "assets/sprites/character_cipher.png";
+    cipherChar.name = "Cipher Guy";
+    cipherChar.width = 68;
+    cipherChar.height = 96;
+
+    cipherChar.animFrames = 9;
+    cipherChar.animSpeed = 83; // 12 FPS
+
+    if (!cipherChar.texture.loadFromFile(cipherChar.path))
+        std::cout << "Failed to load from file: " << cipherChar.path << std::endl;
+}
+
+/* Platformer horse running game character constants */
+
+NPC horseChar;
+void initHorseCharSprite()
+{
+    horseChar.path = "assets/sprites/character_platformer_new.png";
+    horseChar.name = "Horse";
+    horseChar.width = 120;
+    horseChar.height = 80;
+
+    horseChar.animFrames = 4;
+    horseChar.animSpeed = 100; // 10 FPS
+
+    if (!horseChar.texture.loadFromFile(horseChar.path))
+        std::cout << "Failed to load from file: " << horseChar.path << std::endl;
+}
+/* Platformer idle horse character constants */
+
+NPC platformerChar;
+void initPlatformerCharSprite()
+{
+    platformerChar.path = "assets/sprites/demon-idle.png";
+    platformerChar.name = "Horse";
+    platformerChar.width = 160;
+    platformerChar.height = 144;
+
+    platformerChar.animFrames = 6;
+    platformerChar.animSpeed = 83; // 12 FPS
+
+    if (!platformerChar.texture.loadFromFile(platformerChar.path))
+        std::cout << "Failed to load from file: " << platformerChar.path << std::endl;
 }
 
 /* This NPC would basically act as the narrator or the speaker, won't have
@@ -86,14 +140,35 @@ NPC playerChar;
 void initPlayerCharSprite()
 {
     playerChar.path = "assets/sprites/player-sprite.png";
-    playerChar.name = "Message";
+    playerChar.name = "You";
     playerChar.width = PLAYER_SPRITE_WIDTH;
     playerChar.height = PLAYER_SPRITE_HEIGHT;
 
+    playerChar.verticalOffset = PLAYER_SPRITE_DOWN;
     playerChar.animFrames = 1;
     playerChar.animSpeed = 1000;
 
-    playerChar.texture = player.texture;
+    if (!playerChar.texture.loadFromFile(playerChar.path))
+        std::cout << "Failed to load from file: " << playerChar.path << std::endl;
+}
+
+/* The puzzle cipher */
+
+#define PUZZLE_CIPHER_PATH "assets/imgs/KeyMAIN_TWO.png"
+
+NPC puzzleCipherChar;
+void initPuzzleCipherSprite()
+{
+    puzzleCipherChar.path = "assets/sprites/key_puzzle.png";
+    puzzleCipherChar.name = "Puzzle";
+    puzzleCipherChar.width = 25;
+    puzzleCipherChar.height = 25;
+
+    puzzleCipherChar.animFrames = 1;
+    puzzleCipherChar.animSpeed = 1000;
+
+    if (!puzzleCipherChar.texture.loadFromFile(puzzleCipherChar.path))
+        std::cout << "Failed to load from file: " << puzzleCipherChar.path << std::endl;
 }
 
 
@@ -103,8 +178,13 @@ void initPlayerCharSprite()
 #define BACKGROUND_MENU_PATH "assets/imgs/ParallexBG.png"
 #define BACKGROUND_DEMO_PATH "assets/imgs/demo-bg-sprite.jpg"
 #define BACKGROUND_OPTIMUS_PRIME_PATH "assets/imgs/main-bg.png"
-#define BACKGROUND_TEST_PATH "assets/imgs/BackgroundV4.png"
-#define BACKGROUND_ROCK_PATH "assets/imgs/BackgroundV4.png"
+#define BACKGROUND_TEST_PATH "assets/imgs/SceneOne.png"
+#define BACKGROUND_ROCK_PATH "assets/imgs/rockbackground.png"
+#define BACKGROUND_CIPHER_PATH "assets/imgs/cipher.png"
+#define BACKGROUND_CIPHER_COMPLETE_PATH "assets/imgs/cipher_complete.png"
+#define FOREGROUND_CIPHER_PATH "assets/imgs/cipher_foreground.png"
+#define BACKGROUND_VIGENERE_PATH "assets/imgs/vigenere-cipher.png"
+#define BACKGROUND_BRAILLE_PATH "assets/imgs/braille_cipher.png"
 
 sf::Texture menuBgTexture;
 
@@ -113,7 +193,7 @@ sf::Texture menuBgTexture;
 
 #define KEYS_SPRITE_PATH "assets/sprites/Keys.png"
 const sf::IntRect KEY_SPRITE_ROCK(sf::Vector2i(0, 0), sf::Vector2i(32, 32));
-const sf::IntRect KEY_SPRITE_SNAKE(sf::Vector2i(96, 0), sf::Vector2i(32, 32));
+const sf::IntRect KEY_SPRITE_HORSE(sf::Vector2i(96, 0), sf::Vector2i(32, 32));
 const sf::IntRect KEY_SPRITE_CIPHER(sf::Vector2i(32, 0), sf::Vector2i(32, 32));
 
 
@@ -133,14 +213,3 @@ const sf::IntRect UI_SPR_BTN(sf::Vector2i(113, 81), sf::Vector2i(30, 14));
 const sf::IntRect UI_SPR_BTN_PRESSED(sf::Vector2i(113, 97), sf::Vector2i(30, 14));
 
 const sf::IntRect UI_SPR_DIALOG_BG(sf::Vector2i(0, 96), sf::Vector2i(48, 32));
-
-#define MAIN_SCREEN_MUSIC "assets/audio/Main_Screen.wav"
-#define SELF_TALK_MUSIC "assets/audio/Self_Talk.wav"
-#define STARTING_AREA_MUSIC "assets/audio/Starting_Area.wav"
-#define ROCK_GAME_MUSIC "assets/audio/Rock_Minigame.wav"
-#define PLATFORMER_MUSIC "assets/audio/Platformer.wav"
-#define OTHER_WORLD_INTRO_MUSIC "assets/audio/Other_World_Intro.wav"
-#define OTHER_WORLD_ROAMING_MUSIC "assets/audio/Other_World_Roaming.ogg"
-#define MAZE_MUSIC "assets/audio/Maze.wav"
-#define LAST_MAZE_MUSIC "assets/audio/Last_Maze.wav"
-#define END_CREDIT "assets/audio/End_Credit.ogg"

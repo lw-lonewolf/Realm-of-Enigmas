@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/lonewolf/Realm-Of-Enigmas/build",
+  "command": "/usr/bin/clang++  -std=c++11 -g -o CMakeFiles/window.dir/main.cpp.o -c /home/lonewolf/Realm-Of-Enigmas/main.cpp",
+  "file": "/home/lonewolf/Realm-Of-Enigmas/main.cpp"
+}
+]

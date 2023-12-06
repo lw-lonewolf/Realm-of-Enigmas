@@ -61,6 +61,7 @@ void setView()
 
 void clearScene() {
     uiStatus = "";
+    menuStatus = "";
     InteractionPoint nullInteraction;
     player.interactionInRange = nullInteraction;
 }
@@ -97,6 +98,14 @@ void loadScene(Scene scene, bool positionFromSaveFile)
             std::cout << "Failed to load from file: " << currentScene.backgroundSpritePath << std::endl;
 
         currentScene.backgroundSprite.setTexture(currentScene.background);
+    }
+
+
+    if (currentScene.foregroundEnabled) {
+        if (!currentScene.foreground.loadFromFile(currentScene.foregroundSpritePath))
+            std::cout << "Failed to load from file: " << currentScene.foregroundSpritePath << std::endl;
+
+        currentScene.foregroundSprite.setTexture(currentScene.foreground);
     }
 
 
@@ -171,8 +180,9 @@ void NPCsRenderLoop(sf::RenderWindow &window)
 
         sf::Sprite npc;
         npc.setTexture(npcSprite.texture);
-        npc.setTextureRect(sf::IntRect(npcSprite.width * (currentScene.animatedSpritesFrames[i] - 1), 0, npcSprite.width, npcSprite.height));
-        npc.setPosition(npcSprite.position);
+        npc.setScale(npcSprite.scaleX, npcSprite.scaleY);
+        npc.setTextureRect(sf::IntRect(npcSprite.width * (currentScene.animatedSpritesFrames[i] - 1), npcSprite.verticalOffset * npcSprite.height, npcSprite.width, npcSprite.height));
+        npc.setPosition(centerByDimensions(npcSprite.position, sf::Vector2i(npcSprite.width, npcSprite.height), true));
 
         window.draw(npc);
     }
@@ -230,7 +240,7 @@ void dialogRender(sf::RenderWindow &window)
     std::string dialogBtnTxString = dialogBtnTx.getString();
     dialogBtnTx.setOrigin((-UI_BODY_3_SIZE) / 0.85, -UI_BODY_3_SIZE / 1.5);
 
-    if (framecount > (REFRESH_RATE / 2) && !isGamePaused)
+    if (framecount > (REFRESH_RATE / 2))
     {
         // if half a second has passed, change the icon into a pressed button
         dialogBtnHint.setTextureRect(UI_SPR_BTN_PRESSED);
@@ -282,9 +292,55 @@ void gameMenuRender(sf::RenderWindow& window) {
         window.draw(menuItems[i]);
     }
 
+    if (menuStatus.length())
+    { // this will be true when the uiStatus has text
+        sf::Text menuObjectiveText(menuStatus, UI_FONT_BODY);
+        menuObjectiveText.setPosition(40, SCREEN_H - 100);
+        menuObjectiveText.setCharacterSize(UI_BODY_2_SIZE);
+        textWrapper(menuObjectiveText, SCREEN_W - 80);
+        std::string textStr = menuObjectiveText.getString();
+        menuObjectiveText.setPosition(menuObjectiveText.getPosition().x, menuObjectiveText.getPosition().y - (stringCountOccurences(textStr, '\n') * menuObjectiveText.getCharacterSize()));
+
+        window.draw(menuObjectiveText);
+    }
+
     window.draw(menuTitle);
 }
 
+
+void renderImagePopup(sf::RenderWindow& window, std::string imgPath) {
+    sf::Texture popupImgTexture;
+    if (!popupImgTexture.loadFromFile(imgPath)) {
+        std::cout << "Failed to load popup image: " << imgPath << std::endl;
+        return;
+    }
+
+    sf::Sprite popupImg(popupImgTexture);
+    popupImg.setPosition(centerByDimensions(sf::Vector2f (SCREEN_W/2, SCREEN_H/2), sf::Vector2i(popupImgTexture.getSize().x, popupImgTexture.getSize().y), true));
+
+    sf::Sprite popupBtnHint = newButton(sf::Vector2f(SCREEN_W / 2 - 15, SCREEN_H - 50));
+    popupBtnHint.setScale(3, 3);
+    sf::Text popupBtnTx("SPACE", UI_FONT_BODY);
+    popupBtnTx.setCharacterSize(UI_BODY_3_SIZE);
+    popupBtnTx.setFillColor(sf::Color::White);
+    popupBtnTx.setPosition(popupBtnHint.getPosition());
+
+    std::string popupBtnTxString = popupBtnTx.getString();
+    popupBtnTx.setOrigin((-UI_BODY_3_SIZE) / 0.85, -UI_BODY_3_SIZE / 1.5);
+
+    if (framecount > (REFRESH_RATE / 2))
+    {
+        // if half a second has passed, change the icon into a pressed button
+        popupBtnHint.setTextureRect(UI_SPR_BTN_PRESSED);
+
+        // also move the text a little lower too
+        popupBtnTx.setPosition(popupBtnTx.getPosition().x, popupBtnTx.getPosition().y + 2);
+    }
+
+    window.draw(popupImg);
+    window.draw(popupBtnHint);
+    window.draw(popupBtnTx);
+}
 
 void renderPopup(sf::RenderWindow& window, std::string titleText, std::string bodyText) {
     sf::Sprite popupBg(uiSpriteTexture);
@@ -366,12 +422,12 @@ void UILayer(sf::RenderWindow &window)
             if (!keysStore.rock)
                 keyRock.setColor(sf::Color(0, 0, 0, 100));
 
-            sf::Sprite keySnake(keysSpriteTexture);
-            keySnake.setTextureRect(KEY_SPRITE_SNAKE);
-            keySnake.setScale(2, 2);
-            keySnake.setPosition(SCREEN_W - 164, 36);
-            if (!keysStore.snake)
-                keySnake.setColor(sf::Color(0, 0, 0, 100));
+            sf::Sprite keyHorse(keysSpriteTexture);
+            keyHorse.setTextureRect(KEY_SPRITE_HORSE);
+            keyHorse.setScale(2, 2);
+            keyHorse.setPosition(SCREEN_W - 164, 36);
+            if (!keysStore.horse)
+                keyHorse.setColor(sf::Color(0, 0, 0, 100));
 
             sf::Sprite keyCipher(keysSpriteTexture);
             keyCipher.setTextureRect(KEY_SPRITE_CIPHER);
@@ -381,7 +437,7 @@ void UILayer(sf::RenderWindow &window)
                 keyCipher.setColor(sf::Color(0, 0, 0, 100));
 
             window.draw(keyRock);
-            window.draw(keySnake);
+            window.draw(keyHorse);
             window.draw(keyCipher);
         }
     }
@@ -398,6 +454,8 @@ void UILayer(sf::RenderWindow &window)
 
         if (isPopupOpen) {
             renderPopup(window, currentPopupTitle, currentPopupBodyText);
+        } else if (isImagePopupOpen) {
+            renderImagePopup(window, currentPopupImage);
         } else if (isDialogOpen) {
             dialogRender(window);
         } else {
@@ -459,7 +517,8 @@ void Render(sf::RenderWindow &window)
         if (currentScene.playerEnabled)
             playerLoop();
 
-        window.setView(currentScene.view);
+        if (!currentScene.noView)
+            window.setView(currentScene.view);
         if (currentScene.backgroundEnabled)
             window.draw(currentScene.backgroundSprite);
 
@@ -469,6 +528,9 @@ void Render(sf::RenderWindow &window)
 
         if (currentScene.playerEnabled)
             window.draw(player.sprite);
+
+        if (currentScene.foregroundEnabled)
+            window.draw(currentScene.foregroundSprite);
     }
 
     onOverrideRender(window);

@@ -4,8 +4,6 @@
  *
  * */
 
-Scene currentScene;
-
 /* The PhysicsValidatePosition function takes in a test position vector and
  * returns true if the vector isn't colliding with any of the defined hitboxes.
  * (Returns false if it does) (Colliding just means if the test position is
@@ -21,8 +19,10 @@ bool PhysicsValidatePosition(sf::Vector2f testPosition)
         if ((hitbox.left + hitbox.top + hitbox.width + hitbox.height))
         {
             sf::IntRect playerHitbox(testPosition.x + (PLAYER_SPRITE_WIDTH / 4), testPosition.y + (PLAYER_SPRITE_HEIGHT / 2), PLAYER_SPRITE_WIDTH / 2, PLAYER_SPRITE_HEIGHT / 2);
-            if (hitbox.intersects(playerHitbox))
+            if (hitbox.intersects(playerHitbox)) {
+//                std::cout << "player collision with hitbox #" << i << std::endl;
                 return false;
+            }
         }
     }
 

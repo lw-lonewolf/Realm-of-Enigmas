@@ -7,6 +7,7 @@
 void onOverrideEvent(sf::Event event);
 void onOverrideRender(sf::RenderWindow& window);
 
+Scene currentScene;
 void loadScene(Scene scene, bool positionFromSaveFile = false);
 void clearScene();
 bool PhysicsValidatePosition(sf::Vector2f testPosition);
@@ -16,6 +17,7 @@ void miniGameVictory(Minigame wonMiniGame, bool& wonKey);
 void handleDialog(Dialog dialog);
 void handleTravel(SceneLocation location, bool positionFromSaveFile = false);
 void setView();
+void onCipherSceneCreate();
 
 sf::View uiView;
 sf::View defaultView;
@@ -23,16 +25,20 @@ sf::Clock gameClock;
 int framecount = 0;
 bool isGamePaused = false;
 std::string uiStatus = "";
+std::string menuStatus = "";
 sf::Texture uiSpriteTexture;
 sf::Texture keysSpriteTexture;
+sf::Texture puzzleCipherTexture;
 sf::Texture rockTexture;
 
 bool isDialogOpen = false;
 bool isPopupOpen = false;
+bool isImagePopupOpen = false;
 Dialog currentDialog;
 std::string currentDialogText = "";
 std::string currentPopupTitle = "";
 std::string currentPopupBodyText = "";
+std::string currentPopupImage = "";
 Scene sceneToLoad;
 int loadingScene = 0;
 bool sceneLoaded = false;
@@ -43,6 +49,11 @@ int currentDialogStrCharacterIndex = 0;
 NPC currentDialogNPC;
 Dialog minigameFeedbackDialog;
 bool showMinigameFeedbackDialog = false;
+
+bool puzzleCipherCompleted = false;
+bool vigenereCipherCompleted = false;
+bool brailleCipherCompleted = false;
+
 
 void pauseGame();
 void resumeGame();
@@ -55,9 +66,10 @@ Scene initMenuScene();
 sf::Vector2f centerByDimensions(sf::Vector2f orgVector, sf::Vector2i dimensions, bool invertAlignment = false);
 sf::Text dropShadow(sf::Text tx);
 
-sf::Sprite newButton(sf::Vector2f position, bool dontCenterByDimensions);
-sf::Sprite newButtonSquare(sf::Vector2f position, bool dontCenterByDimensions);
+sf::Sprite newButton(sf::Vector2f position, bool dontCenterByDimensions = false);
+sf::Sprite newButtonSquare(sf::Vector2f position, bool dontCenterByDimensions = false);
 void createPopup(std::string titleText, std::string bodyText);
+void createImagePopup(std::string imgPath);
 
 float menuBgPosition = 0;
 MenuItem menuCurrentSelection = MENU_PLAY;

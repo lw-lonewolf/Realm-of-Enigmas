@@ -160,7 +160,6 @@ void onMenuRender(sf::RenderWindow& window) {
 }
 
 Scene initMenuScene() {
-    music.stop();
     Scene scene;
 
     scene.name = "Main menu";
@@ -171,13 +170,10 @@ Scene initMenuScene() {
 
     menuCurrentSelection = MENU_PLAY;
 
-    if (!ReadSaveFile(keysStore.rock, keysStore.snake, keysStore.cipher, lastSceneLocation, lastPlayerPosition)) {
+    if (!ReadSaveFile(keysStore.rock, keysStore.horse, keysStore.cipher, lastSceneLocation, lastPlayerPosition)) {
         newGame = true;
     }
-    initMusic(MAIN_SCREEN_MUSIC);
-    music.setLoop(true);
-    music.setVolume(50);
-    music.play();
+
     return scene;
 }
 

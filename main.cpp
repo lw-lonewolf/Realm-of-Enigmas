@@ -1,6 +1,7 @@
 /* SFML */
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+
 /* Native */
 #include <iostream>
 #include <math.h>
@@ -15,17 +16,21 @@
 #include "src/Dialog.cpp"
 #include "src/Preload.cpp"
 #include "src/Helper.cpp"
-#include "src/Audio.cpp"
 
 /* Scene files */
 #include "src/scenes/DemoScene.cpp"
+#include "src/scenes/TestScene.cpp"
 #include "src/scenes/IntroScene.cpp"
 #include "src/scenes/CreditsScene.cpp"
 #include "src/scenes/MenuScene.cpp"
-#include "src/scenes/TestScene.cpp"
 #include "src/scenes/SnakeScene.cpp"
 #include "src/scenes/RockScene.cpp"
 #include "src/scenes/OptimusPrimeScene.cpp"
+#include "src/scenes/PlatformerScene.cpp"
+#include "src/scenes/CipherScene.cpp"
+#include "src/scenes/PuzzleCipherScene.cpp"
+#include "src/scenes/VigenereCipherScene.cpp"
+#include "src/scenes/BrailleCipherScene.cpp"
 
 /* Source files */
 #include "src/UI.cpp"
@@ -35,6 +40,7 @@
 #include "src/Render.cpp"
 #include "src/EventHandler.cpp"
 #include "src/Override.cpp"
+#include "src/Audio.cpp"
 
 int main() {
     srand(time(0));
@@ -50,6 +56,9 @@ int main() {
     // Preloading the fonts and UI spritesheet:
     loadAssets();
 
+    // Set a non-timezone-dependent time:
+    srand(static_cast<unsigned>(time(nullptr)));
+
     // Loading the first scene, the MenuScene.cpp: (initMenuScene is defined in
     // MenuScene.cpp)
 
@@ -63,10 +72,8 @@ int main() {
             // various levels in that file.
             EventHandler(event);
 
-            if (event.type == sf::Event::Closed){
-            window.close();
-            }
-
+            if (event.type == sf::Event::Closed)
+                window.close();
         }
 
         // This PhysicsLoop (Physics.cpp) ensures the player is not inside of any

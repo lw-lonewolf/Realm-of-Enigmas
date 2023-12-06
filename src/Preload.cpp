@@ -17,12 +17,20 @@ void loadAssets() {
     if (!keysSpriteTexture.loadFromFile(KEYS_SPRITE_PATH))
         std::cout << "Failed to load from file: " << KEYS_SPRITE_PATH << std::endl;
 
-    if (!rockTexture.loadFromFile("assets/sprites/DawayneJohnsun.png")) {
+    if (!rockTexture.loadFromFile(ROCK_TEXTURE_PATH)) {
         std::cout << "Failed to load Rock." << std::endl;
+    }
+
+    if (!puzzleCipherTexture.loadFromFile(PUZZLE_CIPHER_PATH)) {
+        std::cout << "Failed to load from file: " << PUZZLE_CIPHER_PATH << std::endl;
     }
 
     initGuideCharSprite();
     initRockCharSprite();
+    initCipherCharSprite();
+    initHorseCharSprite();
+    initPlatformerCharSprite();
     initEmptyCharSprite();
     initPlayerCharSprite();
+    initPuzzleCipherSprite();
 }

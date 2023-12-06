@@ -17,12 +17,15 @@ void resumeGame()
 }
 
 void saveGame() {
-    if (currentScene.location == SCENE_CREDITS || currentScene.location == SCENE_MAIN_MENU) return;
-    WriteSaveFile(keysStore.rock, keysStore.snake, keysStore.cipher, currentScene.location, player.sprite.getPosition());
+    if (currentScene.location == SCENE_CREDITS || currentScene.location == SCENE_MAIN_MENU || currentScene.type == SCENE_CUSTOM) return;
+
+    lastSceneLocation = currentScene.location;
+    lastPlayerPosition = player.sprite.getPosition();
+    WriteSaveFile(keysStore.rock, keysStore.horse, keysStore.cipher, currentScene.location, player.sprite.getPosition());
 }
 
 int countKeys() {
-    return ((int)keysStore.snake + (int)keysStore.rock + (int)keysStore.cipher);
+    return ((int)keysStore.horse + (int)keysStore.rock + (int)keysStore.cipher);
 }
 
 std::string setKeysDialogTx() {
@@ -40,7 +43,7 @@ void miniGameDefeat(Minigame lostMiniGame) {
     minigameFeedbackDialog = lostMiniGameDialog(lostMiniGame);
     showMinigameFeedbackDialog = true;
 
-    loadScene(initOptimusPrimeScene(), lastSceneLocation == SCENE_OPTIMUS);
+    loadScene(initOptimusPrimeScene(), true);
 }
 
 void miniGameVictory(Minigame wonMiniGame, bool& wonKey) {
@@ -48,7 +51,7 @@ void miniGameVictory(Minigame wonMiniGame, bool& wonKey) {
 
     showMinigameFeedbackDialog = true;
     wonKey = true;
-    loadScene(initOptimusPrimeScene(), lastSceneLocation == SCENE_OPTIMUS);
+    loadScene(initOptimusPrimeScene(), true);
 }
 
 void onGameMenuNavigation(InputAction action, int value = 0) {
@@ -134,7 +137,12 @@ void playerLoop()
             effectiveMovementVector.x = player.movementVector.x;
         }
 
+        effectiveMovementVector.x *= currentScene.playerSpeedMultiplier;
+        effectiveMovementVector.y *= currentScene.playerSpeedMultiplier;
+
         player.sprite.move(effectiveMovementVector);
+
+//        std::cout << "player position: " << player.sprite.getPosition().x << " " << player.sprite.getPosition().y << std::endl;
 
         if (player.movementVector.x == 0 && player.movementVector.y == 0)
             player.moving = false;
@@ -149,12 +157,28 @@ void playerLoop()
 void postInteraction(DialogID DialogIdentifier) {
     switch (DialogIdentifier) {
         case DIALOG_GUIDE_FIRST:
-            if (countKeys() == 3) loadScene(initCreditsScene());
+            if (countKeys() == 3) {
+                newGame = true;
+                loadScene(initCreditsScene());
+            }
+            break;
+        case DIALOG_PLAYER_BEFORE_CAVE:
+            loadScene(initOptimusPrimeScene());
             break;
         case DIALOG_ROCK_GAME:
             loadScene(initRockScene());
             break;
+        case DIALOG_CIPHER_GAME:
+            loadScene(initCipherScene());
+            break;
+        case DIALOG_PLATFORMER_GAME:
+            loadScene(initPlatformerScene());
+            break;
         case DIALOG_MINIGAME_VICTORY:
+            break;
+        case DIALOG_CIPHER_GOBACK:
+            if (puzzleCipherCompleted && vigenereCipherCompleted && brailleCipherCompleted)
+                miniGameVictory(MINIGAME_CIPHER, keysStore.cipher);
             break;
     }
 }
@@ -199,6 +223,21 @@ void handleTravel(SceneLocation location, bool positionFromSaveFile)
         break;
     case SCENE_OPTIMUS:
         loadScene(initOptimusPrimeScene(), positionFromSaveFile);
+        break;
+    case SCENE_CIPHER_GAME:
+        loadScene(initCipherScene(), positionFromSaveFile);
+        break;
+    case SCENE_CIPHER_PUZZLE:
+        loadScene(initPuzzleCipherScene(), positionFromSaveFile);
+        break;
+    case SCENE_CIPHER_VIGENERE:
+        loadScene(initVigenereCipherScene(), positionFromSaveFile);
+        break;
+    case SCENE_CIPHER_BRAILLE:
+        loadScene(initBrailleCipherScene(), positionFromSaveFile);
+        break;
+    case SCENE_PLATFORMER_GAME:
+        loadScene(initPlatformerScene(), positionFromSaveFile);
         break;
     }
 }

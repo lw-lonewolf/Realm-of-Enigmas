@@ -26,7 +26,6 @@ bool introCompleted = false;
 void onIntroRender(sf::RenderWindow& window);
 
 Scene initIntroScene(int lastIntro = -1, int lastSecondsPassed = INTRO_SCREEN_TIME - 1) {
-    music.stop();
     Scene scene;
 
     scene.name = "Intro";
@@ -40,15 +39,12 @@ Scene initIntroScene(int lastIntro = -1, int lastSecondsPassed = INTRO_SCREEN_TI
     introCompleted = false;
 
     return scene;
-    music.setLoop(true);
-    music.setVolume(50);
-    initMusic(SELF_TALK_MUSIC);
 }
 
 void onIntroRender(sf::RenderWindow& window) {
     if (introSecondsPassed == INTRO_SCREEN_TIME && introData[currentIntro + 1][0] == '\0') {
         if (!introCompleted) {
-            loadScene(initDemoScene());
+            loadScene(initTestScene());
 
             if (newGame) {
                 newGame = false;

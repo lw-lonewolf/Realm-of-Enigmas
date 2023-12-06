@@ -1,12 +1,11 @@
 Scene initOptimusPrimeScene() {
-    music.stop();
     Scene scene;
     scene.type = SCENE_GAME;
     scene.location = SCENE_OPTIMUS;
     scene.name = "Optimus Prime";
     scene.backgroundSpritePath = BACKGROUND_OPTIMUS_PRIME_PATH;
     scene.defaultPlayerDir = PLAYER_SPRITE_RIGHT;
-    scene.defaultPlayerPos = sf::Vector2f(1264, 1477);
+    scene.defaultPlayerPos = sf::Vector2f(1950, 1260);
     scene.view = sf::View(scene.defaultPlayerPos, sf::Vector2f(SCREEN_W/2, SCREEN_H/2));
 
     scene.colliderHitboxes[0] = sf::IntRect(1913, 1270, 1, 10);
@@ -46,9 +45,38 @@ Scene initOptimusPrimeScene() {
         scene.interactibles[nextNPCIndex] = talkToRockInteraction;
         nextNPCIndex++;
     }
-    initMusic(OTHER_WORLD_ROAMING_MUSIC);
-    music.setLoop(true);
-    music.setVolume(50);
-    music.play();
+
+    if (!keysStore.horse) {
+        scene.animatedSprites[nextNPCIndex] = platformerChar;
+        scene.animatedSprites[nextNPCIndex].position = sf::Vector2f(1500, 1677);
+
+        InteractionPoint talkToHorseInteraction;
+        talkToHorseInteraction.name = INTERACTION_TALK;
+        talkToHorseInteraction.label = "Talk";
+        talkToHorseInteraction.position = scene.animatedSprites[nextNPCIndex].position;
+        talkToHorseInteraction.dialog = horseDialog();
+        talkToHorseInteraction.associatedNPC = scene.animatedSprites[nextNPCIndex];
+
+        scene.interactibles[nextNPCIndex] = talkToHorseInteraction;
+        nextNPCIndex++;
+    }
+
+
+    if (keysStore.rock && keysStore.horse && !keysStore.cipher) {
+        scene.animatedSprites[nextNPCIndex] = cipherChar;
+        scene.animatedSprites[nextNPCIndex].position = sf::Vector2f(1100, 1477);
+
+        InteractionPoint talkToCipherInteraction;
+        talkToCipherInteraction.name = INTERACTION_TALK;
+        talkToCipherInteraction.label = "Talk";
+        talkToCipherInteraction.position = scene.animatedSprites[nextNPCIndex].position;
+        talkToCipherInteraction.dialog = cipherDialog();
+        talkToCipherInteraction.associatedNPC = scene.animatedSprites[nextNPCIndex];
+
+        scene.interactibles[nextNPCIndex] = talkToCipherInteraction;
+        nextNPCIndex++;
+    }
+
+
     return scene;
 }

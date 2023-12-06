@@ -15,7 +15,7 @@ const int MaxSnakeLength = 6;
 
  // Function to initialize the snake
  void initSnake(Snake& snake) {
-     if (!snake.texture.loadFromFile("assets/sprites/DawayneJohnsun.png")) {
+     if (!snake.texture.loadFromFile(ROCK_TEXTURE_PATH)) {
          std::cout << "Failed to load Snake." << std::endl;
      }
 

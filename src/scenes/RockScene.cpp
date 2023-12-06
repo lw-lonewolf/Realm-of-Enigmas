@@ -2,8 +2,12 @@
 
 const float ROCK_FALL_SPEED = 100.0f; // Adjust this value as needed
 
-const int rockGameGroundheight = 516;
+const int rockGameGroundheight = 900;
 const int charheight = 16;
+
+const int rockSceneSize = 960;
+
+const int totalRockGameTime = 60;
 
 // Initialize the rocks, character, and ground
 int MaxRocks;
@@ -16,11 +20,7 @@ struct Ground {
     sf::Texture texture;
 
     Ground() {
-        if (!texture.loadFromFile("assets/imgs/grass.png")) {
-            std::cout << "Failed to load Ground." << std::endl;
-        }
-        sprite.setTexture(texture);
-        sprite.setPosition(0, rockGameGroundheight);
+        sprite.setPosition(0, rockGameGroundheight - 200);
     }
 };
 
@@ -28,38 +28,34 @@ sf::Sprite sceneRocks[8];
 Ground ground;
 
 void initRocks(sf::Sprite sceneRocks[], int MaxRocks) {
-    sf::Vector2u textureSize = rockTexture.getSize();
-
     for (int i = 0; i < 8; ++i) {
-        float x = (float)(rand() % (int)(SCREEN_W - textureSize.x));
-        float y = (float)(rand() % (int)(SCREEN_H - textureSize.y)) - SCREEN_H;
+        float x = (float)(rand() % (int)(rockSceneSize));
+        float y = (float)(rand() % (int)(rockSceneSize)) - rockSceneSize;
         float yOffset = (float)(rand() % 100);  // Adjust the range as needed
         sceneRocks[i].setTexture(rockTexture);
         sceneRocks[i].setPosition(x, y + yOffset);
+        sceneRocks[i].setRotation(rand() % 2 == 0 ? -30 : 30);
     }
 }
 
-bool isIntersecting(const sf::Sprite& sprite1, const sf::Sprite& sprite2) {
-    return sprite1.getGlobalBounds().intersects(sprite2.getGlobalBounds());
+bool isIntersecting(const sf::FloatRect sprite1, const sf::FloatRect sprite2) {
+    return sprite1.intersects(sprite2);
 }
 
 void adjustRocks(sf::Sprite sceneRocks[], int MaxRocks) {
-    sf::Vector2u textureSize = rockTexture.getSize();
-
     // Collision check and adjustment
     for (int i = 0; i < MaxRocks; ++i) {
         for (int j = i + 1; j < MaxRocks; ++j) {
-            if (isIntersecting(sceneRocks[i], sceneRocks[j])) {
-                float x = static_cast<float>(rand() % static_cast<int>(800 - textureSize.x));
+            if (isIntersecting(sceneRocks[i].getGlobalBounds(), sceneRocks[j].getGlobalBounds())) {
+                float x = static_cast<float>(rand() % rockSceneSize);
                 sceneRocks[j].setPosition(x, -50);
-            }
-            if (isIntersecting(sceneRocks[i], ground.sprite)) {
-                float x = static_cast<float>(rand() % static_cast<int>(800 - textureSize.x));
+            } else if (isIntersecting(sceneRocks[i].getGlobalBounds(), ground.sprite.getGlobalBounds())) {
+                float x = static_cast<float>(rand() % rockSceneSize);
                 sceneRocks[i].setPosition(x, -50);
-            }
-            if (isIntersecting(sceneRocks[i], player.sprite)) {
-                float x = static_cast<float>(rand() % static_cast<int>(800 - textureSize.x));
+            } else if (isIntersecting(sceneRocks[i].getGlobalBounds(), sf::FloatRect(player.sprite.getPosition().x + (PLAYER_SPRITE_WIDTH/2), player.sprite.getPosition().y + (PLAYER_SPRITE_HEIGHT/2), PLAYER_SPRITE_WIDTH/4, PLAYER_SPRITE_HEIGHT/4))) {
+                float x = static_cast<float>(rand() % rockSceneSize);
                 sceneRocks[i].setPosition(x, -50);
+//                std::cout << "player dead" << std::endl;
                 miniGameDefeat(MINIGAME_ROCK_FALLING);
             }
         }
@@ -68,8 +64,6 @@ void adjustRocks(sf::Sprite sceneRocks[], int MaxRocks) {
 
 
 void updateRocks(sf::Sprite sceneRocks[], float dt, int MaxRocks) {
-    sf::Vector2u textureSize = rockTexture.getSize();
-
     // Move rocks
     for (int i = 0; i < MaxRocks; ++i) {
         sf::Vector2f position = sceneRocks[i].getPosition();
@@ -78,8 +72,8 @@ void updateRocks(sf::Sprite sceneRocks[], float dt, int MaxRocks) {
             // Move the rock down with a speed based on delta time
             sceneRocks[i].setPosition(position.x, position.y + ROCK_FALL_SPEED * dt);
         } else {
-            float x = static_cast<float>(rand() % static_cast<int>(SCREEN_W - textureSize.x));
-            float y = static_cast<float>(rand() % static_cast<int>(SCREEN_H - textureSize.y)) - SCREEN_H;
+            float x = static_cast<float>(rand() % static_cast<int>(rockSceneSize));
+            float y = static_cast<float>(rand() % static_cast<int>(rockSceneSize)) - rockSceneSize;
             float yOffset = static_cast<float>(rand() % 100);  // Adjust the range as needed
             sceneRocks[i].setPosition(x, y + yOffset);
         }
@@ -101,9 +95,9 @@ void updateRocks(sf::Sprite sceneRocks[], float dt, int MaxRocks) {
 //}
 
 void spawnRate() {
-    if (timeElapsed <= 2) {
+    if (timeElapsed <= totalRockGameTime / 4) {
         MaxRocks = 4;
-    } else if (timeElapsed <= 6) {
+    } else if (timeElapsed < totalRockGameTime) {
         MaxRocks = 8;
     } else {
         miniGameVictory(MINIGAME_ROCK_FALLING, keysStore.rock);
@@ -117,7 +111,6 @@ void RockSceneRender(sf::RenderWindow& window) {
 //    float dt = gameClock.restart().asSeconds();
     float dt = (float)(framecount == REFRESH_RATE - 1);
     timeElapsed += dt;
-    std::cout << timeElapsed << std::endl;
     spawnRate();
     updateRocks(sceneRocks, (20 + timeElapsed) / 1000, MaxRocks);
 
@@ -127,6 +120,10 @@ void RockSceneRender(sf::RenderWindow& window) {
         window.draw(sceneRocks[i]);
     }
 
+    sf::Text timeIndicator("Distance left: " + std::to_string((int)(totalRockGameTime - timeElapsed)) + "m", UI_FONT_BODY);
+    timeIndicator.setPosition(centerByDimensions(sf::Vector2f(player.sprite.getPosition().x, 460), sf::Vector2i(timeIndicator.getGlobalBounds().width, 1), true));
+    window.draw(dropShadow(timeIndicator));
+    window.draw(timeIndicator);
 }
 
 void onRockSceneShown() {
@@ -136,7 +133,6 @@ void onRockSceneShown() {
 }
 
 Scene initRockScene() {
-    music.stop();
     Scene scene;
 
     scene.name = "Rock Scene";
@@ -144,14 +140,12 @@ Scene initRockScene() {
     scene.location = SCENE_ROCK_GAME;
     scene.backgroundSpritePath = BACKGROUND_ROCK_PATH;
     scene.horizontalMovementOnly = true;
-    scene.defaultPlayerPos = sf::Vector2f(400, 436);
+    scene.defaultPlayerPos = sf::Vector2f(400, rockGameGroundheight - 64);
     scene.defaultPlayerDir = PLAYER_SPRITE_RIGHT;
-    scene.view = sf::View(sf::FloatRect(0, 0, 500, SCREEN_H));
+    scene.playerSpeedMultiplier = 2;
+//    scene.view = sf::View(sf::FloatRect(scene.defaultPlayerPos.x, scene.defaultPlayerPos.y, 960, 960));
+    scene.view = sf::View(sf::FloatRect(scene.defaultPlayerPos.x, scene.defaultPlayerPos.y, 800, 600));
 
     return scene;
-    music.setLoop(true);
-    music.setVolume(50);
-    initMusic(ROCK_GAME_MUSIC);
-    
  }
 

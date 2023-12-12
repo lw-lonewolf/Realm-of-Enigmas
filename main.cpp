@@ -1,7 +1,5 @@
 /* SFML */
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-
 /* Native */
 #include <iostream>
 #include <math.h>
@@ -40,7 +38,6 @@
 #include "src/Render.cpp"
 #include "src/EventHandler.cpp"
 #include "src/Override.cpp"
-#include "src/Audio.cpp"
 
 int main() {
     srand(time(0));

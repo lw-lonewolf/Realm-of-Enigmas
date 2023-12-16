@@ -6,25 +6,27 @@
 
 /* Player constants */
 
-#define PLAYER_SPRITE_PATH "assets/sprites/player-sprite.png"
-#define PLAYER_SPRITE_WIDTH 64
-#define PLAYER_SPRITE_HEIGHT 64
+#define PLAYER_SPRITE_PATH "assets/sprites/Character_Final.png"
+#define PLAYER_SPRITE_WIDTH 18
+#define PLAYER_SPRITE_HEIGHT 32
 
-#define PLAYER_ANIM_FRAMES 8
+#define PLAYER_ANIM_FRAMES 5
 
 #define PLAYER_ANIM_SPEED 100
 
 enum PLAYER_SPRITE_DIR
 {
     PLAYER_SPRITE_UP,
-    PLAYER_SPRITE_LEFT,
     PLAYER_SPRITE_DOWN,
+    PLAYER_SPRITE_LEFT,
     PLAYER_SPRITE_RIGHT
 };
 
-/* Rock texture */
+/* Game textures */
 
 #define ROCK_TEXTURE_PATH "assets/sprites/DawayneJohnsun.png"
+#define ROCK_RED_TEXTURE_PATH "assets/sprites/DawayneTheRedJohnson.png"
+#define PLATFORMER_PLATFORM_PATH "assets/imgs/platformer-platform.png"
 
 /* Guide character constants */
 
@@ -33,7 +35,7 @@ NPC guideChar;
 void initGuideCharSprite()
 {
     guideChar.path = "assets/sprites/character_guide.png";
-    guideChar.name = "Guide";
+    guideChar.name = "Aurelius";
     guideChar.width = 32;
     guideChar.height = 32;
 
@@ -51,7 +53,7 @@ NPC rockChar;
 void initRockCharSprite()
 {
     rockChar.path = "assets/sprites/golem.png";
-    rockChar.name = "Rock Guy";
+    rockChar.name = "Goliath";
     rockChar.width = 80;
     rockChar.height = 108;
 
@@ -68,7 +70,7 @@ NPC cipherChar;
 void initCipherCharSprite()
 {
     cipherChar.path = "assets/sprites/character_cipher.png";
-    cipherChar.name = "Cipher Guy";
+    cipherChar.name = "Mystico";
     cipherChar.width = 68;
     cipherChar.height = 96;
 
@@ -84,8 +86,8 @@ void initCipherCharSprite()
 NPC horseChar;
 void initHorseCharSprite()
 {
-    horseChar.path = "assets/sprites/character_platformer_new.png";
-    horseChar.name = "Horse";
+    horseChar.path = "assets/sprites/character_platformer_horse.png";
+    horseChar.name = "Infernostrider";
     horseChar.width = 120;
     horseChar.height = 80;
 
@@ -101,12 +103,12 @@ NPC platformerChar;
 void initPlatformerCharSprite()
 {
     platformerChar.path = "assets/sprites/demon-idle.png";
-    platformerChar.name = "Horse";
+    platformerChar.name = "Infernoscorch";
     platformerChar.width = 160;
     platformerChar.height = 144;
 
     platformerChar.animFrames = 6;
-    platformerChar.animSpeed = 83; // 12 FPS
+    platformerChar.animSpeed = 150;
 
     if (!platformerChar.texture.loadFromFile(platformerChar.path))
         std::cout << "Failed to load from file: " << platformerChar.path << std::endl;
@@ -139,8 +141,8 @@ void initEmptyCharSprite()
 NPC playerChar;
 void initPlayerCharSprite()
 {
-    playerChar.path = "assets/sprites/player-sprite.png";
-    playerChar.name = "You";
+    playerChar.path = PLAYER_SPRITE_PATH;
+    playerChar.name = "Elias";
     playerChar.width = PLAYER_SPRITE_WIDTH;
     playerChar.height = PLAYER_SPRITE_HEIGHT;
 
@@ -177,14 +179,18 @@ void initPuzzleCipherSprite()
 
 #define BACKGROUND_MENU_PATH "assets/imgs/ParallexBG.png"
 #define BACKGROUND_DEMO_PATH "assets/imgs/demo-bg-sprite.jpg"
-#define BACKGROUND_OPTIMUS_PRIME_PATH "assets/imgs/main-bg.png"
-#define BACKGROUND_TEST_PATH "assets/imgs/SceneOne.png"
+#define BACKGROUND_OPTIMUS_PRIME_PATH "assets/imgs/optimus-prime.png"
+#define BACKGROUND_OPTIMUS_PRIME_FOREGROUND_PATH "assets/imgs/optimus-prime-foreground.png"
+#define BACKGROUND_TEST_PATH "assets/imgs/SceneOne_FULL.png"
+#define BACKGROUND_TEST_FOREGROUND_PATH "assets/imgs/SceneOneForeground.png"
 #define BACKGROUND_ROCK_PATH "assets/imgs/rockbackground.png"
+#define BACKGROUND_PLATFORMER_PATH_PREFIX "assets/imgs/platformer_bg_"
 #define BACKGROUND_CIPHER_PATH "assets/imgs/cipher.png"
 #define BACKGROUND_CIPHER_COMPLETE_PATH "assets/imgs/cipher_complete.png"
 #define FOREGROUND_CIPHER_PATH "assets/imgs/cipher_foreground.png"
 #define BACKGROUND_VIGENERE_PATH "assets/imgs/vigenere-cipher.png"
 #define BACKGROUND_BRAILLE_PATH "assets/imgs/braille_cipher.png"
+#define PLATFORMER_OBSTACLE_PATH "assets/imgs/platformer-obstacle.png"
 
 sf::Texture menuBgTexture;
 
@@ -213,3 +219,17 @@ const sf::IntRect UI_SPR_BTN(sf::Vector2i(113, 81), sf::Vector2i(30, 14));
 const sf::IntRect UI_SPR_BTN_PRESSED(sf::Vector2i(113, 97), sf::Vector2i(30, 14));
 
 const sf::IntRect UI_SPR_DIALOG_BG(sf::Vector2i(0, 96), sf::Vector2i(48, 32));
+
+
+/* Music constants */
+
+#define MUSIC_MENU_PATH "assets/music/Solace.ogg"
+#define MUSIC_SELFTALK_PATH "assets/music/Self_Talk.ogg"
+#define MUSIC_STARTINGAREA_PATH "assets/music/Starting_Area.ogg"
+#define MUSIC_OTHERWORLD_PATH "assets/music/White.ogg"
+#define MUSIC_ROCK_PATH "assets/music/Coffee_Break.ogg"
+#define MUSIC_PLATFORMER_PATH "assets/music/Against_All_Odds.ogg"
+#define MUSIC_MAZE_PATH "assets/music/No_Tomorrow.ogg"
+#define MUSIC_FINISHED_PATH "assets/music/Hedwig.ogg"
+#define MUSIC_END_PATH "assets/music/Narrator.ogg"
+#define MUSIC_CREDITS_PATH "assets/music/Eilen.ogg"

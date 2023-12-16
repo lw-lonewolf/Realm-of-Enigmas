@@ -17,10 +17,12 @@
 #define PI 3.141
 #define SAVE_FILE_NAME "save.dat"
 #define PLAYER_MOVE_MULTIPLIER 2  // PLAYER SPEED
-#define INTERACTIBLE_THRESHOLD 40 // DISTANCE TO TRIGGER INTERACTION EVENT
+#define INTERACTIBLE_THRESHOLD 60 // DISTANCE TO TRIGGER INTERACTION EVENT
+#define MUSIC_MAX_VOL 75
 const float MENU_BG_SCROLL_SPEED = 10.f;
 const float SCENE_FADE_SPEED = 10.f;
 const float INTRO_SCREEN_TIME = 4.f;
+const float END_SCREEN_TIME = 31.f;
 
 enum MenuItem
 {
@@ -110,7 +112,8 @@ enum InputAction
 enum SceneLocation
 {
     SCENE_INTRO,
-    SCENE_TEST_SCENE,
+    SCENE_END,
+    SCENE_OVERWORLD,
     SCENE_DEMO_SCENE,
     SCENE_MAIN_MENU,
     SCENE_CREDITS,
@@ -145,7 +148,8 @@ enum Interaction
 
 enum DialogID {
     DIALOG_NULLID,
-    DIALOG_GUIDE_FIRST,
+    DIALOG_GUIDE_HELP,
+    DIALOG_GUIDE_INTRODUCTION,
     DIALOG_PLAYER_BEFORE_CAVE,
     DIALOG_ROCK_GAME,
     DIALOG_PLATFORMER_GAME,
@@ -231,6 +235,10 @@ struct Scene
     sf::Sprite foregroundSprite;
     sf::View view = sf::View(sf::FloatRect(0, 0, -1, -1));
 
+    std::string musicFilePath;
+    bool musicEnabled = true;
+    bool musicLooping = true;
+
     bool noView = false;
     bool horizontalMovementOnly = false;
     bool playerEnabled = true;
@@ -238,7 +246,7 @@ struct Scene
     sf::Vector2f defaultPlayerPos;
     int playerSpeedMultiplier = 1;
 
-    sf::IntRect colliderHitboxes[32];
+    sf::IntRect colliderHitboxes[384];
     InteractionPoint interactibles[32]; // TRIGGER POINTS
     NPC animatedSprites[32];
     int animatedSpritesFrames[32]; // This is used by a render loop to store the

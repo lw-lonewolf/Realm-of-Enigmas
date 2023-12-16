@@ -12,16 +12,14 @@
 const char introData[64][256] = {
         " ",
         "I was just loitering about around the jungle until...",
-        "I saw this intriguing yet visually uninteresting path.",
-        "I walked into it, and walked...",
-        "Until I realized there's no going back.",
+        "A plain path caught my eye...",
+        "I ventured deeper...",
+        "The path behind faded darker and darker....",
         "I was lost.",
-        "But I went further..."
+        "But something. Someone... pulled me in further..."
 };
 
-int currentIntro = -1;
 int introSecondsPassed = INTRO_SCREEN_TIME - 1;
-bool introCompleted = false;
 
 void onIntroRender(sf::RenderWindow& window);
 
@@ -33,8 +31,12 @@ Scene initIntroScene(int lastIntro = -1, int lastSecondsPassed = INTRO_SCREEN_TI
     scene.location = SCENE_INTRO;
     scene.playerEnabled = false;
     scene.backgroundEnabled = false;
+    scene.musicFilePath = MUSIC_SELFTALK_PATH;
+
     currentIntro = lastIntro;
     introSecondsPassed = lastSecondsPassed;
+
+    scene.musicEnabled = currentIntro < 1;
 
     introCompleted = false;
 
@@ -44,6 +46,7 @@ Scene initIntroScene(int lastIntro = -1, int lastSecondsPassed = INTRO_SCREEN_TI
 void onIntroRender(sf::RenderWindow& window) {
     if (introSecondsPassed == INTRO_SCREEN_TIME && introData[currentIntro + 1][0] == '\0') {
         if (!introCompleted) {
+
             loadScene(initTestScene());
 
             if (newGame) {

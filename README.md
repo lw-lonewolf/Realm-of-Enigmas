@@ -1,5 +1,4 @@
 # Realm Of Enigmas
-> A fork of [@lw-lonewolf/Realm-of-Enigmas](github.com/lw-lonewolf/Realm-of-Enigmas/tree/engine-development)
 > Made as a university project.
 
 A C++ based graphics top-down platformer game made with SFML.
@@ -40,5 +39,5 @@ The last two steps can be automatically performed through the install script:
 ./run.sh # Compiles and runs the executable
 ```
 
-# I want to contrinute!
-By the time this repository is public, This project would have already been discontinued. Sorry.
+# I want to contribute!
+This project is not accepting contributions as of now

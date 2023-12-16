@@ -87,6 +87,7 @@ void loadScene(Scene scene, bool positionFromSaveFile)
             sceneLoaded = true;
         }
     }
+//    currentMusic.setVolume(loadingScene);
     if (loadingScene < 100 && loadingScene > 0) return;
 
     clearScene();
@@ -100,12 +101,16 @@ void loadScene(Scene scene, bool positionFromSaveFile)
         currentScene.backgroundSprite.setTexture(currentScene.background);
     }
 
-
     if (currentScene.foregroundEnabled) {
         if (!currentScene.foreground.loadFromFile(currentScene.foregroundSpritePath))
             std::cout << "Failed to load from file: " << currentScene.foregroundSpritePath << std::endl;
 
         currentScene.foregroundSprite.setTexture(currentScene.foreground);
+    }
+
+    if (currentScene.musicEnabled) {
+        playMusic(currentScene.musicFilePath);
+        currentMusic.setLoop(currentScene.musicLooping);
     }
 
 
@@ -208,7 +213,7 @@ void dialogRender(sf::RenderWindow &window)
 
     sf::Sprite dialogNPCPic;
     dialogNPCPic.setTexture(dialogNPCTexture);
-    dialogNPCPic.setTextureRect(sf::IntRect(0, 0, currentDialogNPC.width, currentDialogNPC.height));
+    dialogNPCPic.setTextureRect(sf::IntRect(0, currentDialogNPC.verticalOffset * currentDialogNPC.height, currentDialogNPC.width, currentDialogNPC.height));
     dialogNPCPic.setScale(100.f / currentDialogNPC.height, 100.f / currentDialogNPC.height);
     dialogNPCPic.setPosition(centerByDimensions(sf::Vector2f(SCREEN_W / 2, SCREEN_H / 6), sf::Vector2i(100 * ((float)currentDialogNPC.width / currentDialogNPC.height), 100), true));
 
@@ -414,7 +419,7 @@ void UILayer(sf::RenderWindow &window)
         window.draw(uiStatusTx);
 
         /* The keys indicator: only shown in a game scene */
-        if (currentScene.type == SCENE_GAME) {
+        if (currentScene.type == SCENE_GAME && guideIntroduced) {
             sf::Sprite keyRock(keysSpriteTexture);
             keyRock.setTextureRect(KEY_SPRITE_ROCK);
             keyRock.setScale(2, 2);
@@ -512,6 +517,8 @@ void Render(sf::RenderWindow &window)
 
     if (loadingScene) loadScene(sceneToLoad, loadPositionFromFile);
 
+    onOverridePreRender(window);
+
     if (currentScene.type != SCENE_MENU)
     {
         if (currentScene.playerEnabled)
@@ -522,12 +529,13 @@ void Render(sf::RenderWindow &window)
         if (currentScene.backgroundEnabled)
             window.draw(currentScene.backgroundSprite);
 
-        NPCsRenderLoop(window);
-        if (!isGamePaused)
-            interactionLoop(window);
-
         if (currentScene.playerEnabled)
             window.draw(player.sprite);
+
+        NPCsRenderLoop(window);
+
+        if (!isGamePaused)
+            interactionLoop(window);
 
         if (currentScene.foregroundEnabled)
             window.draw(currentScene.foregroundSprite);

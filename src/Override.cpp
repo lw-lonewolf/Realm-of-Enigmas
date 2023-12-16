@@ -33,12 +33,20 @@ void onOverrideEvent(sf::Event event) {
 
         /* An example would be:
 
-        case SCENE_TEST_SCENE:
+        case SCENE_OVERWORLD:
             testSceneEvent(event);
             break;
          */
-        }
     }
+}
+
+void onOverridePreRender(sf::RenderWindow& window) {
+    switch (currentScene.location) {
+        case SCENE_PLATFORMER_GAME:
+            onPlatformerPreRender(window);
+            break;
+    }
+}
 
 void onOverrideRender(sf::RenderWindow& window) {
     switch (currentScene.location) {
@@ -57,6 +65,10 @@ void onOverrideRender(sf::RenderWindow& window) {
 
         case SCENE_INTRO:
             onIntroRender(window);
+            break;
+
+        case SCENE_END:
+            onEndScreenTextRender(window);
             break;
 
         case SCENE_ROCK_GAME:
@@ -81,7 +93,7 @@ void onOverrideRender(sf::RenderWindow& window) {
 
         /* An example would be:
 
-        case SCENE_TEST_SCENE:
+        case SCENE_OVERWORLD:
             onTestRender(window);
             break;
         */

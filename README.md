@@ -1,17 +1,21 @@
 # Realm Of Enigmas
+> A fork of [@lw-lonewolf/Realm-of-Enigmas](github.com/lw-lonewolf/Realm-of-Enigmas/tree/engine-development)
 > Made as a university project.
 
 A C++ based graphics top-down platformer game made with SFML.
 
 ## How do I try it out?
-You can compile the sources manually using cmake
+You can compile the sources manually or run the release executables
+
+### Download releases:
+Head to the [releases](releases) page to download a precompiled version of the game.
 
 ### Compile from sources
-The following guide is for compiling on Linux. Compiling on Windows is possible but not supported.
+This guide is for compiling on linux, although compiling on Windows is possible but not supported.
 
-Project dependencies can be installed by:
+The project dependencies can be installed by:
 ```sh
-sudo apt install git make cmake clion libsfml-dev
+sudo apt install git make cmake clang libsfml-dev
 ```
 Next, clone the repo, and compile the code.
 
@@ -37,7 +41,4 @@ The last two steps can be automatically performed through the install script:
 ```
 
 # I want to contrinute!
-nope :>
-  
-# About the Project: 
-This project was created by us as our semester project for our first semester as SE majors.
+By the time this repository is public, This project would have already been discontinued. Sorry.
